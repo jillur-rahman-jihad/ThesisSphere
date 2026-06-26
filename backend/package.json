@@ -1,7 +1,7 @@
 {
-  "name": "insightforge-backend",
+  "name": "thesis-sphere-backend",
   "version": "1.0.0",
-  "description": "Backend API for InsightForge MERN application",
+  "description": "Backend API for ThesisSphere MERN application",
   "main": "server.js",
   "type": "module",
   "scripts": {

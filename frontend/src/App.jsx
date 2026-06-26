@@ -123,15 +123,15 @@ export default function App() {
               name: 'index.css', 
               type: 'file', 
               role: 'Global Styles', 
-              desc: 'Imports Tailwind CSS v4 directives and defines custom CSS variables, custom typography, and transitions.' 
+              desc: 'Imports Tailwind CSS v3 directives and applies custom scrollbar and theme rules.' 
             }
           ]
         },
         { 
-          name: 'vite.config.js', 
+          name: 'tailwind.config.js', 
           type: 'file', 
-          role: 'Build & Proxy Configuration', 
-          desc: 'Vite config incorporating `@tailwindcss/vite` and routing proxy settings. Proxies `/api` to avoid CORS issues in development.' 
+          role: 'Tailwind CSS Configuration', 
+          desc: 'Specifies source code scan paths and defines design tokens like colors and fonts for Tailwind v3.' 
         }
       ]
     }
@@ -255,7 +255,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-                InsightForge
+                ThesisSphere
               </h1>
               <p className="text-xs text-indigo-400 font-mono">MERN MVC Architecture Boilerplate</p>
             </div>
@@ -327,7 +327,7 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-5 gap-3 items-center text-center text-xs font-mono">
               <div className="p-3 bg-indigo-950/50 rounded-xl border border-indigo-500/20 text-indigo-200">
                 <span className="block font-bold text-sm mb-1 text-white">Client View</span>
-                React (Vite)
+                React (CRA)
               </div>
               <div className="text-slate-600 flex justify-center rotate-90 md:rotate-0">
                 <ArrowRight className="w-5 h-5" />

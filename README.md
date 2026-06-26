@@ -1,6 +1,6 @@
-# InsightForge: MERN MVC Project with Tailwind CSS v4
+# ThesisSphere: MERN MVC Project with Tailwind CSS
 
-A modern boilerplate for a MERN stack application structured using the MVC (Model-View-Controller) design pattern on the backend, styled with Tailwind CSS v4 on the frontend.
+A modern boilerplate for a MERN stack application structured using the MVC (Model-View-Controller) design pattern on the backend, styled with Tailwind CSS on the frontend.
 
 ## Folder Structure
 
@@ -24,8 +24,9 @@ ThesisSphere/
 │   ├── .env.example             # Example environment variables
 │   ├── server.js                # Entry point for backend server
 │   └── package.json             # Backend dependencies & scripts
-└── frontend/                    # React Client (Vite + Tailwind CSS v4)
+└── frontend/                    # React Client (CRA + Tailwind CSS)
     ├── public/
+    │   └── index.html           # HTML Template
     ├── src/
     │   ├── assets/              # Static assets
     │   ├── components/          # Reusable UI components
@@ -35,11 +36,10 @@ ThesisSphere/
     │   ├── services/            # API call services
     │   ├── App.css
     │   ├── App.jsx
-    │   ├── index.css            # Tailwind directives import location
-    │   └── main.jsx
-    ├── index.html
-    ├── package.json             # Frontend dependencies (React, Vite, @tailwindcss/vite, tailwindcss)
-    └── vite.config.js           # Vite configuration with @tailwindcss/vite plugin & proxy
+    │   ├── index.css            # Tailwind CSS directives
+    │   └── index.js             # React entry point
+    ├── package.json             # Frontend dependencies & scripts
+    └── tailwind.config.js       # Tailwind CSS v3 configuration
 ```
 
 ## Getting Started
@@ -62,7 +62,11 @@ ThesisSphere/
    ```
 
 4. Run the project in development mode:
-   ```bash
-   npm run dev
-   ```
-   This will run both the frontend and backend servers concurrently.
+   * To start the **Express API backend** (port `5500` or `5050`):
+     ```bash
+     npm run dev
+     ```
+   * To start the **React frontend** client (port `3000`):
+     ```bash
+     npm start
+     ```

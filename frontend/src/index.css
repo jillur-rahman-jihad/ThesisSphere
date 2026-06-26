@@ -1,14 +1,6 @@
-@import "tailwindcss";
-
-@theme {
-  --font-sans: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-  
-  --color-brand-50: #f0f3ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
