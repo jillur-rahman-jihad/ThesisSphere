@@ -1,4 +1,4 @@
-# ThesisSphere: MERN MVC Project with Tailwind CSS
+# ThesisSphere
 
 A modern boilerplate for a MERN stack application structured using the MVC (Model-View-Controller) design pattern on the backend, styled with Tailwind CSS on the frontend.
 
