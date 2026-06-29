@@ -108,7 +108,7 @@ export default function AuthPage({ onLoginSuccess }) {
             <button
               type="button"
               onClick={() => setRole("student")}
-              className={`flex-1 p-2 rounded border ${
+              className={`flex-1 p-2 rounded border text-black ${
                 role === "student"
                   ? "bg-blue-600 text-white"
                   : "bg-white"
@@ -120,7 +120,7 @@ export default function AuthPage({ onLoginSuccess }) {
             <button
               type="button"
               onClick={() => setRole("faculty")}
-              className={`flex-1 p-2 rounded border ${
+              className={`flex-1 p-2 rounded border text-black ${
                 role === "faculty"
                   ? "bg-blue-600 text-white"
                   : "bg-white"
@@ -141,7 +141,7 @@ export default function AuthPage({ onLoginSuccess }) {
               placeholder="Full Name"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full border rounded p-3"
+              className="w-full border rounded p-3 text-black"
               required
             />
           )}
@@ -152,7 +152,7 @@ export default function AuthPage({ onLoginSuccess }) {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border rounded p-3"
+            className="w-full border rounded p-3 text-black"
             required
           />
 
@@ -162,7 +162,7 @@ export default function AuthPage({ onLoginSuccess }) {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full border rounded p-3"
+            className="w-full border rounded p-3 text-black "
             required
           />
 
@@ -174,7 +174,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full border rounded p-3"
+                className="w-full border rounded p-3 text-black"
                 required
               />
 
@@ -184,7 +184,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 placeholder="Department"
                 value={formData.department}
                 onChange={handleChange}
-                className="w-full border rounded p-3"
+                className="w-full border rounded p-3 text-black"
               />
 
               <input
@@ -193,7 +193,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 placeholder="University"
                 value={formData.university}
                 onChange={handleChange}
-                className="w-full border rounded p-3"
+                className="w-full border rounded p-3 text-black"
               />
 
               {role === "student" && (
@@ -204,7 +204,7 @@ export default function AuthPage({ onLoginSuccess }) {
                     placeholder="Student ID"
                     value={formData.studentId}
                     onChange={handleChange}
-                    className="w-full border rounded p-3"
+                    className="w-full border rounded p-3 text-black"
                   />
 
                   <input
@@ -213,7 +213,7 @@ export default function AuthPage({ onLoginSuccess }) {
                     placeholder="Semester"
                     value={formData.semester}
                     onChange={handleChange}
-                    className="w-full border rounded p-3"
+                    className="w-full border rounded p-3 text-black"
                   />
                 </>
               )}
@@ -225,7 +225,7 @@ export default function AuthPage({ onLoginSuccess }) {
                   placeholder="Designation"
                   value={formData.designation}
                   onChange={handleChange}
-                  className="w-full border rounded p-3"
+                  className="w-full border rounded p-3 text-black"
                 />
               )}
             </>
@@ -245,13 +245,13 @@ export default function AuthPage({ onLoginSuccess }) {
         </form>
 
         {/* Toggle */}
-        <div className="text-center mt-5">
+        <div className="text-center mt-5 text-black">
           {isLogin ? (
             <>
               Don't have an account?{" "}
               <button
                 onClick={() => setIsLogin(false)}
-                className="text-blue-600 font-semibold"
+                className="text-blue-600 font-semibold text-black"
               >
                 Register
               </button>
@@ -261,7 +261,7 @@ export default function AuthPage({ onLoginSuccess }) {
               Already have an account?{" "}
               <button
                 onClick={() => setIsLogin(true)}
-                className="text-blue-600 font-semibold"
+                className="text-blue-600 font-semibold text-black"
               >
                 Login
               </button>
