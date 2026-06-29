@@ -3,9 +3,14 @@ import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    role: {
       type: String,
-      required: [true, 'Please add a name'],
+      enum: ['student', 'faculty', 'admin'],
+      required: [true, 'Please specify a role'],
+    },
+    fullName: {
+      type: String,
+      required: [true, 'Please add a full name'],
     },
     email: {
       type: String,
@@ -22,10 +27,37 @@ const userSchema = new mongoose.Schema(
       minlength: [6, 'Password must be at least 6 characters'],
       select: false, // Don't return password by default in queries
     },
-    role: {
+    profilePicture: {
       type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
+      default: '',
+    },
+    department: {
+      type: String,
+      default: '',
+    },
+    university: {
+      type: String,
+      default: '',
+    },
+    researchInterests: {
+      type: [String],
+      default: [],
+    },
+    skills: {
+      type: [String],
+      default: [],
+    },
+    achievements: {
+      type: [String],
+      default: [],
+    },
+    bio: {
+      type: String,
+      default: '',
+    },
+    availability: {
+      type: String,
+      default: '',
     },
   },
   {
