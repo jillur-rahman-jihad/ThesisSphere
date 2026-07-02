@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar.jsx';
 
 const DashboardLayout = ({ currentUser, onLogout }) => {
@@ -25,11 +26,9 @@ const DashboardLayout = ({ currentUser, onLogout }) => {
           </div>
         </header>
 
-        {/* Scrollable Main Content (Currently blank for future modules) */}
+        {/* Scrollable Main Content renders the matched child route component */}
         <main className="flex-1 overflow-y-auto p-8">
-            <div className="flex items-center justify-center h-full border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50/50">
-               <p className="text-slate-400 font-medium">Main content area (Future modules will go here)</p>
-            </div>
+            <Outlet />
         </main>
       </div>
     </div>

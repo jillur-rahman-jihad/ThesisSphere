@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Search, 
@@ -21,29 +22,29 @@ const Sidebar = ({ currentUser }) => {
 
   const navItems = isStudent 
     ? [
-        { name: 'Dashboard', icon: LayoutDashboard, active: true },
-        { name: 'Find Supervisor', icon: Search, badge: 3 },
-        { name: 'Discussion Forum', icon: MessageSquare },
-        { name: 'Thesis Groups', icon: Users },
-        { name: 'Browse Topics', icon: Lightbulb },
-        { name: 'Meetings', icon: Video },
-        { name: 'Messages', icon: Mail, badge: 3 },
-        { name: 'Deadline Calendar', icon: Calendar },
-        { name: 'Reports', icon: FileText },
-        { name: 'Paper Reviews', icon: BookOpen },
-        { name: 'Contributions', icon: BarChart2 },
-        { name: 'Notifications', icon: Bell, badge: 3 },
-        { name: 'My Profile', icon: User },
+        { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
+        { name: 'Find Supervisor', icon: Search, badge: 3, path: '/find-supervisor' },
+        { name: 'Discussion Forum', icon: MessageSquare, path: '/discussion' },
+        { name: 'Thesis Groups', icon: Users, path: '/groups' },
+        { name: 'Browse Topics', icon: Lightbulb, path: '/topics' },
+        { name: 'Meetings', icon: Video, path: '/meetings' },
+        { name: 'Messages', icon: Mail, badge: 3, path: '/messages' },
+        { name: 'Deadline Calendar', icon: Calendar, path: '/calendar' },
+        { name: 'Reports', icon: FileText, path: '/reports' },
+        { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
+        { name: 'Contributions', icon: BarChart2, path: '/contributions' },
+        { name: 'Notifications', icon: Bell, badge: 3, path: '/notifications' },
+        { name: 'My Profile', icon: User, path: '/profile' },
       ]
     : [
-        { name: 'Workload Dashboard', icon: LayoutDashboard, active: true },
-        { name: 'Post Topics', icon: Lightbulb },
-        { name: 'Meetings', icon: Video },
-        { name: 'Messages', icon: Mail, badge: 2 },
-        { name: 'Calendar', icon: Calendar },
-        { name: 'Paper Reviews', icon: BookOpen },
-        { name: 'Notifications', icon: Bell, badge: 3 },
-        { name: 'My Profile', icon: User },
+        { name: 'Workload Dashboard', icon: LayoutDashboard, path: '/' },
+        { name: 'Post Topics', icon: Lightbulb, path: '/post-topics' },
+        { name: 'Meetings', icon: Video, path: '/meetings' },
+        { name: 'Messages', icon: Mail, badge: 2, path: '/messages' },
+        { name: 'Calendar', icon: Calendar, path: '/calendar' },
+        { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
+        { name: 'Notifications', icon: Bell, badge: 3, path: '/notifications' },
+        { name: 'My Profile', icon: User, path: '/profile' },
       ];
 
   const getInitials = (name) => {
@@ -77,26 +78,31 @@ const Sidebar = ({ currentUser }) => {
       {/* Navigation Links */}
       <div className="flex-1 overflow-y-auto px-4 py-2 space-y-1 custom-scrollbar">
         {navItems.map((item, index) => (
-          <button 
+          <NavLink 
             key={index}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${
-              item.active 
+            to={item.path}
+            className={({ isActive }) => `w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${
+              isActive 
                 ? 'bg-amber-600/10 text-amber-500' 
                 : 'hover:bg-slate-800/50 text-slate-400 hover:text-slate-200'
             }`}
           >
-            <div className="flex items-center gap-3">
-              <item.icon className={`w-4 h-4 ${item.active ? 'text-amber-500' : 'text-slate-400 group-hover:text-slate-200'}`} />
-              <span className={`text-[0.85rem] font-medium ${item.active ? 'text-amber-500' : ''}`}>
-                {item.name}
-              </span>
-            </div>
-            {item.badge && (
-              <span className="bg-amber-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
-                {item.badge}
-              </span>
+            {({ isActive }) => (
+              <>
+                <div className="flex items-center gap-3">
+                  <item.icon className={`w-4 h-4 ${isActive ? 'text-amber-500' : 'text-slate-400 group-hover:text-slate-200'}`} />
+                  <span className={`text-[0.85rem] font-medium ${isActive ? 'text-amber-500' : ''}`}>
+                    {item.name}
+                  </span>
+                </div>
+                {item.badge && (
+                  <span className="bg-amber-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                    {item.badge}
+                  </span>
+                )}
+              </>
             )}
-          </button>
+          </NavLink>
         ))}
       </div>
 
