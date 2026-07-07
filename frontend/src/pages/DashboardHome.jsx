@@ -1,10 +1,68 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import StudentDashboardContent from '../components/StudentDashboardContent.jsx';
 
 const DashboardHome = () => {
+  const { currentUser } = useOutletContext() || {};
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadDashboard = async () => {
+      if (!currentUser?.token) {
+        if (isMounted) {
+          setError('Missing authentication token. Please log in again.');
+          setLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/dashboard/student', {
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+          },
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || 'Failed to load dashboard data');
+        }
+
+        if (isMounted) {
+          setDashboardData(result.data);
+          setError('');
+        }
+      } catch (fetchError) {
+        if (isMounted) {
+          setError(fetchError.message || 'Failed to load dashboard data');
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadDashboard();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentUser?.token]);
+
   return (
-    <div className="flex items-center justify-center h-full border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50/50">
-      <p className="text-slate-400 font-medium">DashboardHome (Future Module)</p>
-    </div>
+    <StudentDashboardContent
+      user={currentUser}
+      dashboardData={dashboardData}
+      loading={loading}
+      error={error}
+    />
   );
 };
 
