@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Outfit', 'Plus Jakarta Sans', 'sans-serif'],
+        sans: ['Inter', 'Outfit', 'Plus Jakarta Sans', 'sans-serif'],
       },
       colors: {
         brand: {
