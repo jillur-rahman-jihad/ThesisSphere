@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
-import StudentProfile from '../models/StudentProfile.js';
+import StudentProfile from '../models/StudentProfileModel.js';
 import SupervisorProfile from '../models/SupervisorProfile.js';
 
 // Generate JWT token
@@ -147,6 +147,74 @@ export const getUserProfile = async (req, res, next) => {
       data: {
         ...user.toObject(),
         profile,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Update current user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+export const updateUserProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    // ---------- Update User Collection ----------
+    user.fullName = req.body.fullName ?? user.fullName;
+    user.department = req.body.department ?? user.department;
+    user.university = req.body.university ?? user.university;
+    user.researchInterests =
+      req.body.researchInterests ?? user.researchInterests;
+    user.skills = req.body.skills ?? user.skills;
+    user.bio = req.body.bio ?? user.bio;
+    user.profilePicture =
+      req.body.profilePicture ?? user.profilePicture;
+
+    await user.save();
+
+    // ---------- Update Student Profile ----------
+    const studentProfile = await StudentProfile.findOne({
+      userId: req.user._id,
+    });
+
+    if (studentProfile) {
+      studentProfile.studentId =
+        req.body.studentId ?? studentProfile.studentId;
+
+      studentProfile.semester =
+        req.body.semester ?? studentProfile.semester;
+
+      studentProfile.program =
+        req.body.program ?? studentProfile.program;
+
+      studentProfile.cgpa =
+        req.body.cgpa ?? studentProfile.cgpa;
+
+      studentProfile.publications =
+        req.body.publications ?? studentProfile.publications;
+
+      studentProfile.thesisTitle =
+        req.body.thesisTitle ?? studentProfile.thesisTitle;
+
+      studentProfile.supervisorId =
+        req.body.supervisorId ?? studentProfile.supervisorId;
+
+      await studentProfile.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: {
+        user,
+        studentProfile,
       },
     });
   } catch (error) {
