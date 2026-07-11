@@ -28,7 +28,7 @@ const DashboardLayout = ({ currentUser, onLogout }) => {
 
         {/* Scrollable Main Content renders the matched child route component */}
         <main className="flex-1 overflow-y-auto p-8">
-            <Outlet />
+            <Outlet context={{ currentUser }} />
         </main>
       </div>
     </div>
