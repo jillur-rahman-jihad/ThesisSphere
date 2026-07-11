@@ -17,6 +17,7 @@ import PaperReviews from './pages/PaperReviews';
 import Contributions from './pages/Contributions';
 import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
+import FacultyProfile from './pages/FacultyProfile';
 import PostTopics from './pages/PostTopics';
 
 export default function App() {
@@ -71,6 +72,7 @@ export default function App() {
             <Route path="contributions" element={<Contributions />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="faculty-profile" element={<FacultyProfile />} />
             <Route path="post-topics" element={<PostTopics />} />
             
             {/* Catch-all for logged in users */}

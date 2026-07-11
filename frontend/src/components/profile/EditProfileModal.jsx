@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
-import { updateProfile } from "../../services/profileService";
+import { updateFacultyProfile } from "../../services/profileService";
 
 const RESEARCH_OPTIONS = [
   "Machine Learning",
@@ -30,27 +30,23 @@ const TECHNICAL_SKILLS = [
 
 const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
   const [formData, setFormData] = useState({
-  fullName: profileData.fullName || "",
-
-  program: profileData.profile?.program || "",
-
-  semester: profileData.profile?.semester || "",
-
-  cgpa: profileData.profile?.cgpa || "",
-
-  publications: profileData.profile?.publications || 0,
-
-  // NEW
-  thesisTitle: profileData.profile?.thesisTitle || "",
-
-  bio: profileData.bio || "",
-
-  supervisor:
-    profileData.profile?.supervisorName || "Not Assigned",
-  
-  researchInterests: profileData.researchInterests || [],
-  skills: profileData.skills || [],  
-});
+    fullName: profileData.fullName || "",
+    program: profileData.profile?.program || "",
+    semester: profileData.profile?.semester || "",
+    cgpa: profileData.profile?.cgpa || "",
+    publications: profileData.profile?.publications || 0,
+    thesisTitle: profileData.profile?.thesisTitle || "",
+    bio: profileData.bio || "",
+    supervisor: profileData.profile?.supervisorName || "Not Assigned",
+    researchInterests: profileData.researchInterests || [],
+    skills: profileData.skills || [],
+    designation: profileData.profile?.designation || "",
+    officeRoom: profileData.profile?.officeRoom || "",
+    expertise: profileData.profile?.expertise || [],
+    consultationHours: profileData.profile?.consultationHours || "",
+    consultationMode: profileData.profile?.consultationMode || "campus",
+    website: profileData.profile?.website || "",
+  });
   const handleChange = (e) => {
   setFormData({
     ...formData,
@@ -77,24 +73,23 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
   const [saving, setSaving] = useState(false);
  
   const handleSave = async () => {
-  try {
-    setSaving(true);
+    try {
+      setSaving(true);
 
-    await updateProfile(formData);
+      await updateFacultyProfile(formData);
 
-    await onProfileUpdated();
+      await onProfileUpdated();
 
-    onClose();
+      onClose();
 
-    alert("✅ Profile updated successfully!");
-
-  } catch (err) {
-    console.error(err);
-    alert("❌ Failed to update profile.");
-  } finally {
-    setSaving(false);
-  }
-};
+      alert("✅ Faculty profile updated successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to update faculty profile.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center p-6">

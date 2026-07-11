@@ -36,3 +36,21 @@ export const updateProfile = async (profileData) => {
 
   return response.json();
 };
+
+export const updateFacultyProfile = async (profileData) => {
+  const response = await fetch("/api/faculty/profile", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify(profileData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to update faculty profile");
+  }
+
+  return response.json();
+};
