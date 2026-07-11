@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import {
   GraduationCap,
   School,
@@ -12,9 +13,11 @@ import { getProfile } from "../services/profileService";
 import EditProfileModal from "../components/profile/EditProfileModal";
 
 const Profile = () => {
+  const { currentUser } = useOutletContext() || {};
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
+  const isStudent = currentUser?.role === "student";
 
   const loadProfile = async () => {
       try {
@@ -43,6 +46,10 @@ const Profile = () => {
   }
 
   const profile = profileData?.profile || {};
+
+  if (!isStudent) {
+    return <div className="min-h-full bg-[#f8f9fa]" />;
+  }
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -78,16 +85,22 @@ const Profile = () => {
             </div>
 
           </div>
-          <button
-            onClick={() => {
-              console.log("Edit clicked");
-              setShowEditModal(true);
-            }}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold transition"
-          >
-            <Pencil size={18} />
-            Edit Profile
-          </button>
+          {isStudent ? (
+            <button
+              onClick={() => {
+                console.log("Edit clicked");
+                setShowEditModal(true);
+              }}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold transition"
+            >
+              <Pencil size={18} />
+              Edit Profile
+            </button>
+          ) : (
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
+              Faculty profile editing will be added later.
+            </div>
+          )}
 
         </div>
 
@@ -236,7 +249,7 @@ const Profile = () => {
           )}
 
         </div>
-  {showEditModal && (
+  {isStudent && showEditModal && (
     <EditProfileModal
         profileData={profileData}
         onClose={() => setShowEditModal(false)}

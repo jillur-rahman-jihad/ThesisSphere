@@ -1,5 +1,5 @@
 import User from '../models/userModel.js';
-import StudentProfile from '../models/StudentProfile.js';
+import StudentProfile from '../models/StudentProfileModel.js';
 import ThesisGroup from '../models/ThesisGroup.js';
 import ThesisTopic from '../models/ThesisTopic.js';
 import Deadline from '../models/Deadline.js';

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { faker } from '@faker-js/faker';
 import User from './models/userModel.js';
-import StudentProfile from './models/StudentProfile.js';
+import StudentProfile from './models/StudentProfileModel.js';
 import SupervisorProfile from './models/SupervisorProfile.js';
 import ThesisTopic from './models/ThesisTopic.js';
 import ThesisGroup from './models/ThesisGroup.js';
