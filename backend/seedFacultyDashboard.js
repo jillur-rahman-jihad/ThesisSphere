@@ -51,19 +51,19 @@ const seedFacultyDashboard = async () => {
   // Create Mock Students
   const students = await User.insertMany([
     {
-      role: 'student', fullName: 'Sarah Chen', email: 'sarah.c@test.com', password: 'pass', department: 'CS'
+      role: 'student', fullName: 'Sarah Chen', email: 'sarah.c@test.com', password: 'password123', department: 'CS'
     },
     {
-      role: 'student', fullName: 'Marcus Obinna', email: 'marcus.o@test.com', password: 'pass', department: 'CS'
+      role: 'student', fullName: 'Marcus Obinna', email: 'marcus.o@test.com', password: 'password123', department: 'CS'
     },
     {
-      role: 'student', fullName: 'Ji-ho Park', email: 'jiho.p@test.com', password: 'pass', department: 'CS'
+      role: 'student', fullName: 'Ji-ho Park', email: 'jiho.p@test.com', password: 'password123', department: 'CS'
     },
     {
-      role: 'student', fullName: 'Fatima Al-Rashidi', email: 'fatima.a@test.com', password: 'pass', department: 'Environmental CS'
+      role: 'student', fullName: 'Fatima Al-Rashidi', email: 'fatima.a@test.com', password: 'password123', department: 'Environmental CS'
     },
     {
-      role: 'student', fullName: 'Kwame Asante', email: 'kwame.a@test.com', password: 'pass', department: 'Computer Engineering'
+      role: 'student', fullName: 'Kwame Asante', email: 'kwame.a@test.com', password: 'password123', department: 'Computer Engineering'
     }
   ]);
 
