@@ -44,7 +44,7 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Calendar', icon: Calendar, path: '/calendar' },
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
         { name: 'Notifications', icon: Bell, badge: 3, path: '/notifications' },
-        { name: 'My Profile', icon: User, path: '/profile' },
+        { name: 'My Profile', icon: User, path: '/faculty-profile' },
       ];
 
   const getInitials = (name) => {

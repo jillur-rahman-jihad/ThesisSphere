@@ -8,6 +8,8 @@ import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import facultyRoutes from './routes/facultyRoutes.js';
+//...
 
 // Load environment variables
 dotenv.config();
@@ -41,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/faculty', facultyRoutes);
 
 // Error Middlewares
 app.use(notFound);

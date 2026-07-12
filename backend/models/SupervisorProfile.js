@@ -20,6 +20,23 @@ const supervisorProfileSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    researchInterests: {
+      type: [String],
+      default: [],
+    },
+    consultationHours: {
+      type: String,
+      default: '',
+    },
+    consultationMode: {
+      type: String,
+      enum: ['campus', 'online', 'offline', 'hybrid'],
+      default: 'campus',
+    },
+    website: {
+      type: String,
+      default: '',
+    },
     publications: {
       type: [String],
       default: [],

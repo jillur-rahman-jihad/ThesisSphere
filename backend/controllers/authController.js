@@ -209,12 +209,42 @@ export const updateUserProfile = async (req, res, next) => {
       await studentProfile.save();
     }
 
+    let supervisorProfile = null;
+    if (user.role === 'faculty') {
+      supervisorProfile = await SupervisorProfile.findOne({ userId: user._id });
+      if (!supervisorProfile) {
+        supervisorProfile = new SupervisorProfile({ userId: user._id });
+      }
+
+      supervisorProfile.designation =
+        req.body.designation ?? supervisorProfile.designation;
+      supervisorProfile.officeRoom =
+        req.body.officeRoom ?? supervisorProfile.officeRoom;
+      supervisorProfile.expertise =
+        req.body.expertise ?? supervisorProfile.expertise;
+      supervisorProfile.researchInterests =
+        req.body.researchInterests ?? supervisorProfile.researchInterests;
+      supervisorProfile.consultationHours =
+        req.body.consultationHours ?? supervisorProfile.consultationHours;
+      supervisorProfile.consultationMode =
+        req.body.consultationMode ?? supervisorProfile.consultationMode;
+      supervisorProfile.publications =
+        req.body.publications ?? supervisorProfile.publications;
+      supervisorProfile.maxStudents =
+        req.body.maxStudents ?? supervisorProfile.maxStudents;
+      supervisorProfile.currentStudents =
+        req.body.currentStudents ?? supervisorProfile.currentStudents;
+
+      await supervisorProfile.save();
+    }
+
     res.status(200).json({
       success: true,
       message: 'Profile updated successfully',
       data: {
         user,
         studentProfile,
+        supervisorProfile,
       },
     });
   } catch (error) {
