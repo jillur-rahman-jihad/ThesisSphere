@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import StudentDashboardContent from '../components/StudentDashboardContent.jsx';
+import FacultyDashboardContent from '../components/FacultyDashboardContent.jsx';
 
 const DashboardHome = () => {
   const { currentUser } = useOutletContext() || {};
@@ -22,7 +23,8 @@ const DashboardHome = () => {
       }
 
       try {
-        const response = await fetch('/api/dashboard/student', {
+        const endpoint = currentUser.role === 'faculty' ? '/api/dashboard/faculty' : '/api/dashboard/student';
+        const response = await fetch(endpoint, {
           headers: {
             Authorization: `Bearer ${currentUser.token}`,
           },
@@ -54,7 +56,18 @@ const DashboardHome = () => {
     return () => {
       isMounted = false;
     };
-  }, [currentUser?.token]);
+  }, [currentUser?.token, currentUser?.role]);
+
+  if (currentUser?.role === 'faculty') {
+    return (
+      <FacultyDashboardContent
+        user={currentUser}
+        dashboardData={dashboardData}
+        loading={loading}
+        error={error}
+      />
+    );
+  }
 
   return (
     <StudentDashboardContent
