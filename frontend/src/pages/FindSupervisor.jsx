@@ -9,6 +9,8 @@ const FindSupervisor = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const [aiError, setAiError] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,10 +32,15 @@ const FindSupervisor = () => {
           const recData = await recRes.json();
           if (recData.success) {
             setRecommendations(recData.data);
+          } else {
+            setAiError(recData.message || 'Failed to load AI recommendations.');
           }
+        } else {
+          setAiError('AI Recommendations are only available for student accounts.');
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        setAiError('Network error connecting to AI engine. Is the backend running?');
       } finally {
         setLoading(false);
       }
@@ -73,12 +80,24 @@ const FindSupervisor = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-2xl transition-colors">
+          <button 
+            onClick={() => alert('Advanced filtering coming soon!')}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-2xl transition-colors">
             <Filter className="w-5 h-5" />
             Filters
           </button>
         </div>
       </div>
+
+      {aiError && !recommendations && (
+        <div className="bg-rose-50 p-6 rounded-3xl border border-rose-200 text-rose-700">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="w-6 h-6 text-rose-500" />
+            <h2 className="text-xl font-bold">AI Recommendations Unavailable</h2>
+          </div>
+          <p>{aiError}</p>
+        </div>
+      )}
 
       {recommendations && (
         <div className="space-y-6">
@@ -193,7 +212,9 @@ const FindSupervisor = () => {
                 </div>
               </div>
 
-              <button className="w-full mt-6 py-2.5 bg-slate-900 hover:bg-indigo-600 text-white text-sm font-medium rounded-xl transition-colors">
+              <button 
+                onClick={() => alert(`Navigating to ${sup.fullName}'s profile...`)}
+                className="w-full mt-6 py-2.5 bg-slate-900 hover:bg-indigo-600 text-white text-sm font-medium rounded-xl transition-colors">
                 View Profile
               </button>
             </div>
