@@ -54,3 +54,18 @@ export const updateFacultyProfile = async (profileData) => {
 
   return response.json();
 };
+
+export const getFacultyProfileById = async (id) => {
+  const response = await fetch(`/api/faculty/profile/${id}`, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to fetch faculty profile");
+  }
+
+  return response.json();
+};
