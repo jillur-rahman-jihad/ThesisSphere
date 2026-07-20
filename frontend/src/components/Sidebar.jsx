@@ -30,7 +30,7 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Meetings', icon: Video, path: '/meetings' },
         { name: 'Messages', icon: Mail, badge: 3, path: '/messages' },
         { name: 'Deadline Calendar', icon: Calendar, path: '/calendar' },
-        { name: 'Reports', icon: FileText, path: '/reports' },
+        { name: 'My Applications', icon: FileText, path: '/applications' },
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
         { name: 'Contributions', icon: BarChart2, path: '/contributions' },
         { name: 'Notifications', icon: Bell, badge: 3, path: '/notifications' },

@@ -12,7 +12,7 @@ import BrowseTopics from './pages/BrowseTopics';
 import Meetings from './pages/Meetings';
 import Messages from './pages/Messages';
 import Calendar from './pages/Calendar';
-import Reports from './pages/Reports';
+import MyApplications from './pages/MyApplications';
 import PaperReviews from './pages/PaperReviews';
 import Contributions from './pages/Contributions';
 import Notifications from './pages/Notifications';
@@ -67,7 +67,7 @@ export default function App() {
             <Route path="meetings" element={<Meetings />} />
             <Route path="messages" element={<Messages />} />
             <Route path="calendar" element={<Calendar />} />
-            <Route path="reports" element={<Reports />} />
+            <Route path="applications" element={<MyApplications />} />
             <Route path="reviews" element={<PaperReviews />} />
             <Route path="contributions" element={<Contributions />} />
             <Route path="notifications" element={<Notifications />} />
