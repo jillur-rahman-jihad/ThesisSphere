@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Search, Filter, Star, Sparkles, BookOpen, GraduationCap, ChevronRight, UserCircle2 } from 'lucide-react';
+import { Search, Filter, Star, Sparkles, BookOpen, GraduationCap, ChevronRight, UserCircle2, Cpu, Clock, Target } from 'lucide-react';
 
 const FindSupervisor = () => {
   const { currentUser } = useOutletContext();
@@ -101,9 +101,28 @@ const FindSupervisor = () => {
 
       {recommendations && (
         <div className="space-y-6">
-          <div className="flex items-center gap-3 px-2">
-            <Sparkles className="w-6 h-6 text-amber-500" />
-            <h2 className="text-2xl font-bold text-slate-900">AI-Recommended for You</h2>
+          <div className="flex flex-col gap-4 px-2">
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-6 h-6 text-amber-500" />
+              <h2 className="text-2xl font-bold text-slate-900">AI-Recommended for You</h2>
+            </div>
+            
+            {recommendations.metadata && (
+              <div className="flex flex-wrap items-center gap-4 text-xs font-medium bg-slate-50 border border-slate-200 p-3 rounded-xl w-fit">
+                <div className="flex items-center gap-1.5 text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+                  <Cpu className="w-4 h-4" />
+                  <span>Model: {recommendations.metadata.modelUsed}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                  <Clock className="w-4 h-4" />
+                  <span>Time: {recommendations.metadata.processingTimeMs}ms</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-amber-700 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100">
+                  <Target className="w-4 h-4" />
+                  <span>Parsed Input: {recommendations.metadata.input?.length > 0 ? recommendations.metadata.input.join(', ') : 'None'}</span>
+                </div>
+              </div>
+            )}
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

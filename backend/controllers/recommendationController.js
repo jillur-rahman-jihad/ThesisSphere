@@ -9,6 +9,7 @@ import User from '../models/userModel.js';
 // @access  Private (Student only)
 export const getRecommendations = async (req, res, next) => {
   try {
+    const startTime = Date.now();
     const studentId = req.user._id;
 
     if (req.user.role !== 'student') {
@@ -43,7 +44,11 @@ export const getRecommendations = async (req, res, next) => {
         success: true,
         message: "Using fallback engine. Add GEMINI_API_KEY to .env for real AI.",
         data: {
-          studentInterests,
+          metadata: {
+            modelUsed: "Algorithmic Matcher (Fallback)",
+            processingTimeMs: Date.now() - startTime,
+            input: studentInterests
+          },
           recommendedSupervisors: [],
           recommendedTopics: []
         }
@@ -63,6 +68,7 @@ export const getRecommendations = async (req, res, next) => {
     };
 
     let aiData;
+    let usedModelName = "Gemini 1.5 Flash";
     
     try {
       // 4. Initialize Gemini API
@@ -122,6 +128,7 @@ export const getRecommendations = async (req, res, next) => {
     } catch (apiError) {
       console.error("Gemini API Error or Invalid Key:", apiError.message);
       console.log("Falling back to local algorithmic math engine...");
+      usedModelName = "Local Algorithmic Math (Fallback)";
       
       // Fallback Algorithmic Engine if API key is invalid
       const rankedSupervisors = validSupervisors.map(sup => {
@@ -169,18 +176,23 @@ export const getRecommendations = async (req, res, next) => {
       };
     }).filter(Boolean);
 
+    const processingTimeMs = Date.now() - startTime;
+
     res.status(200).json({
       success: true,
       data: {
-        studentInterests,
+        metadata: {
+          modelUsed: usedModelName,
+          processingTimeMs,
+          input: studentInterests
+        },
         recommendedSupervisors,
         recommendedTopics
       }
     });
 
   } catch (error) {
-    console.error("Gemini API Error:", error);
-    // Graceful fallback on AI error
+    console.error("Recommendation Engine Error:", error);
     next(new Error('AI Recommendation Engine failed. Please try again later.'));
   }
 };
