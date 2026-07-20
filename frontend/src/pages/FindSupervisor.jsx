@@ -297,7 +297,6 @@ const FindSupervisor = () => {
           )}
         </div>
       </div>
-      </div>
     </div>
   );
 };
