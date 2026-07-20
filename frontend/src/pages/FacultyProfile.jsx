@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import {
   User,
   BookOpen,
@@ -13,24 +13,32 @@ import {
   Activity,
   X,
 } from "lucide-react";
-import { getProfile, updateFacultyProfile } from "../services/profileService";
+import { getProfile, updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
 
 const FacultyProfile = () => {
   const { currentUser } = useOutletContext() || {};
+  const { id } = useParams();
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const loadProfile = async () => {
-    if (currentUser?.role !== "faculty") {
-      setLoading(false);
-      return;
-    }
+  const isPublicView = !!id;
+  const canEdit = !isPublicView && currentUser?.role === "faculty";
 
+  const loadProfile = async () => {
     try {
-      const response = await getProfile();
-      setProfileData(response.data);
+      if (isPublicView) {
+        const response = await getFacultyProfileById(id);
+        setProfileData(response.data);
+      } else {
+        if (currentUser?.role !== "faculty") {
+          setLoading(false);
+          return;
+        }
+        const response = await getProfile();
+        setProfileData(response.data);
+      }
     } catch (err) {
       console.error(err);
       setError(err.message || "Unable to load profile.");
@@ -68,7 +76,7 @@ const FacultyProfile = () => {
     );
   }
 
-  if (currentUser?.role !== "faculty") {
+  if (!isPublicView && currentUser?.role !== "faculty") {
     return (
       <div className="min-h-full bg-slate-50 py-16">
         <div className="max-w-3xl mx-auto rounded-3xl border border-slate-200 bg-white p-10 shadow-sm text-center">
@@ -130,13 +138,15 @@ const FacultyProfile = () => {
             {isAccepting && (
               <span className="rounded-full bg-emerald-100/90 px-3 py-1 text-sm font-semibold text-emerald-800">Accepting Students</span>
             )}
-            <button
-            onClick={() => setShowEditModal(true)}
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/25"
-          >
-              <ChevronRight size={16} />
-              Edit Profile
-            </button>
+            {canEdit && (
+              <button
+                onClick={() => setShowEditModal(true)}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/25"
+              >
+                <ChevronRight size={16} />
+                Edit Profile
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { Search, Filter, Star, Sparkles, BookOpen, GraduationCap, ChevronRight, UserCircle2, Cpu, Clock, Target, X, Mail, MapPin, Briefcase } from 'lucide-react';
 
 const FindSupervisor = () => {
   const { currentUser } = useOutletContext();
+  const navigate = useNavigate();
   const [supervisors, setSupervisors] = useState([]);
   const [recommendations, setRecommendations] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,7 +16,6 @@ const FindSupervisor = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [filterDept, setFilterDept] = useState('');
   const [filterAvailableOnly, setFilterAvailableOnly] = useState(false);
-  const [selectedSupervisor, setSelectedSupervisor] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -282,7 +282,7 @@ const FindSupervisor = () => {
               </div>
 
               <button 
-                onClick={() => setSelectedSupervisor(sup)}
+                onClick={() => navigate(`/faculty-profile/${sup._id}`)}
                 className="w-full mt-6 py-2.5 bg-slate-900 hover:bg-indigo-600 text-white text-sm font-medium rounded-xl transition-colors">
                 View Profile
               </button>
@@ -297,108 +297,7 @@ const FindSupervisor = () => {
           )}
         </div>
       </div>
-
-      {/* Profile Modal Popup */}
-      {selectedSupervisor && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in" onClick={() => setSelectedSupervisor(null)}>
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="relative h-32 bg-gradient-to-r from-indigo-500 to-purple-600">
-              <button 
-                onClick={() => setSelectedSupervisor(null)}
-                className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="px-8 pb-8">
-              <div className="relative -mt-16 mb-4 flex items-end justify-between">
-                {selectedSupervisor.profilePicture ? (
-                  <img src={selectedSupervisor.profilePicture} alt="Profile" className="w-32 h-32 rounded-2xl border-4 border-white shadow-lg object-cover bg-white" />
-                ) : (
-                  <div className="w-32 h-32 rounded-2xl border-4 border-white shadow-lg bg-indigo-50 flex items-center justify-center text-indigo-500">
-                    <UserCircle2 className="w-16 h-16" />
-                  </div>
-                )}
-                <div className="mb-2 bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-bold border border-indigo-100 flex items-center gap-2">
-                  <Star className="w-4 h-4 fill-indigo-500 text-indigo-500" />
-                  {selectedSupervisor.currentStudents}/{selectedSupervisor.maxStudents} Students
-                </div>
-              </div>
-
-              <h2 className="text-3xl font-bold text-slate-900">{selectedSupervisor.fullName}</h2>
-              <p className="text-lg text-indigo-600 font-medium mb-6">{selectedSupervisor.designation || 'Faculty Member'}</p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div className="flex items-center gap-3 text-slate-600">
-                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
-                    <Briefcase className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase">Department</p>
-                    <p className="font-medium text-slate-800">{selectedSupervisor.department}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 text-slate-600">
-                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase">Email Contact</p>
-                    <p className="font-medium text-slate-800 line-clamp-1">{selectedSupervisor.email || 'Not provided'}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <Target className="w-4 h-4 text-emerald-500" /> Research Interests
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedSupervisor.researchInterests && selectedSupervisor.researchInterests.length > 0 ? (
-                      selectedSupervisor.researchInterests.map((interest, i) => (
-                        <span key={i} className="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-sm font-medium rounded-lg border border-emerald-200">
-                          {interest}
-                        </span>
-                      ))
-                    ) : (
-                      <p className="text-sm text-slate-500 italic">No specific interests listed.</p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-indigo-500" /> Technical Expertise
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedSupervisor.expertise && selectedSupervisor.expertise.length > 0 ? (
-                      selectedSupervisor.expertise.map((exp, i) => (
-                        <span key={i} className="px-3 py-1.5 bg-indigo-50 text-indigo-700 text-sm font-medium rounded-lg border border-indigo-200">
-                          {exp}
-                        </span>
-                      ))
-                    ) : (
-                      <p className="text-sm text-slate-500 italic">No specific expertise listed.</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
-                <button 
-                  onClick={() => setSelectedSupervisor(null)}
-                  className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors"
-                >
-                  Close Profile
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
+      </div>
     </div>
   );
 };

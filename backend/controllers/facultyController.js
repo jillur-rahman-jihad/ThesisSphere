@@ -54,3 +54,34 @@ export const updateFacultyProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get faculty profile by ID
+// @route   GET /api/faculty/profile/:id
+// @access  Private
+export const getFacultyProfileById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    let supervisorProfile = await SupervisorProfile.findOne({ userId: user._id });
+
+    if (!supervisorProfile) {
+      // Return basic data if profile doesn't exist yet
+      supervisorProfile = { userId: user._id };
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        ...user.toObject(),
+        profile: supervisorProfile,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

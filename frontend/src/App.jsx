@@ -72,7 +72,7 @@ export default function App() {
             <Route path="contributions" element={<Contributions />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="faculty-profile" element={<FacultyProfile />} />
+            <Route path="faculty-profile/:id?" element={<FacultyProfile />} />
             <Route path="post-topics" element={<PostTopics />} />
             
             {/* Catch-all for logged in users */}
