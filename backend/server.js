@@ -9,6 +9,7 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import facultyRoutes from './routes/facultyRoutes.js';
+import recommendationRoutes from './routes/recommendationRoutes.js';
 //...
 
 // Load environment variables
@@ -44,6 +45,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/faculty', facultyRoutes);
+app.use('/api/recommendations', recommendationRoutes);
 
 // Error Middlewares
 app.use(notFound);
