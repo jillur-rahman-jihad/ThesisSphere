@@ -184,7 +184,11 @@ const FindSupervisor = () => {
               <div className="space-y-4">
                 {recommendations.recommendedSupervisors.length > 0 ? (
                   recommendations.recommendedSupervisors.map((sup, idx) => (
-                    <div key={idx} className="bg-white p-4 rounded-2xl border border-indigo-50 shadow-sm flex items-center gap-4 hover:shadow-md transition cursor-pointer">
+                    <div 
+                      key={idx} 
+                      onClick={() => navigate(`/faculty-profile/${sup._id}`)}
+                      className="bg-white p-4 rounded-2xl border border-indigo-50 shadow-sm flex items-center gap-4 hover:shadow-md transition cursor-pointer"
+                    >
                       <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold">
                         {sup.fullName.charAt(0)}
                       </div>
@@ -209,7 +213,11 @@ const FindSupervisor = () => {
               <div className="space-y-4">
                 {recommendations.recommendedTopics.length > 0 ? (
                   recommendations.recommendedTopics.map((topic, idx) => (
-                    <div key={idx} className="bg-white p-4 rounded-2xl border border-emerald-50 shadow-sm hover:shadow-md transition cursor-pointer">
+                    <div 
+                      key={idx} 
+                      onClick={() => topic.supervisorId ? navigate(`/faculty-profile/${topic.supervisorId}`) : navigate('/topics')}
+                      className="bg-white p-4 rounded-2xl border border-emerald-50 shadow-sm hover:shadow-md transition cursor-pointer"
+                    >
                       <h4 className="font-semibold text-slate-900 line-clamp-1">{topic.title}</h4>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-slate-500">By {topic.supervisor}</p>

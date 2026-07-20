@@ -172,6 +172,7 @@ export const getRecommendations = async (req, res, next) => {
         description: fullTopic.description,
         category: fullTopic.category,
         supervisor: fullTopic.supervisorId ? fullTopic.supervisorId.fullName : 'Unassigned',
+        supervisorId: fullTopic.supervisorId ? fullTopic.supervisorId._id : null,
         matchPercentage: aiTopic.matchPercentage
       };
     }).filter(Boolean);
