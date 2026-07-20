@@ -26,7 +26,7 @@ const meetingSchema = new mongoose.Schema(
       type: Date,
       required: [true, 'Please add a meeting date'],
     },
-    meetingLink: {
+    specialRequest: {
       type: String,
       default: '',
     },
