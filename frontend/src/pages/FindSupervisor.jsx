@@ -195,6 +195,18 @@ const FindSupervisor = () => {
                       <div className="flex-1">
                         <h4 className="font-semibold text-slate-900">{sup.fullName}</h4>
                         <p className="text-xs text-slate-500">{sup.department} • {sup.matchPercentage}% Match</p>
+                        {sup.researchInterests && sup.researchInterests.length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {sup.researchInterests.slice(0, 2).map((interest, i) => (
+                              <span key={i} className="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md border border-indigo-100 line-clamp-1 max-w-[120px]">
+                                {interest}
+                              </span>
+                            ))}
+                            {sup.researchInterests.length > 2 && (
+                              <span className="text-[10px] text-slate-400">+{sup.researchInterests.length - 2}</span>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <ChevronRight className="w-5 h-5 text-slate-300" />
                     </div>

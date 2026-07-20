@@ -159,6 +159,7 @@ export const getRecommendations = async (req, res, next) => {
         profilePicture: fullSup.userId.profilePicture,
         designation: fullSup.designation,
         expertise: fullSup.expertise,
+        researchInterests: fullSup.researchInterests,
         matchPercentage: aiSup.matchPercentage
       };
     }).filter(Boolean); // Remove nulls if AI hallucinated an ID
