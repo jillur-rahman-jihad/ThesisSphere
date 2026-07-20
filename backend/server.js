@@ -10,7 +10,14 @@ import messageRoutes from './routes/messageRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
+
+import meetingRoutes from './routes/meetingRoutes.js';
 //...
+=======
+import thesisPostRoutes from './routes/thesisPostRoutes.js';
+import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
+import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
+
 
 // Load environment variables
 dotenv.config();
@@ -46,6 +53,13 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+
+app.use('/api/meetings', meetingRoutes);
+
+app.use('/api/thesis-post', thesisPostRoutes);
+app.use('/api/thesis-browse', thesisBrowseRoutes);
+app.use('/api/thesis-applications', thesisApplicationRoutes);
+
 
 // Error Middlewares
 app.use(notFound);
