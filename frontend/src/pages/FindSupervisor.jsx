@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Search, Filter, Star, Sparkles, BookOpen, GraduationCap, ChevronRight, UserCircle2, Cpu, Clock, Target } from 'lucide-react';
+import { Search, Filter, Star, Sparkles, BookOpen, GraduationCap, ChevronRight, UserCircle2, Cpu, Clock, Target, X, Mail, MapPin, Briefcase } from 'lucide-react';
 
 const FindSupervisor = () => {
   const { currentUser } = useOutletContext();
@@ -10,6 +10,12 @@ const FindSupervisor = () => {
   const [loading, setLoading] = useState(true);
 
   const [aiError, setAiError] = useState('');
+  
+  // New States for UI Enhancements
+  const [showFilters, setShowFilters] = useState(false);
+  const [filterDept, setFilterDept] = useState('');
+  const [filterAvailableOnly, setFilterAvailableOnly] = useState(false);
+  const [selectedSupervisor, setSelectedSupervisor] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,11 +55,19 @@ const FindSupervisor = () => {
     fetchData();
   }, [currentUser]);
 
-  const filteredSupervisors = supervisors.filter(sup => 
-    sup.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    sup.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (sup.expertise && sup.expertise.some(e => e.toLowerCase().includes(searchTerm.toLowerCase())))
-  );
+  const filteredSupervisors = supervisors.filter(sup => {
+    const matchesSearch = sup.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          sup.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          (sup.expertise && sup.expertise.some(e => e.toLowerCase().includes(searchTerm.toLowerCase())));
+    
+    const matchesDept = filterDept === '' || sup.department === filterDept;
+    const matchesCapacity = !filterAvailableOnly || (sup.currentStudents < sup.maxStudents);
+    
+    return matchesSearch && matchesDept && matchesCapacity;
+  });
+
+  // Get unique departments for the filter dropdown
+  const uniqueDepartments = [...new Set(supervisors.map(s => s.department).filter(Boolean))];
 
   if (loading) {
     return (
@@ -81,12 +95,48 @@ const FindSupervisor = () => {
             />
           </div>
           <button 
-            onClick={() => alert('Advanced filtering coming soon!')}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-2xl transition-colors">
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-2xl transition-colors ${
+              showFilters ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+            }`}>
             <Filter className="w-5 h-5" />
             Filters
           </button>
         </div>
+        
+        {/* Advanced Filters Drawer */}
+        {showFilters && (
+          <div className="mt-4 p-5 bg-indigo-50 border border-indigo-100 rounded-2xl animate-in slide-in-from-top-2 flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-slate-700 mb-2">Department</label>
+              <select 
+                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                value={filterDept}
+                onChange={(e) => setFilterDept(e.target.value)}
+              >
+                <option value="">All Departments</option>
+                {uniqueDepartments.map(dept => (
+                  <option key={dept} value={dept}>{dept}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-end pb-2">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <div className="relative">
+                  <input 
+                    type="checkbox" 
+                    className="sr-only" 
+                    checked={filterAvailableOnly}
+                    onChange={(e) => setFilterAvailableOnly(e.target.checked)}
+                  />
+                  <div className={`block w-12 h-7 rounded-full transition-colors ${filterAvailableOnly ? 'bg-indigo-500' : 'bg-slate-300'}`}></div>
+                  <div className={`dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-transform ${filterAvailableOnly ? 'transform translate-x-5' : ''}`}></div>
+                </div>
+                <span className="text-sm font-medium text-slate-700">Only show available slots</span>
+              </label>
+            </div>
+          </div>
+        )}
       </div>
 
       {aiError && !recommendations && (
@@ -232,7 +282,7 @@ const FindSupervisor = () => {
               </div>
 
               <button 
-                onClick={() => alert(`Navigating to ${sup.fullName}'s profile...`)}
+                onClick={() => setSelectedSupervisor(sup)}
                 className="w-full mt-6 py-2.5 bg-slate-900 hover:bg-indigo-600 text-white text-sm font-medium rounded-xl transition-colors">
                 View Profile
               </button>
@@ -247,6 +297,108 @@ const FindSupervisor = () => {
           )}
         </div>
       </div>
+
+      {/* Profile Modal Popup */}
+      {selectedSupervisor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in" onClick={() => setSelectedSupervisor(null)}>
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="relative h-32 bg-gradient-to-r from-indigo-500 to-purple-600">
+              <button 
+                onClick={() => setSelectedSupervisor(null)}
+                className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="px-8 pb-8">
+              <div className="relative -mt-16 mb-4 flex items-end justify-between">
+                {selectedSupervisor.profilePicture ? (
+                  <img src={selectedSupervisor.profilePicture} alt="Profile" className="w-32 h-32 rounded-2xl border-4 border-white shadow-lg object-cover bg-white" />
+                ) : (
+                  <div className="w-32 h-32 rounded-2xl border-4 border-white shadow-lg bg-indigo-50 flex items-center justify-center text-indigo-500">
+                    <UserCircle2 className="w-16 h-16" />
+                  </div>
+                )}
+                <div className="mb-2 bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-bold border border-indigo-100 flex items-center gap-2">
+                  <Star className="w-4 h-4 fill-indigo-500 text-indigo-500" />
+                  {selectedSupervisor.currentStudents}/{selectedSupervisor.maxStudents} Students
+                </div>
+              </div>
+
+              <h2 className="text-3xl font-bold text-slate-900">{selectedSupervisor.fullName}</h2>
+              <p className="text-lg text-indigo-600 font-medium mb-6">{selectedSupervisor.designation || 'Faculty Member'}</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="flex items-center gap-3 text-slate-600">
+                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+                    <Briefcase className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-slate-400 uppercase">Department</p>
+                    <p className="font-medium text-slate-800">{selectedSupervisor.department}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 text-slate-600">
+                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-slate-400 uppercase">Email Contact</p>
+                    <p className="font-medium text-slate-800 line-clamp-1">{selectedSupervisor.email || 'Not provided'}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <Target className="w-4 h-4 text-emerald-500" /> Research Interests
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedSupervisor.researchInterests && selectedSupervisor.researchInterests.length > 0 ? (
+                      selectedSupervisor.researchInterests.map((interest, i) => (
+                        <span key={i} className="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-sm font-medium rounded-lg border border-emerald-200">
+                          {interest}
+                        </span>
+                      ))
+                    ) : (
+                      <p className="text-sm text-slate-500 italic">No specific interests listed.</p>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-indigo-500" /> Technical Expertise
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedSupervisor.expertise && selectedSupervisor.expertise.length > 0 ? (
+                      selectedSupervisor.expertise.map((exp, i) => (
+                        <span key={i} className="px-3 py-1.5 bg-indigo-50 text-indigo-700 text-sm font-medium rounded-lg border border-indigo-200">
+                          {exp}
+                        </span>
+                      ))
+                    ) : (
+                      <p className="text-sm text-slate-500 italic">No specific expertise listed.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+                <button 
+                  onClick={() => setSelectedSupervisor(null)}
+                  className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors"
+                >
+                  Close Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
