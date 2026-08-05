@@ -32,6 +32,7 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Deadline Calendar', icon: Calendar, path: '/calendar' },
         { name: 'My Applications', icon: FileText, path: '/applications' },
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
+        { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
         { name: 'Contributions', icon: BarChart2, path: '/contributions' },
         { name: 'Notifications', icon: Bell, badge: 3, path: '/notifications' },
         { name: 'My Profile', icon: User, path: '/profile' },
@@ -43,6 +44,7 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Messages', icon: Mail, badge: 2, path: '/messages' },
         { name: 'Calendar', icon: Calendar, path: '/calendar' },
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
+        { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
         { name: 'Notifications', icon: Bell, badge: 3, path: '/notifications' },
         { name: 'My Profile', icon: User, path: '/faculty-profile' },
       ];

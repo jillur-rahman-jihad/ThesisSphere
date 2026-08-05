@@ -19,6 +19,7 @@ import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
 import FacultyProfile from './pages/FacultyProfile';
 import PostTopics from './pages/PostTopics';
+import Citations from './pages/Citations';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -74,6 +75,7 @@ export default function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="faculty-profile/:id?" element={<FacultyProfile />} />
             <Route path="post-topics" element={<PostTopics />} />
+            <Route path="citations" element={<Citations />} />
             
             {/* Catch-all for logged in users */}
             <Route path="*" element={<Navigate to="/" replace />} />

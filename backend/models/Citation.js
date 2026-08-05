@@ -7,6 +7,10 @@ const citationSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    sourceInput: {
+      type: String,
+      default: '',
+    },
     sourceTitle: {
       type: String,
       required: [true, 'Please add a source title'],
@@ -23,14 +27,32 @@ const citationSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    sourceUrl: {
+      type: String,
+      default: '',
+    },
     citationType: {
       type: String,
-      enum: ['APA', 'IEEE', 'MLA'],
-      required: [true, 'Please specify the citation type'],
+      enum: ['APA', 'IEEE', 'MLA', 'BibTeX'],
+      default: 'APA',
     },
     generatedCitation: {
       type: String,
       default: '',
+    },
+    formats: {
+      apa: {
+        type: String,
+        default: '',
+      },
+      mla: {
+        type: String,
+        default: '',
+      },
+      bibtex: {
+        type: String,
+        default: '',
+      },
     },
   },
   {
