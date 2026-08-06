@@ -15,6 +15,7 @@ import meetingRoutes from './routes/meetingRoutes.js';
 import thesisPostRoutes from './routes/thesisPostRoutes.js';
 import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
+import calendarRoutes from './routes/calendarRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -52,8 +53,8 @@ app.use('/api/faculty', facultyRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 
 app.use('/api/meetings', meetingRoutes);
-
 app.use('/api/thesis-post', thesisPostRoutes);
+app.use('/api/calendar', calendarRoutes);
 app.use('/api/thesis-browse', thesisBrowseRoutes);
 app.use('/api/thesis-applications', thesisApplicationRoutes);
 
