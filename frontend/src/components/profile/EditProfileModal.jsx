@@ -20,7 +20,6 @@ const EditProfileModal = ({
     fullName: "",
     department: "",
     university: "",
-    bio: "",
 
     program: "",
     semester: "",
@@ -32,7 +31,6 @@ const EditProfileModal = ({
     researchInterests: [],
     skills: [],
   });
-
 
   // ==========================================
   // LOAD EXISTING PROFILE DATA
@@ -48,7 +46,6 @@ const EditProfileModal = ({
       fullName: user.fullName || "",
       department: user.department || "",
       university: user.university || "",
-      bio: user.bio || "",
 
       program: profile.program || "",
       semester: profile.semester || "",
@@ -62,7 +59,6 @@ const EditProfileModal = ({
     });
   }, [profileData]);
 
-
   // ==========================================
   // HANDLE TEXT / INPUT CHANGES
   // ==========================================
@@ -75,7 +71,6 @@ const EditProfileModal = ({
       [name]: value,
     }));
   };
-
 
   // ==========================================
   // TOGGLE RESEARCH INTEREST
@@ -93,7 +88,6 @@ const EditProfileModal = ({
     }));
   };
 
-
   // ==========================================
   // TOGGLE TECHNICAL SKILL
   // ==========================================
@@ -110,7 +104,6 @@ const EditProfileModal = ({
     }));
   };
 
-
   // ==========================================
   // SAVE PROFILE
   // ==========================================
@@ -125,9 +118,9 @@ const EditProfileModal = ({
         fullName: formData.fullName,
         department: formData.department,
         university: formData.university,
-        bio: formData.bio,
 
         program: formData.program,
+
         cgpa:
           formData.cgpa === ""
             ? 0
@@ -164,6 +157,7 @@ const EditProfileModal = ({
 
       // Simple success popup
       alert("Profile updated successfully!");
+
     } catch (error) {
       console.error(
         "PROFILE UPDATE ERROR:",
@@ -174,11 +168,11 @@ const EditProfileModal = ({
         error.message ||
           "Failed to update profile."
       );
+
     } finally {
       setSaving(false);
     }
   };
-
 
   // ==========================================
   // MODAL
@@ -287,25 +281,6 @@ const EditProfileModal = ({
                   type="text"
                   name="university"
                   value={formData.university}
-                  onChange={handleChange}
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-
-              </div>
-
-
-              {/* Bio */}
-
-              <div>
-
-                <label className="block text-sm font-bold text-slate-800 mb-2">
-                  Bio
-                </label>
-
-                <input
-                  type="text"
-                  name="bio"
-                  value={formData.bio}
                   onChange={handleChange}
                   className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -471,6 +446,7 @@ const EditProfileModal = ({
                   );
 
                 return (
+
                   <button
                     type="button"
                     key={interest}
@@ -487,6 +463,7 @@ const EditProfileModal = ({
                   >
                     {interest}
                   </button>
+
                 );
 
               })}
@@ -516,6 +493,7 @@ const EditProfileModal = ({
                   formData.skills.includes(skill);
 
                 return (
+
                   <button
                     type="button"
                     key={skill}
@@ -530,6 +508,7 @@ const EditProfileModal = ({
                   >
                     {skill}
                   </button>
+
                 );
 
               })}
