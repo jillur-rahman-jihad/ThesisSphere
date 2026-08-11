@@ -18,10 +18,11 @@ const studentProfileSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    
+
     program: {
       type: String,
-      default: "",
+      enum: ["Bachelors", "Masters", "PhD"],
+      default: "Bachelors",
     },
 
     cgpa: {
@@ -49,6 +50,16 @@ const studentProfileSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null,
+    },
+
+    researchInterests: {
+      type: [String],
+      default: [],
+    },
+
+    skills: {
+      type: [String],
+      default: [],
     },
   },
   {

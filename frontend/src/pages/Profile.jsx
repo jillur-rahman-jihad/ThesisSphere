@@ -14,26 +14,42 @@ import EditProfileModal from "../components/profile/EditProfileModal";
 
 const Profile = () => {
   const { currentUser } = useOutletContext() || {};
+
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
+
   const isStudent = currentUser?.role === "student";
 
+  // ==========================================
+  // LOAD STUDENT PROFILE
+  // ==========================================
+
   const loadProfile = async () => {
-      try {
-        const response = await getProfile();
-        console.log("PROFILE RESPONSE:", response.data);
-        setProfileData(response.data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      const response = await getProfile();
+
+      console.log("STUDENT PROFILE RESPONSE:", response);
+
+      setProfileData(response.data);
+    } catch (err) {
+      console.error("Failed to load student profile:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
+    if (isStudent) {
       loadProfile();
-  }, []);
+    } else {
+      setLoading(false);
+    }
+  }, [isStudent]);
+
+  // ==========================================
+  // LOADING
+  // ==========================================
 
   if (loading) {
     return (
@@ -45,11 +61,28 @@ const Profile = () => {
     );
   }
 
-  const profile = profileData?.profile || {};
+  // ==========================================
+  // STUDENT CHECK
+  // ==========================================
 
   if (!isStudent) {
-    return <div className="min-h-full bg-[#f8f9fa]" />;
+    return (
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+          <p className="text-slate-700 font-semibold">
+            This page is for student profiles.
+          </p>
+        </div>
+      </div>
+    );
   }
+
+  // ==========================================
+  // PROFILE DATA
+  // ==========================================
+
+  const user = profileData?.user || {};
+  const profile = profileData?.profile || {};
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -63,63 +96,53 @@ const Profile = () => {
           <div className="flex items-center gap-6">
 
             <div className="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center text-white">
-
               <User size={45} />
-
             </div>
 
             <div>
 
               <h1 className="text-3xl font-bold text-slate-900">
-                {profileData?.fullName || "Student Name"}
+                {user.fullName || "Student Name"}
               </h1>
 
-              <p className="text-slate-700 text-lg mt-1">
-                {profileData?.department || "Department"}
+              <p className="text-slate-700 text-lg mt-1 font-medium">
+                {user.department || "Department"}
               </p>
 
               <p className="text-slate-600">
-                {profileData?.university || "University"}
+                {user.university || "University"}
               </p>
 
             </div>
 
           </div>
-          {isStudent ? (
-            <button
-              onClick={() => {
-                console.log("Edit clicked");
-                setShowEditModal(true);
-              }}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold transition"
-            >
-              <Pencil size={18} />
-              Edit Profile
-            </button>
-          ) : (
-            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
-              Faculty profile editing will be added later.
-            </div>
-          )}
+
+          {/* EDIT BUTTON */}
+
+          <button
+            onClick={() => setShowEditModal(true)}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold transition"
+          >
+            <Pencil size={18} />
+            Edit Profile
+          </button>
 
         </div>
 
       </div>
 
+
       {/* ================= ACADEMIC + THESIS ================= */}
 
       <div className="grid md:grid-cols-2 gap-6">
 
-        {/* Academic */}
+        {/* ================= ACADEMIC ================= */}
 
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
 
           <h2 className="text-xl font-bold text-slate-900 mb-5 flex items-center gap-2">
-
             <GraduationCap size={22} />
-
             Academic Information
-
           </h2>
 
           <div className="space-y-4">
@@ -152,14 +175,13 @@ const Profile = () => {
 
         </div>
 
-        {/* Thesis */}
+
+        {/* ================= THESIS ================= */}
 
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
 
           <h2 className="text-xl font-bold text-slate-900 mb-5">
-
             Thesis Information
-
           </h2>
 
           <div className="space-y-5">
@@ -194,7 +216,8 @@ const Profile = () => {
 
       </div>
 
-      {/* ================= RESEARCH ================= */}
+
+      {/* ================= RESEARCH INTERESTS ================= */}
 
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
 
@@ -204,8 +227,9 @@ const Profile = () => {
 
         <div className="flex flex-wrap gap-3">
 
-          {profileData?.researchInterests?.length ? (
-            profileData.researchInterests.map((item, index) => (
+          {profile.researchInterests?.length ? (
+
+            profile.researchInterests.map((item, index) => (
               <span
                 key={index}
                 className="bg-blue-100 text-blue-800 font-medium px-4 py-2 rounded-full"
@@ -213,17 +237,21 @@ const Profile = () => {
                 {item}
               </span>
             ))
+
           ) : (
+
             <p className="text-slate-600">
               No research interests added.
             </p>
+
           )}
 
         </div>
 
       </div>
 
-      {/* ================= SKILLS ================= */}
+
+      {/* ================= TECHNICAL SKILLS ================= */}
 
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
 
@@ -233,8 +261,9 @@ const Profile = () => {
 
         <div className="flex flex-wrap gap-3">
 
-          {profileData?.skills?.length ? (
-            profileData.skills.map((item, index) => (
+          {profile.skills?.length ? (
+
+            profile.skills.map((item, index) => (
               <span
                 key={index}
                 className="bg-green-100 text-green-800 font-medium px-4 py-2 rounded-full"
@@ -242,25 +271,46 @@ const Profile = () => {
                 {item}
               </span>
             ))
+
           ) : (
+
             <p className="text-slate-600">
               No skills added.
             </p>
+
           )}
 
         </div>
-  {isStudent && showEditModal && (
-    <EditProfileModal
-        profileData={profileData}
-        onClose={() => setShowEditModal(false)}
-        onProfileUpdated={loadProfile}
-    />
-   )}
-  </div>
+
+      </div>
+
+
+      {/* ================= EDIT PROFILE MODAL ================= */}
+
+      {showEditModal && (
+        <EditProfileModal
+          profileData={{
+            ...user,
+            profile: profile,
+            researchInterests: profile.researchInterests || [],
+            skills: profile.skills || [],
+          }}
+          onClose={() => setShowEditModal(false)}
+          onProfileUpdated={async () => {
+            await loadProfile();
+            setShowEditModal(false);
+          }}
+        />
+      )}
 
     </div>
   );
 };
+
+
+// ==========================================
+// INFO ROW
+// ==========================================
 
 const InfoRow = ({ icon, label, value }) => (
   <div className="flex justify-between items-center border-b border-slate-200 pb-2">
@@ -269,15 +319,16 @@ const InfoRow = ({ icon, label, value }) => (
 
       {icon}
 
-      {label}
+      <span>{label}</span>
 
     </div>
 
     <span className="text-slate-700 font-medium">
       {value}
     </span>
-    
+
   </div>
 );
+
 
 export default Profile;

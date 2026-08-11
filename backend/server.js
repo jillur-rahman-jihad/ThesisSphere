@@ -10,7 +10,7 @@ import messageRoutes from './routes/messageRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
-
+import studentProfileRoutes from "./routes/studentProfileRoutes.js";
 import meetingRoutes from './routes/meetingRoutes.js';
 //...
 import thesisPostRoutes from './routes/thesisPostRoutes.js';
@@ -52,6 +52,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+app.use("/api/student-profile", studentProfileRoutes);
 
 app.use('/api/meetings', meetingRoutes);
 
