@@ -262,8 +262,8 @@ const EditProfileModal = ({
                   type="text"
                   name="department"
                   value={formData.department}
-                  onChange={handleChange}
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled
+                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-500 bg-slate-100 cursor-not-allowed"
                 />
 
               </div>
@@ -281,8 +281,8 @@ const EditProfileModal = ({
                   type="text"
                   name="university"
                   value={formData.university}
-                  onChange={handleChange}
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled
+                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-500 bg-slate-100 cursor-not-allowed"
                 />
 
               </div>
