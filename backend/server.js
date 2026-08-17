@@ -17,7 +17,7 @@ import thesisPostRoutes from './routes/thesisPostRoutes.js';
 import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
-
+import forumRoutes from './routes/forumRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -60,6 +60,7 @@ app.use('/api/thesis-post', thesisPostRoutes);
 app.use('/api/thesis-browse', thesisBrowseRoutes);
 app.use('/api/thesis-applications', thesisApplicationRoutes);
 app.use('/api/citations', citationRoutes);
+app.use('/api/forum', forumRoutes);
 
 
 // Error Middlewares
