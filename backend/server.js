@@ -16,6 +16,7 @@ import meetingRoutes from './routes/meetingRoutes.js';
 import thesisPostRoutes from './routes/thesisPostRoutes.js';
 import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
+import thesisGroupRoutes from "./routes/thesisGroupRoutes.js";
 
 
 // Load environment variables
@@ -59,7 +60,7 @@ app.use('/api/meetings', meetingRoutes);
 app.use('/api/thesis-post', thesisPostRoutes);
 app.use('/api/thesis-browse', thesisBrowseRoutes);
 app.use('/api/thesis-applications', thesisApplicationRoutes);
-
+app.use('/api/thesis-groups', thesisGroupRoutes);
 
 // Error Middlewares
 app.use(notFound);
