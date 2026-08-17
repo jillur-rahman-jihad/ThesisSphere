@@ -79,3 +79,11 @@
 .animate-message-slide {
   animation: messageSlide 0.3s ease forwards;
 }
+
+/* Print rules: hide sidebar and adjust background for PDF/print */
+@media print {
+  .print-hidden { display: none !important; }
+  body { background: #ffffff !important; color: #000 !important; }
+  /* Improve print layout: make report container use full width */
+  #automated-report-content { width: 100% !important; padding: 12px !important; }
+}

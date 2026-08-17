@@ -17,6 +17,7 @@ import thesisPostRoutes from './routes/thesisPostRoutes.js';
 import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
+import automatedReportRoutes from './routes/automatedReportRoutes.js';
 
 
 // Load environment variables
@@ -60,6 +61,8 @@ app.use('/api/thesis-post', thesisPostRoutes);
 app.use('/api/thesis-browse', thesisBrowseRoutes);
 app.use('/api/thesis-applications', thesisApplicationRoutes);
 app.use('/api/citations', citationRoutes);
+
+app.use('/api/automated-report', automatedReportRoutes);
 
 
 // Error Middlewares

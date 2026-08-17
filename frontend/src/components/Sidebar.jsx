@@ -34,6 +34,7 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
         { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
         { name: 'Contributions', icon: BarChart2, path: '/contributions' },
+        { name: 'Automated Report', icon: FileText, path: '/automated-report' },
         { name: 'Notifications', icon: Bell, badge: 3, path: '/notifications' },
         { name: 'My Profile', icon: User, path: '/profile' },
       ]
@@ -55,7 +56,7 @@ const Sidebar = ({ currentUser }) => {
   };
 
   return (
-    <div className="w-[260px] bg-[#1a1f2e] h-screen flex flex-col text-slate-300 font-['Inter',sans-serif] border-r border-slate-800 flex-shrink-0">
+    <div className="w-[260px] bg-[#1a1f2e] h-screen flex flex-col text-slate-300 font-['Inter',sans-serif] border-r border-slate-800 flex-shrink-0 print-hidden">
       
       {/* Logo Area */}
       <div className="p-6 pb-4">
