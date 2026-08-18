@@ -70,10 +70,10 @@ const Sidebar = ({ currentUser }) => {
 
         {/* Role Toggle Indicator */}
         <div className="flex p-1 bg-[#131722] rounded-lg border border-slate-800/60 mb-2">
-          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${isStudent ? 'bg-amber-600 text-white' : 'text-slate-500'}`}>
+          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${isStudent ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400'}`}>
             Student
           </div>
-          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${!isStudent ? 'bg-amber-600 text-white' : 'text-slate-500'}`}>
+          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${!isStudent ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400'}`}>
             Faculty
           </div>
         </div>
@@ -120,7 +120,7 @@ const Sidebar = ({ currentUser }) => {
             <h4 className="text-[0.85rem] font-bold text-slate-200 truncate">
               {currentUser?.fullName || 'User Name'}
             </h4>
-            <p className="text-[0.65rem] text-slate-500 truncate mt-0.5">
+            <p className="text-[0.65rem] text-slate-500 dark:text-slate-400 truncate mt-0.5">
               {isStudent ? 'Student • ThesisSphere' : currentUser?.designation || 'Faculty • ThesisSphere'}
             </p>
           </div>

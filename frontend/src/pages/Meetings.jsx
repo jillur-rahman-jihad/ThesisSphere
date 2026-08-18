@@ -260,10 +260,10 @@ const Meetings = () => {
       <div className="space-y-6 max-w-6xl mx-auto pb-12 font-['Inter',sans-serif] animate-fade-slide-in">
 
         {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-sm">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Meeting Scheduler</h1>
-            <p className="text-slate-500 text-sm mt-1">
+            <h1 className="text-2xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">Meeting Scheduler</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
               Organize, log, and update your research consultations and group discussions.
             </p>
           </div>
@@ -279,12 +279,12 @@ const Meetings = () => {
         </div>
 
         {/* Tabs Menu */}
-        <div className="flex border-b border-slate-200/80">
+        <div className="flex border-b border-slate-200 dark:border-slate-700/80">
           <button
             onClick={() => setActiveTab('upcoming')}
             className={`px-5 py-3 font-semibold text-sm transition-all border-b-2 -mb-[2px] ${activeTab === 'upcoming'
               ? 'border-amber-600 text-amber-600'
-              : 'border-transparent text-slate-400 hover:text-slate-600'
+              : 'border-transparent text-slate-400 hover:text-slate-600 dark:text-slate-300'
               }`}
           >
             Upcoming Meetings ({meetings.filter(m => m.status === 'scheduled' && new Date(m.meetingDate) >= new Date()).length})
@@ -293,7 +293,7 @@ const Meetings = () => {
             onClick={() => setActiveTab('completed')}
             className={`px-5 py-3 font-semibold text-sm transition-all border-b-2 -mb-[2px] ${activeTab === 'completed'
               ? 'border-amber-600 text-amber-600'
-              : 'border-transparent text-slate-400 hover:text-slate-600'
+              : 'border-transparent text-slate-400 hover:text-slate-600 dark:text-slate-300'
               }`}
           >
             Completed & Past ({meetings.filter(m => m.status === 'completed' || (m.status === 'scheduled' && new Date(m.meetingDate) < new Date())).length})
@@ -302,7 +302,7 @@ const Meetings = () => {
             onClick={() => setActiveTab('cancelled')}
             className={`px-5 py-3 font-semibold text-sm transition-all border-b-2 -mb-[2px] ${activeTab === 'cancelled'
               ? 'border-amber-600 text-amber-600'
-              : 'border-transparent text-slate-400 hover:text-slate-600'
+              : 'border-transparent text-slate-400 hover:text-slate-600 dark:text-slate-300'
               }`}
           >
             Cancelled ({meetings.filter(m => m.status === 'cancelled').length})
@@ -311,7 +311,7 @@ const Meetings = () => {
 
         {/* Main Content Area */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-slate-200/80">
+          <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700/80">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-amber-600"></div>
             <p className="text-slate-400 font-medium text-sm mt-4">Retrieving meetings list...</p>
           </div>
@@ -330,11 +330,11 @@ const Meetings = () => {
             </div>
           </div>
         ) : filteredMeetings.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white rounded-2xl border border-slate-200/80 shadow-sm">
-            <div className="w-16 h-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mb-4">
+          <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-sm">
+            <div className="w-16 h-16 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-full flex items-center justify-center mb-4">
               <Calendar className="w-7 h-7 text-slate-400" />
             </div>
-            <h3 className="text-slate-700 font-bold text-lg">No meetings found</h3>
+            <h3 className="text-slate-700 dark:text-slate-200 font-bold text-lg">No meetings found</h3>
             <p className="text-slate-400 text-sm max-w-md mt-1">
               {activeTab === 'upcoming'
                 ? 'You have no scheduled upcoming meetings. Feel free to set one up with your group or supervisor.'
@@ -357,7 +357,7 @@ const Meetings = () => {
               return (
                 <div
                   key={meeting._id}
-                  className="bg-white border border-slate-200/80 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all flex flex-col justify-between overflow-hidden"
+                  className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all flex flex-col justify-between overflow-hidden"
                 >
                   {/* Card Top Banner / Badges */}
                   <div className="p-6 pb-4 border-b border-slate-50">
@@ -368,7 +368,7 @@ const Meetings = () => {
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
                           : isMeetingUpcoming
                             ? 'bg-amber-50 text-amber-700 border border-amber-100'
-                            : 'bg-indigo-50 text-indigo-700 border border-indigo-100'
+                            : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 border border-indigo-100'
                         }`}>
                         <Clock className="w-3 h-3" />
                         <span>
@@ -403,21 +403,21 @@ const Meetings = () => {
                       )}
                     </div>
 
-                    <h3 className="text-lg font-bold text-slate-800 leading-snug hover:text-amber-600 transition-colors">
+                    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 leading-snug hover:text-amber-600 transition-colors">
                       {meeting.title}
                     </h3>
 
                     {/* Supervisor/Group tags */}
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-2.5 text-xs text-slate-500">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-2.5 text-xs text-slate-500 dark:text-slate-400">
                       <span className="flex items-center gap-1">
                         <Users className="w-3.5 h-3.5 text-slate-400" />
                         <span>
-                          Group: <strong className="text-slate-700">{meeting.thesisGroupId?.groupName || 'My Research Group'}</strong>
+                          Group: <strong className="text-slate-700 dark:text-slate-200">{meeting.thesisGroupId?.groupName || 'My Research Group'}</strong>
                         </span>
                       </span>
                       <span className="text-slate-300">•</span>
-                      <span className="text-slate-500">
-                        Supervisor: <strong className="text-slate-700">{meeting.supervisorId?.fullName || 'Not assigned'}</strong>
+                      <span className="text-slate-500 dark:text-slate-400">
+                        Supervisor: <strong className="text-slate-700 dark:text-slate-200">{meeting.supervisorId?.fullName || 'Not assigned'}</strong>
                       </span>
                     </div>
                   </div>
@@ -425,11 +425,11 @@ const Meetings = () => {
                   {/* Card Body */}
                   <div className="p-6 pt-4 pb-5 flex-1 space-y-4">
                     {/* Date & Time */}
-                    <div className="flex items-center gap-3 bg-slate-50 border border-slate-100 p-3.5 rounded-xl">
+                    <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 p-3.5 rounded-xl">
                       <Calendar className="w-4.5 h-4.5 text-amber-600 flex-shrink-0" />
                       <div>
                         <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Scheduled Date</p>
-                        <p className="text-xs font-semibold text-slate-700 mt-0.5">
+                        <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 mt-0.5">
                           {formatMeetingDate(meeting.meetingDate)}
                         </p>
                       </div>
@@ -442,7 +442,7 @@ const Meetings = () => {
                           <FileText className="w-3.5 h-3.5" />
                           <span>Meeting Agenda</span>
                         </p>
-                        <p className="text-xs text-slate-600 leading-relaxed bg-slate-50/50 p-3 rounded-lg border border-dashed border-slate-100 max-h-24 overflow-y-auto">
+                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/50/50 p-3 rounded-lg border border-dashed border-slate-100 dark:border-slate-800 max-h-24 overflow-y-auto">
                           {meeting.agenda}
                         </p>
                       </div>
@@ -456,7 +456,7 @@ const Meetings = () => {
                           {meeting.participants.map((participant, index) => (
                             <span
                               key={index}
-                              className="bg-slate-100/80 text-slate-600 text-[10px] font-medium px-2 py-0.5 rounded-md border border-slate-200/30"
+                              className="bg-slate-100/80 text-slate-600 dark:text-slate-300 text-[10px] font-medium px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700/30"
                               title={participant.email}
                             >
                               {participant.fullName}
@@ -468,7 +468,7 @@ const Meetings = () => {
                   </div>
 
                   {/* Card Footer Actions */}
-                  <div className="p-4 px-6 bg-slate-50/80 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                  <div className="p-4 px-6 bg-slate-50 dark:bg-slate-900/50/80 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       {meeting.meetingLink ? (
                         <a
@@ -492,14 +492,14 @@ const Meetings = () => {
                         <>
                           <button
                             onClick={() => handleOpenEditModal(meeting)}
-                            className="flex items-center justify-center p-1.5 text-slate-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg border border-slate-200 transition-colors"
+                            className="flex items-center justify-center p-1.5 text-slate-500 dark:text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors"
                             title="Edit details"
                           >
                             <Edit className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleDeleteMeeting(meeting._id)}
-                            className="flex items-center justify-center p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg border border-slate-200 transition-colors"
+                            className="flex items-center justify-center p-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors"
                             title="Delete meeting"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -520,7 +520,7 @@ const Meetings = () => {
             style={{ position: 'fixed', inset: 0, zIndex: 9999, backgroundColor: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', overflowY: 'auto' }}
             onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false); }}
           >
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl border border-slate-200 overflow-hidden animate-container-entry" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-4xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-container-entry" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
 
               {/* Modal Header */}
               <div className="bg-gradient-to-r from-amber-600 to-amber-500 p-7 flex items-center justify-between">
@@ -536,7 +536,7 @@ const Meetings = () => {
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="text-white/70 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors"
+                  className="text-white/70 hover:text-white p-2 rounded-xl hover:bg-white dark:bg-slate-800/10 transition-colors"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -549,7 +549,7 @@ const Meetings = () => {
                 <div className="mb-6">
                   {isFaculty && modalMode === 'create' ? (
                     <div className="space-y-2">
-                      <label htmlFor="group-name-input" className="text-sm font-bold text-slate-700 block uppercase tracking-wider">
+                      <label htmlFor="group-name-input" className="text-sm font-bold text-slate-700 dark:text-slate-200 block uppercase tracking-wider">
                         🎓 Thesis Group Name *
                       </label>
                       <input
@@ -561,7 +561,7 @@ const Meetings = () => {
                         onChange={(e) => setGroupNameInput(e.target.value)}
                         required
                         autoComplete="off"
-                        className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all placeholder:text-slate-400 text-slate-800"
+                        className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
                       />
                       <datalist id="groups-datalist">
                         {groups.map((group) => (
@@ -571,9 +571,9 @@ const Meetings = () => {
                       <p className="text-xs text-slate-400 mt-1">Suggestions will appear as you type.</p>
                     </div>
                   ) : isFaculty ? (
-                    <div className="bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl">
+                    <div className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 p-4 rounded-2xl">
                       <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Group Context</p>
-                      <p className="text-base font-bold text-slate-700 mt-1">
+                      <p className="text-base font-bold text-slate-700 dark:text-slate-200 mt-1">
                         {groupNameInput || groups.find(g => g._id === selectedGroupId)?.groupName || 'Supervised Group'}
                       </p>
                     </div>
@@ -592,7 +592,7 @@ const Meetings = () => {
 
                   {/* Title — full width */}
                   <div className="md:col-span-2 space-y-2">
-                    <label htmlFor="meeting-title" className="text-sm font-bold text-slate-700 block uppercase tracking-wider">
+                    <label htmlFor="meeting-title" className="text-sm font-bold text-slate-700 dark:text-slate-200 block uppercase tracking-wider">
                       Meeting Title *
                     </label>
                     <input
@@ -602,13 +602,13 @@ const Meetings = () => {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       required
-                      className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all placeholder:text-slate-400 text-slate-800"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
                     />
                   </div>
 
                   {/* Date & Time */}
                   <div className="space-y-2">
-                    <label htmlFor="meeting-date" className="text-sm font-bold text-slate-700 block uppercase tracking-wider">
+                    <label htmlFor="meeting-date" className="text-sm font-bold text-slate-700 dark:text-slate-200 block uppercase tracking-wider">
                       📅 Date & Time *
                     </label>
                     <input
@@ -617,13 +617,13 @@ const Meetings = () => {
                       value={meetingDate}
                       onChange={(e) => setMeetingDate(e.target.value)}
                       required
-                      className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all text-slate-800"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all text-slate-800 dark:text-slate-100"
                     />
                   </div>
 
                   {/* Video Link */}
                   <div className="space-y-2">
-                    <label htmlFor="meeting-link" className="text-sm font-bold text-slate-700 block uppercase tracking-wider">
+                    <label htmlFor="meeting-link" className="text-sm font-bold text-slate-700 dark:text-slate-200 block uppercase tracking-wider">
                       🎥 Any link (include https://..)
                     </label>
                     <input
@@ -632,13 +632,13 @@ const Meetings = () => {
                       placeholder="e.g. Any URL or Source if you would like to share"
                       value={meetingLink}
                       onChange={(e) => setMeetingLink(e.target.value)}
-                      className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all placeholder:text-slate-400 text-slate-800"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
                     />
                   </div>
 
                   {/* Agenda */}
                   <div className={`space-y-2 ${modalMode === 'edit' ? '' : 'md:col-span-2'}`}>
-                    <label htmlFor="meeting-agenda" className="text-sm font-bold text-slate-700 block uppercase tracking-wider">
+                    <label htmlFor="meeting-agenda" className="text-sm font-bold text-slate-700 dark:text-slate-200 block uppercase tracking-wider">
                       📋 Meeting Agenda (Optional)
                     </label>
                     <textarea
@@ -647,21 +647,21 @@ const Meetings = () => {
                       placeholder="Specify key discussion targets, documents to review, deliverables to present, questions to resolve, etc."
                       value={agenda}
                       onChange={(e) => setAgenda(e.target.value)}
-                      className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all placeholder:text-slate-400 resize-none text-slate-800 leading-relaxed"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all placeholder:text-slate-400 resize-none text-slate-800 dark:text-slate-100 leading-relaxed"
                     ></textarea>
                   </div>
 
                   {/* Status (edit mode only) */}
                   {modalMode === 'edit' && (
                     <div className="space-y-2">
-                      <label htmlFor="meeting-status-select" className="text-sm font-bold text-slate-700 block uppercase tracking-wider">
+                      <label htmlFor="meeting-status-select" className="text-sm font-bold text-slate-700 dark:text-slate-200 block uppercase tracking-wider">
                         🔄 Meeting Status
                       </label>
                       <select
                         id="meeting-status-select"
                         value={meetingStatus}
                         onChange={(e) => setMeetingStatus(e.target.value)}
-                        className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all text-slate-800 font-semibold"
+                        className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all text-slate-800 dark:text-slate-100 font-semibold"
                       >
                         <option value="scheduled">🕐 Scheduled</option>
                         <option value="completed">✅ Completed</option>
@@ -672,13 +672,13 @@ const Meetings = () => {
                 </div>
 
                 {/* Form Actions */}
-                <div className="pt-6 mt-6 border-t-2 border-slate-100 flex items-center justify-between gap-4">
+                <div className="pt-6 mt-6 border-t-2 border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
                   <p className="text-xs text-slate-400">* Required fields</p>
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
                       onClick={() => setIsModalOpen(false)}
-                      className="px-7 py-3 border-2 border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-sm rounded-2xl transition-colors"
+                      className="px-7 py-3 border-2 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-300 font-bold text-sm rounded-2xl transition-colors"
                     >
                       Cancel
                     </button>

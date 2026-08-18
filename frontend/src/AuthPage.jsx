@@ -91,7 +91,7 @@ export default function AuthPage({ onLoginSuccess }) {
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
-      <div className="bg-white shadow-lg rounded-xl w-full max-w-md p-8">
+      <div className="bg-white dark:bg-slate-800 shadow-lg rounded-xl w-full max-w-md p-8">
 
         {/* Header */}
         <h1 className="text-3xl font-bold text-center text-blue-600">
@@ -111,7 +111,7 @@ export default function AuthPage({ onLoginSuccess }) {
               className={`flex-1 p-2 rounded border text-black ${
                 role === "student"
                   ? "bg-blue-600 text-white"
-                  : "bg-white"
+                  : "bg-white dark:bg-slate-800"
               }`}
             >
               Student
@@ -123,7 +123,7 @@ export default function AuthPage({ onLoginSuccess }) {
               className={`flex-1 p-2 rounded border text-black ${
                 role === "faculty"
                   ? "bg-blue-600 text-white"
-                  : "bg-white"
+                  : "bg-white dark:bg-slate-800"
               }`}
             >
               Faculty

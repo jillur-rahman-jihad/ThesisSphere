@@ -71,18 +71,18 @@ const FacultyProfile = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <p className="text-slate-800 text-lg font-semibold">Loading supervisor profile...</p>
+        <p className="text-slate-800 dark:text-slate-100 text-lg font-semibold">Loading supervisor profile...</p>
       </div>
     );
   }
 
   if (!isPublicView && currentUser?.role !== "faculty") {
     return (
-      <div className="min-h-full bg-slate-50 py-16">
-        <div className="max-w-3xl mx-auto rounded-3xl border border-slate-200 bg-white p-10 shadow-sm text-center">
-          <User className="mx-auto mb-4 text-slate-500" size={42} />
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Faculty profile not available</h2>
-          <p className="text-slate-600">This page is reserved for users with the faculty role.</p>
+      <div className="min-h-full bg-slate-50 dark:bg-slate-900/50 py-16">
+        <div className="max-w-3xl mx-auto rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-10 shadow-sm text-center">
+          <User className="mx-auto mb-4 text-slate-500 dark:text-slate-400" size={42} />
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Faculty profile not available</h2>
+          <p className="text-slate-600 dark:text-slate-300">This page is reserved for users with the faculty role.</p>
         </div>
       </div>
     );
@@ -90,7 +90,7 @@ const FacultyProfile = () => {
 
   if (error) {
     return (
-      <div className="min-h-full bg-slate-50 py-16">
+      <div className="min-h-full bg-slate-50 dark:bg-slate-900/50 py-16">
         <div className="max-w-3xl mx-auto rounded-3xl border border-red-200 bg-red-50 p-10 shadow-sm text-center">
           <p className="text-red-700 font-semibold">{error}</p>
         </div>
@@ -118,11 +118,11 @@ const FacultyProfile = () => {
   const experienceYears = profile.experienceYears ?? 12;
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="rounded-[32px] bg-gradient-to-r from-indigo-700 via-violet-700 to-sky-600 p-8 shadow-2xl shadow-slate-300/20 sm:p-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-5">
-            <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white/10 text-3xl font-bold text-white shadow-xl shadow-indigo-200/30">
+            <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white dark:bg-slate-800/10 text-3xl font-bold text-white shadow-xl shadow-indigo-200/30">
               {initials || "EC"}
             </div>
             <div>
@@ -134,14 +134,14 @@ const FacultyProfile = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-4 rounded-[28px] bg-white/10 px-4 py-3 text-white shadow-inner shadow-slate-900/10 sm:max-w-sm">
+          <div className="flex items-center justify-between gap-4 rounded-[28px] bg-white dark:bg-slate-800/10 px-4 py-3 text-white shadow-inner shadow-slate-900/10 sm:max-w-sm">
             {isAccepting && (
               <span className="rounded-full bg-emerald-100/90 px-3 py-1 text-sm font-semibold text-emerald-800">Accepting Students</span>
             )}
             {canEdit && (
               <button
                 onClick={() => setShowEditModal(true)}
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/25"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white dark:bg-slate-800/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white dark:bg-slate-800/25"
               >
                 <ChevronRight size={16} />
                 Edit Profile
@@ -160,18 +160,18 @@ const FacultyProfile = () => {
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-          <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
-            <div className="flex items-center gap-3 text-slate-500">
+          <div className="rounded-[32px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
+            <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
               <Briefcase className="w-5 h-5" />
               <h2 className="text-sm font-semibold uppercase tracking-[0.25em]">Biography</h2>
             </div>
-            <p className="mt-4 text-slate-700 leading-7">
+            <p className="mt-4 text-slate-700 dark:text-slate-200 leading-7">
               {profileData?.bio ||
                 "Leading researcher in AI applications for healthcare imaging. Lab focuses on deploying interpretable deep learning in clinical workflows. Active collaborations with top institutions and grant-funded projects."}
             </p>
 
             <div className="mt-8">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">Research Areas</h3>
+              <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">Research Areas</h3>
               <div className="mt-4 flex flex-wrap gap-3">
                 {researchTags.length ? (
                   researchTags.map((tag, index) => (
@@ -180,14 +180,14 @@ const FacultyProfile = () => {
                     </span>
                   ))
                 ) : (
-                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600">No research areas added</span>
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600 dark:text-slate-300">No research areas added</span>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
-            <div className="flex items-center gap-3 text-slate-500">
+          <div className="rounded-[32px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
+            <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
               <MapPin className="w-5 h-5" />
               <div className="text-sm font-semibold uppercase tracking-[0.25em]">Contact</div>
             </div>
@@ -215,19 +215,19 @@ const FacultyProfile = () => {
 };
 
 const StatCard = ({ icon, label, value, subtext }) => (
-  <div className="rounded-[24px] border border-slate-200 bg-white px-5 py-6 text-center shadow-sm">
-    <div className="flex items-center justify-center gap-2 text-slate-500">
+  <div className="rounded-[24px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-5 py-6 text-center shadow-sm">
+    <div className="flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400">
       {icon}
       <span className="text-xs font-semibold uppercase tracking-[0.28em]">{label}</span>
     </div>
-    <div className="mt-3 text-3xl font-bold text-slate-900">{value}</div>
-    <div className="mt-2 text-sm text-slate-500">{subtext}</div>
+    <div className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">{value}</div>
+    <div className="mt-2 text-sm text-slate-500 dark:text-slate-400">{subtext}</div>
   </div>
 );
 
 const ContactCard = ({ icon, label }) => (
-  <div className="flex items-center gap-4 rounded-[24px] border border-slate-200 bg-white px-5 py-4 text-slate-700 shadow-sm">
-    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">{icon}</div>
+  <div className="flex items-center gap-4 rounded-[24px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-5 py-4 text-slate-700 dark:text-slate-200 shadow-sm">
+    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-600 dark:text-slate-300">{icon}</div>
     <div className="text-sm font-medium">{label}</div>
   </div>
 );
@@ -285,13 +285,13 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-3xl overflow-hidden rounded-[28px] bg-white shadow-2xl max-h-[90vh]">
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+      <div className="w-full max-w-3xl overflow-hidden rounded-[28px] bg-white dark:bg-slate-800 shadow-2xl max-h-[90vh]">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-6 py-5">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900">Edit Faculty Profile</h2>
-            <p className="text-sm text-slate-500">Update topics, consultation hours, and availability mode.</p>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Edit Faculty Profile</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Update topics, consultation hours, and availability mode.</p>
           </div>
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-900">
+          <button onClick={onClose} className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white">
             <X size={24} />
           </button>
         </div>
@@ -299,43 +299,43 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
         <div className="max-h-[calc(90vh-88px)] overflow-y-auto px-6 py-6">
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-semibold text-slate-900">Designation</label>
+              <label className="block text-sm font-semibold text-slate-900 dark:text-white">Designation</label>
               <input
                 name="designation"
                 value={formData.designation}
                 onChange={handleChange}
-                className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900"
+                className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-900">Office Room</label>
+              <label className="block text-sm font-semibold text-slate-900 dark:text-white">Office Room</label>
               <input
                 name="officeRoom"
                 value={formData.officeRoom}
                 onChange={handleChange}
-                className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900"
+                className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white"
               />
             </div>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-semibold text-slate-900">Consultation Hours</label>
+              <label className="block text-sm font-semibold text-slate-900 dark:text-white">Consultation Hours</label>
               <input
                 name="consultationHours"
                 value={formData.consultationHours}
                 onChange={handleChange}
                 placeholder="e.g. Mon 2-4pm, Fri 10-12pm"
-                className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900"
+                className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-900">Availability Mode</label>
+              <label className="block text-sm font-semibold text-slate-900 dark:text-white">Availability Mode</label>
               <select
                 name="consultationMode"
                 value={formData.consultationMode}
                 onChange={handleChange}
-                className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900"
+                className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white"
               >
                 {consultationModes.map((mode) => (
                   <option key={mode.value} value={mode.value}>
@@ -347,8 +347,8 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-900">Topics</label>
-            <p className="text-xs text-slate-500">Select the main research topics you supervise.</p>
+            <label className="block text-sm font-semibold text-slate-900 dark:text-white">Topics</label>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Select the main research topics you supervise.</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {RESEARCH_OPTIONS.map((option) => {
                 const selected = formData.researchInterests.includes(option);
@@ -360,7 +360,7 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
                     className={`rounded-full border px-4 py-2 text-sm transition ${
                       selected
                         ? 'border-blue-600 bg-blue-600 text-white'
-                        : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+                        : 'border-slate-300 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-slate-400'
                     }`}
                   >
                     {option}
@@ -371,7 +371,7 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-900">Expertise Keywords</label>
+            <label className="block text-sm font-semibold text-slate-900 dark:text-white">Expertise Keywords</label>
             <input
               name="expertise"
               value={formData.expertise.join(', ')}
@@ -380,12 +380,12 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
                 expertise: e.target.value.split(',').map((item) => item.trim()).filter(Boolean),
               }))}
               placeholder="Add comma-separated expertise keywords"
-              className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900"
+              className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-900">Publications</label>
+            <label className="block text-sm font-semibold text-slate-900 dark:text-white">Publications</label>
             <textarea
               name="publications"
               value={formData.publications.join(', ')}
@@ -394,29 +394,29 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
                 publications: e.target.value.split(',').map((item) => item.trim()).filter(Boolean),
               }))}
               placeholder="List publications separated by commas"
-              className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 min-h-[120px]"
+              className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white min-h-[120px]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-900">Profile Bio</label>
+            <label className="block text-sm font-semibold text-slate-900 dark:text-white">Profile Bio</label>
             <textarea
               name="bio"
               value={formData.bio}
               onChange={handleChange}
               placeholder="Write a short bio or overview"
-              className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 min-h-[120px]"
+              className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white min-h-[120px]"
             />
           </div>
 
         </div>
 
-        <div className="sticky bottom-0 z-10 border-t border-slate-200 bg-white px-6 py-4">
+        <div className="sticky bottom-0 z-10 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 py-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:w-auto"
+              className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-5 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:bg-slate-900/50 sm:w-auto"
             >
               Cancel
             </button>

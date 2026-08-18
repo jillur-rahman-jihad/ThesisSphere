@@ -161,8 +161,8 @@ const PostTopics = () => {
     <div className="max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">My Thesis Topics</h1>
-          <p className="text-slate-500 text-sm mt-1">Manage the thesis topics you have posted for students.</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">My Thesis Topics</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage the thesis topics you have posted for students.</p>
         </div>
         <button
           onClick={() => handleOpenTopicModal()}
@@ -183,12 +183,12 @@ const PostTopics = () => {
           <p>{error}</p>
         </div>
       ) : topics.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-12 text-center">
           <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Bookmark className="w-8 h-8 text-slate-400" />
           </div>
-          <h3 className="text-lg font-bold text-slate-700 mb-2">No topics posted yet</h3>
-          <p className="text-slate-500 text-sm max-w-sm mx-auto mb-6">
+          <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-2">No topics posted yet</h3>
+          <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm mx-auto mb-6">
             You haven't posted any thesis topics. Post your first topic to attract prospective students.
           </p>
           <button
@@ -202,16 +202,16 @@ const PostTopics = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {topics.map(topic => (
-            <div key={topic._id} className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5 transition-all flex flex-col group">
+            <div key={topic._id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5 transition-all flex flex-col group">
               <div className="flex justify-between items-start mb-3">
                 <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full ${
-                  topic.status === 'available' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
+                  topic.status === 'available' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600 dark:text-slate-300'
                 }`}>
                   {topic.status}
                 </span>
                 
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => handleOpenTopicModal(topic)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit Topic">
+                  <button onClick={() => handleOpenTopicModal(topic)} className="p-1.5 text-slate-400 hover:text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:bg-indigo-900/30 rounded-lg transition-colors" title="Edit Topic">
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button onClick={() => handleTopicDelete(topic._id)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete Topic">
@@ -220,16 +220,16 @@ const PostTopics = () => {
                 </div>
               </div>
               
-              <h3 className="font-bold text-slate-800 text-lg leading-tight mb-2 line-clamp-2" title={topic.title}>{topic.title}</h3>
-              <p className="text-slate-500 text-sm mb-4 line-clamp-3 flex-1">{topic.description}</p>
+              <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg leading-tight mb-2 line-clamp-2" title={topic.title}>{topic.title}</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-3 flex-1">{topic.description}</p>
               
               <div className="mt-auto">
                 <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Category</div>
-                <div className="text-sm font-medium text-slate-700 mb-4">{topic.category || 'General'}</div>
+                <div className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-4">{topic.category || 'General'}</div>
                 
                 <button 
                   onClick={() => handleOpenAppsModal(topic)}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
                 >
                   <Users className="w-4 h-4" />
                   View Applications
@@ -243,12 +243,12 @@ const PostTopics = () => {
       {/* Topic Create/Edit Modal */}
       {isTopicModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-              <h3 className="text-lg font-bold text-slate-800">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
                 {editingTopic ? 'Edit Thesis Topic' : 'Post New Topic'}
               </h3>
-              <button onClick={handleCloseTopicModal} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+              <button onClick={handleCloseTopicModal} className="text-slate-400 hover:text-slate-600 dark:text-slate-300 transition-colors p-1">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -265,51 +265,51 @@ const PostTopics = () => {
 
               <form onSubmit={handleTopicSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Topic Title</label>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Topic Title</label>
                   <input
                     type="text"
                     name="title"
                     required
                     value={formData.title}
                     onChange={handleTopicChange}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
                     placeholder="Enter an engaging title"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Description</label>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Description</label>
                   <textarea
                     name="description"
                     rows={4}
                     value={formData.description}
                     onChange={handleTopicChange}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
                     placeholder="Describe the research objectives and scope..."
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Category</label>
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Category</label>
                     <input
                       type="text"
                       name="category"
                       value={formData.category}
                       onChange={handleTopicChange}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
                       placeholder="e.g. Machine Learning"
                     />
                   </div>
                   
                   {editingTopic && (
                     <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Status</label>
+                      <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Status</label>
                       <select
                         name="status"
                         value={formData.status}
                         onChange={handleTopicChange}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
+                        className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
                       >
                         <option value="available">Available</option>
                         <option value="assigned">Assigned</option>
@@ -319,13 +319,13 @@ const PostTopics = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Keywords</label>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Keywords</label>
                   <input
                     type="text"
                     name="keywords"
                     value={formData.keywords}
                     onChange={handleTopicChange}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
                     placeholder="Comma separated (e.g. AI, NLP, Healthcare)"
                   />
                 </div>
@@ -334,7 +334,7 @@ const PostTopics = () => {
                   <button
                     type="button"
                     onClick={handleCloseTopicModal}
-                    className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                    className="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 rounded-xl transition-colors"
                   >
                     Cancel
                   </button>
@@ -356,13 +356,13 @@ const PostTopics = () => {
       {/* Applications View Modal */}
       {isAppsModalOpen && viewingAppsForTopic && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 flex-shrink-0">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex-shrink-0">
               <div>
-                <h3 className="text-lg font-bold text-slate-800">Student Applications</h3>
-                <p className="text-slate-500 text-xs mt-0.5 line-clamp-1">{viewingAppsForTopic.title}</p>
+                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Student Applications</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5 line-clamp-1">{viewingAppsForTopic.title}</p>
               </div>
-              <button onClick={handleCloseAppsModal} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+              <button onClick={handleCloseAppsModal} className="text-slate-400 hover:text-slate-600 dark:text-slate-300 transition-colors p-1">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -380,21 +380,21 @@ const PostTopics = () => {
               ) : applications.length === 0 ? (
                 <div className="text-center py-12">
                   <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                  <h4 className="text-slate-700 font-semibold">No applications yet</h4>
-                  <p className="text-slate-500 text-sm mt-1">Students have not applied for this topic.</p>
+                  <h4 className="text-slate-700 dark:text-slate-200 font-semibold">No applications yet</h4>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Students have not applied for this topic.</p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {applications.map(app => (
-                    <div key={app._id} className="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
+                    <div key={app._id} className="border border-slate-200 dark:border-slate-700 rounded-xl p-4 bg-slate-50 dark:bg-slate-900/50/50">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm">
                             {app.studentId?.fullName?.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() || 'ST'}
                           </div>
                           <div>
-                            <h4 className="font-bold text-slate-800">{app.studentId?.fullName || 'Unknown Student'}</h4>
-                            <p className="text-xs text-slate-500">{app.studentId?.email}</p>
+                            <h4 className="font-bold text-slate-800 dark:text-slate-100">{app.studentId?.fullName || 'Unknown Student'}</h4>
+                            <p className="text-xs text-slate-500 dark:text-slate-400">{app.studentId?.email}</p>
                           </div>
                         </div>
                         
@@ -429,9 +429,9 @@ const PostTopics = () => {
                       </div>
                       
                       {app.message && (
-                        <div className="mt-4 pt-4 border-t border-slate-200">
+                        <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                           <p className="text-xs font-bold text-slate-400 uppercase mb-1">Application Message</p>
-                          <p className="text-sm text-slate-700">{app.message}</p>
+                          <p className="text-sm text-slate-700 dark:text-slate-200">{app.message}</p>
                         </div>
                       )}
                       
