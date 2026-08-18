@@ -129,14 +129,14 @@ const Messages = () => {
     <div className="flex h-full gap-6">
       {/* Left: Inbox / Contacts */}
       <div className="w-1/3 bg-white dark:bg-slate-800 rounded-lg shadow p-4 overflow-y-auto text-slate-900 dark:text-white" style={{ maxHeight: '78vh' }}>
-        <h2 className="text-lg font-semibold mb-3 text-black">Inbox</h2>
+        <h2 className="text-lg font-semibold mb-3 text-black dark:text-white">Inbox</h2>
         <div className="mb-3">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search users by name or email"
-            className="w-full border rounded p-2 text-black placeholder:text-slate-500 dark:text-slate-400"
+            className="w-full border dark:border-slate-600 rounded p-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
           />
           {search.trim() !== '' && (
             <div className="mt-2 max-h-40 overflow-y-auto border rounded bg-white dark:bg-slate-800">
@@ -172,7 +172,7 @@ const Messages = () => {
               return (
                 <li
                   key={participant._id || item.lastMessageId}
-                  className={`p-3 rounded hover:bg-slate-50 dark:bg-slate-900/50 cursor-pointer flex justify-between items-start ${selected && ((selected.participant && selected.participant._id) || selected._id) === participant._id ? 'bg-slate-100' : ''}`}
+                  className={`p-3 rounded hover:bg-slate-50 dark:bg-slate-900/50 cursor-pointer flex justify-between items-start ${selected && ((selected.participant && selected.participant._id) || selected._id) === participant._id ? 'bg-slate-100 dark:bg-slate-800' : ''}`}
                   onClick={() => openConversation(item)}
                 >
                   <div>
@@ -194,8 +194,8 @@ const Messages = () => {
 
       {/* Right: Conversation */}
       <div className="flex-1 bg-white dark:bg-slate-800 rounded-lg shadow p-4 flex flex-col text-slate-900 dark:text-white" style={{ maxHeight: '78vh' }}>
-        <div className="border-b pb-3 mb-3">
-          <h2 className="text-lg font-semibold text-black">{selected ? (selected.participant?.fullName || selected.fullName || 'Conversation') : 'Select a conversation'}</h2>
+        <div className="border-b dark:border-slate-700 pb-3 mb-3">
+          <h2 className="text-lg font-semibold text-black dark:text-white">{selected ? (selected.participant?.fullName || selected.fullName || 'Conversation') : 'Select a conversation'}</h2>
           <div className="text-sm text-slate-600 dark:text-slate-300">{selected?.participant?.email || ''}</div>
         </div>
 
@@ -206,7 +206,7 @@ const Messages = () => {
             <div className="space-y-3">
               {conversation.map((m) => (
                 <div key={m._id} className={`flex ${m.sender._id === user?._id ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`${m.sender._id === user?._id ? 'bg-blue-600 text-white' : 'bg-gray-100 text-black'} rounded-xl p-3 max-w-[70%]`}>
+                  <div className={`${m.sender._id === user?._id ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-black dark:text-white'} rounded-xl p-3 max-w-[70%]`}>
                     <div className="text-sm">{m.message}</div>
                     <div className="text-xs text-slate-400 mt-1 text-right">{new Date(m.createdAt).toLocaleString()}</div>
                   </div>
@@ -225,7 +225,7 @@ const Messages = () => {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder={selected ? `Message ${selected.participant?.fullName || selected.fullName || ''}` : 'Select a conversation'}
-              className="flex-1 border rounded p-2 text-black placeholder:text-slate-500 dark:text-slate-400"
+              className="flex-1 border dark:border-slate-600 rounded p-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
               disabled={!selected}
             />
             <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded" disabled={!selected || !text.trim() || loading}>

@@ -106,7 +106,7 @@ const FindSupervisor = () => {
         
         {/* Advanced Filters Drawer */}
         {showFilters && (
-          <div className="mt-4 p-5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 rounded-2xl animate-in slide-in-from-top-2 flex flex-col md:flex-row gap-6">
+          <div className="mt-4 p-5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50 rounded-2xl animate-in slide-in-from-top-2 flex flex-col md:flex-row gap-6">
             <div className="flex-1">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">Department</label>
               <select 
@@ -177,7 +177,7 @@ const FindSupervisor = () => {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Recommended Supervisors */}
-            <div className="bg-gradient-to-br from-indigo-50 to-white dark:from-slate-800 dark:to-slate-900 p-6 rounded-3xl border border-indigo-100 dark:border-slate-700 shadow-sm">
+            <div className="bg-gradient-to-br from-indigo-50 to-white dark:from-slate-800 dark:to-slate-900 p-6 rounded-3xl border border-indigo-100 dark:border-indigo-800/50 dark:border-slate-700 shadow-sm">
               <h3 className="text-lg font-semibold text-indigo-900 dark:text-indigo-300 mb-4 flex items-center gap-2">
                 <GraduationCap className="w-5 h-5" /> Top Supervisor Matches
               </h3>
@@ -198,7 +198,7 @@ const FindSupervisor = () => {
                         {sup.researchInterests && sup.researchInterests.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1">
                             {sup.researchInterests.slice(0, 2).map((interest, i) => (
-                              <span key={i} className="text-[10px] bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2 py-0.5 rounded-md border border-indigo-100 line-clamp-1 max-w-[120px]">
+                              <span key={i} className="text-[10px] bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2 py-0.5 rounded-md border border-indigo-100 dark:border-indigo-800/50 line-clamp-1 max-w-[120px]">
                                 {interest}
                               </span>
                             ))}
@@ -218,7 +218,7 @@ const FindSupervisor = () => {
             </div>
 
             {/* Recommended Topics */}
-            <div className="bg-gradient-to-br from-emerald-50 to-white dark:from-slate-800 dark:to-slate-900 p-6 rounded-3xl border border-emerald-100 dark:border-slate-700 shadow-sm">
+            <div className="bg-gradient-to-br from-emerald-50 to-white dark:from-slate-800 dark:to-slate-900 p-6 rounded-3xl border border-emerald-100 dark:border-emerald-800/50 dark:border-slate-700 shadow-sm">
               <h3 className="text-lg font-semibold text-emerald-900 dark:text-emerald-300 mb-4 flex items-center gap-2">
                 <BookOpen className="w-5 h-5" /> Top Topic Matches
               </h3>
@@ -233,7 +233,7 @@ const FindSupervisor = () => {
                       <h4 className="font-semibold text-slate-900 dark:text-white line-clamp-1">{topic.title}</h4>
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-xs text-slate-500 dark:text-slate-400">By {topic.supervisor}</p>
-                        <span className="text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">
+                        <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-2 py-1 rounded-full">
                           {topic.matchPercentage}% Match
                         </span>
                       </div>
@@ -258,7 +258,7 @@ const FindSupervisor = () => {
                   {sup.profilePicture ? (
                     <img src={sup.profilePicture} alt={sup.fullName} className="w-14 h-14 rounded-full object-cover" />
                   ) : (
-                    <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 dark:bg-indigo-900/30 group-hover:text-indigo-600 dark:text-indigo-400 transition-colors">
+                    <div className="w-14 h-14 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 dark:bg-indigo-900/30 group-hover:text-indigo-600 dark:text-indigo-400 transition-colors">
                       <UserCircle2 className="w-8 h-8" />
                     </div>
                   )}
@@ -275,7 +275,7 @@ const FindSupervisor = () => {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                   <span className="font-medium">Capacity:</span> 
-                  <span className={`${sup.currentStudents >= sup.maxStudents ? 'text-rose-500' : 'text-emerald-600'} font-semibold`}>
+                  <span className={`${sup.currentStudents >= sup.maxStudents ? 'text-rose-500' : 'text-emerald-600 dark:text-emerald-400'} font-semibold`}>
                     {sup.currentStudents}/{sup.maxStudents}
                   </span>
                 </div>

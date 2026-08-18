@@ -115,7 +115,7 @@ const Sidebar = ({ currentUser }) => {
         <h4 className="text-[0.85rem] font-bold text-slate-200 truncate px-2">
           {currentUser?.fullName || 'User Name'}
         </h4>
-        <p className="text-[0.65rem] text-slate-500 truncate mt-1 px-2">
+        <p className="text-[0.65rem] text-slate-500 dark:text-slate-400 truncate mt-1 px-2">
           {isStudent ? 'Student • ThesisSphere' : currentUser?.designation || 'Faculty • ThesisSphere'}
         </p>
       </div>

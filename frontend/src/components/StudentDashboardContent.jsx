@@ -181,7 +181,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
       <section className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-8 shadow-xl shadow-slate-900/10 border border-slate-800">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="space-y-4 max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white dark:bg-slate-800/5 px-4 py-2 text-sm text-slate-200">
               <Sparkles className="w-4 h-4 text-amber-400" />
               Student dashboard overview
             </div>
@@ -196,15 +196,15 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-4">
+              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4">
                 <p className="text-slate-400">Department</p>
                 <p className="mt-1 font-semibold text-white">{department}</p>
               </div>
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-4">
+              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4">
                 <p className="text-slate-400">Semester</p>
                 <p className="mt-1 font-semibold text-white">{semester}</p>
               </div>
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center gap-3">
+              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4 flex items-center gap-3">
                 <div className="w-11 h-11 rounded-full bg-amber-500 text-slate-900 dark:text-white font-bold flex items-center justify-center">
                   {getInitials(displayName)}
                 </div>
@@ -216,7 +216,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
             </div>
           </div>
 
-          <div className="rounded-3xl bg-white/5 border border-white/10 p-5 w-full lg:max-w-sm">
+          <div className="rounded-3xl bg-white dark:bg-slate-800/5 border border-white/10 p-5 w-full lg:max-w-sm">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-300">Today</p>
@@ -271,7 +271,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">Progress milestones</h2>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Track the major steps of your thesis journey.</p>
             </div>
-            <div className="rounded-full bg-emerald-50 text-emerald-700 px-3 py-1 text-sm font-semibold">
+            <div className="rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-3 py-1 text-sm font-semibold">
               {progressMilestones.filter((item) => item.completed).length} of {progressMilestones.length} complete
             </div>
           </div>
@@ -279,14 +279,14 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
           <div className="mt-6 space-y-4">
             {progressMilestones.map((item) => (
               <div key={item.title} className="flex items-center gap-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 px-4 py-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${item.completed ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200 text-slate-400'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${item.completed ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400' : 'bg-slate-200 text-slate-400'}`}>
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-slate-900 dark:text-white">{item.title}</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400">{item.completed ? 'Completed' : 'Pending'}</p>
                 </div>
-                <div className={`text-sm font-semibold ${item.completed ? 'text-emerald-600' : 'text-slate-400'}`}>
+                <div className={`text-sm font-semibold ${item.completed ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
                   {item.completed ? 'Done' : 'Next'}
                 </div>
               </div>
@@ -311,7 +311,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
                     <p className="font-semibold text-slate-900 dark:text-white">{deadline.title}</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Due {deadline.due}</p>
                   </div>
-                  <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                  <span className="rounded-full bg-amber-50 dark:bg-amber-900/30 px-3 py-1 text-xs font-semibold text-amber-700 dark:text-amber-300">
                     {deadline.status}
                   </span>
                 </div>
@@ -365,7 +365,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
                 <Link
                   key={item.label}
                   to={item.path}
-                  className="group rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 p-4 transition hover:border-amber-300 hover:bg-amber-50"
+                  className="group rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 p-4 transition hover:border-amber-300 hover:bg-amber-50 dark:bg-amber-900/30"
                 >
                   <Icon className="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:text-amber-600" />
                   <p className="mt-4 text-sm font-semibold text-slate-900 dark:text-white">{item.label}</p>

@@ -184,7 +184,7 @@ const PostTopics = () => {
         </div>
       ) : topics.length === 0 ? (
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-12 text-center">
-          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Bookmark className="w-8 h-8 text-slate-400" />
           </div>
           <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-2">No topics posted yet</h3>
@@ -205,7 +205,7 @@ const PostTopics = () => {
             <div key={topic._id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5 transition-all flex flex-col group">
               <div className="flex justify-between items-start mb-3">
                 <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full ${
-                  topic.status === 'available' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600 dark:text-slate-300'
+                  topic.status === 'available' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                 }`}>
                   {topic.status}
                 </span>
@@ -229,7 +229,7 @@ const PostTopics = () => {
                 
                 <button 
                   onClick={() => handleOpenAppsModal(topic)}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
                 >
                   <Users className="w-4 h-4" />
                   View Applications
@@ -256,7 +256,7 @@ const PostTopics = () => {
             <div className="p-6">
               {formMessage && (
                 <div className={`mb-6 p-3 rounded-xl flex items-center gap-2 text-sm ${
-                  formMessage.type === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                  formMessage.type === 'success' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300' : 'bg-rose-50 text-rose-700'
                 }`}>
                   {formMessage.type === 'success' ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
                   {formMessage.text}
@@ -334,7 +334,7 @@ const PostTopics = () => {
                   <button
                     type="button"
                     onClick={handleCloseTopicModal}
-                    className="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 rounded-xl transition-colors"
+                    className="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:bg-slate-800 rounded-xl transition-colors"
                   >
                     Cancel
                   </button>
@@ -386,7 +386,7 @@ const PostTopics = () => {
               ) : (
                 <div className="space-y-4">
                   {applications.map(app => (
-                    <div key={app._id} className="border border-slate-200 dark:border-slate-700 rounded-xl p-4 bg-slate-50 dark:bg-slate-900/50/50">
+                    <div key={app._id} className="border border-slate-200 dark:border-slate-700 rounded-xl p-4 bg-slate-50/50 dark:bg-slate-900/50">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm">
@@ -403,7 +403,7 @@ const PostTopics = () => {
                             <>
                               <button 
                                 onClick={() => handleUpdateAppStatus(app._id, 'accepted')}
-                                className="p-2 bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white rounded-lg transition-colors border border-emerald-200 hover:border-emerald-500"
+                                className="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white rounded-lg transition-colors border border-emerald-200 dark:border-emerald-800/60 hover:border-emerald-500"
                                 title="Accept Student"
                               >
                                 <Check className="w-4 h-4" />
@@ -417,7 +417,7 @@ const PostTopics = () => {
                               </button>
                             </>
                           ) : app.status === 'accepted' ? (
-                            <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+                            <span className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1">
                               <CheckCircle2 className="w-3.5 h-3.5" /> Accepted
                             </span>
                           ) : (

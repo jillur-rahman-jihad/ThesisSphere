@@ -116,7 +116,7 @@ export default function AuthPage({ onLoginSuccess }) {
               className={`flex-1 p-2 rounded border transition-colors ${
                 role === "student"
                   ? "bg-blue-600 border-blue-600 text-white"
-                  : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+                  : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 dark:border-slate-600 text-slate-700 dark:text-slate-200 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
               }`}
             >
               Student
@@ -128,7 +128,7 @@ export default function AuthPage({ onLoginSuccess }) {
               className={`flex-1 p-2 rounded border transition-colors ${
                 role === "faculty"
                   ? "bg-blue-600 border-blue-600 text-white"
-                  : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+                  : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 dark:border-slate-600 text-slate-700 dark:text-slate-200 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
               }`}
             >
               Faculty
@@ -146,7 +146,7 @@ export default function AuthPage({ onLoginSuccess }) {
               placeholder="Full Name"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded p-3 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+              className="w-full border border-slate-300 dark:border-slate-600 rounded p-3 bg-white dark:bg-slate-800 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
               required
             />
           )}
@@ -179,7 +179,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full border border-slate-300 dark:border-slate-600 rounded p-3 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                className="w-full border border-slate-300 dark:border-slate-600 rounded p-3 bg-white dark:bg-slate-800 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 required
               />
 
@@ -189,7 +189,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 placeholder="Department"
                 value={formData.department}
                 onChange={handleChange}
-                className="w-full border border-slate-300 dark:border-slate-600 rounded p-3 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                className="w-full border border-slate-300 dark:border-slate-600 rounded p-3 bg-white dark:bg-slate-800 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
               />
 
               <input
@@ -198,7 +198,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 placeholder="University"
                 value={formData.university}
                 onChange={handleChange}
-                className="w-full border border-slate-300 dark:border-slate-600 rounded p-3 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                className="w-full border border-slate-300 dark:border-slate-600 rounded p-3 bg-white dark:bg-slate-800 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
               />
 
               {role === "student" && (

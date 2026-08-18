@@ -35,11 +35,11 @@ const MyApplications = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'accepted': 
-        return <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Accepted</span>;
+        return <span className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Accepted</span>;
       case 'rejected': 
         return <span className="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Rejected</span>;
       default: 
-        return <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Pending Review</span>;
+        return <span className="bg-amber-100 text-amber-700 dark:text-amber-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Pending Review</span>;
     }
   };
 
@@ -69,7 +69,7 @@ const MyApplications = () => {
         </div>
       ) : applications.length === 0 ? (
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-12 text-center">
-          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <FileText className="w-8 h-8 text-slate-400" />
           </div>
           <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-2">No applications yet</h3>

@@ -64,7 +64,7 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
       <section className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-8 shadow-xl shadow-slate-900/10 border border-slate-800">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="space-y-4 max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white dark:bg-slate-800/5 px-4 py-2 text-sm text-slate-200">
               <Briefcase className="w-4 h-4 text-amber-400" />
               Supervisor Dashboard
             </div>
@@ -77,17 +77,17 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm mt-6">
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-4">
+              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4">
                 <p className="text-slate-400">Department</p>
                 <p className="mt-1 font-semibold text-white">{department}</p>
               </div>
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-4">
+              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4">
                 <p className="text-slate-400">Supervision Capacity</p>
                 <p className="mt-1 font-semibold text-white">
                   {summary.activeStudentsCount || 0} / {summary.maxStudents || 5} Students
                 </p>
               </div>
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center gap-3">
+              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4 flex items-center gap-3">
                 <div className="w-11 h-11 rounded-full bg-amber-500 text-slate-900 dark:text-white font-bold flex items-center justify-center">
                   {getInitials(displayName)}
                 </div>
@@ -221,14 +221,14 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
                   {req.topicTitle}
                 </div>
                 <div className="flex items-center justify-between mt-4">
-                  <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+                  <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded">
                     Score: {req.compatibilityScore}%
                   </span>
                   <div className="flex gap-2">
                     <button className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition" title="Decline">
                       <XCircle className="w-5 h-5" />
                     </button>
-                    <button className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition" title="Accept">
+                    <button className="p-1.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:bg-emerald-900/30 rounded-lg transition" title="Accept">
                       <CheckCircle2 className="w-5 h-5" />
                     </button>
                   </div>

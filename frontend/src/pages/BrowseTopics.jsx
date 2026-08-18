@@ -119,7 +119,7 @@ const BrowseTopics = () => {
         </div>
       ) : topics.length === 0 ? (
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-12 text-center">
-          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Bookmark className="w-8 h-8 text-slate-400" />
           </div>
           <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-2">No available topics</h3>
@@ -151,11 +151,11 @@ const BrowseTopics = () => {
               
               <div className="mt-auto">
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-[11px] font-medium bg-amber-50 text-amber-700 px-2 py-1 rounded-md border border-amber-100">
+                  <span className="text-[11px] font-medium bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 px-2 py-1 rounded-md border border-amber-100 dark:border-amber-800/50">
                     {topic.category || 'General'}
                   </span>
                   {topic.keywords?.slice(0, 2).map((kw, i) => (
-                    <span key={i} className="text-[11px] font-medium bg-slate-100 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md">
+                    <span key={i} className="text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md">
                       {kw}
                     </span>
                   ))}
@@ -171,9 +171,9 @@ const BrowseTopics = () => {
                   disabled={hasApplied(topic._id) || currentUser?.role !== 'student'}
                   className={`w-full text-sm font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 ${
                     currentUser?.role !== 'student' 
-                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
+                      ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed' 
                       : hasApplied(topic._id) 
-                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 cursor-not-allowed' 
+                        ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 cursor-not-allowed' 
                         : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                   }`}
                 >
@@ -228,7 +228,7 @@ const BrowseTopics = () => {
                   <button
                     type="button"
                     onClick={handleCloseModal}
-                    className="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 rounded-xl transition-colors"
+                    className="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:bg-slate-800 rounded-xl transition-colors"
                   >
                     Cancel
                   </button>

@@ -157,7 +157,7 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
                   type="text"
                   value={profileData.department}
                   disabled
-                  className="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 dark:text-slate-100 font-medium cursor-not-allowed"
+                  className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 dark:text-slate-100 font-medium cursor-not-allowed"
                 />
 
               </div>
@@ -174,7 +174,7 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
                   type="text"
                   value={profileData.university}
                   disabled
-                  className="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 dark:text-slate-100 font-medium cursor-not-allowed"
+                  className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 dark:text-slate-100 font-medium cursor-not-allowed"
                 />
 
               </div>
@@ -229,7 +229,7 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
                 type="text"
                 value={formData.semester}
                 disabled
-                className="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 dark:text-slate-100 font-medium cursor-not-allowed"
+                className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 dark:text-slate-100 font-medium cursor-not-allowed"
             />
 
         </div>
@@ -316,7 +316,7 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
                 type="text"
                 value={formData.supervisor}
                 disabled
-                className="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 dark:text-slate-100 font-medium cursor-not-allowed"
+                className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 dark:text-slate-100 font-medium cursor-not-allowed"
             />
 
         </div>
@@ -353,7 +353,7 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
             ${
               selected
                 ? "bg-blue-600 text-white border-blue-600"
-                : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-300 hover:bg-slate-100"
+                : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-300 hover:bg-slate-100 dark:bg-slate-800"
             }
           `}
         >
@@ -396,7 +396,7 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
                     ${
                         selected
                             ? "bg-green-600 text-white border-green-600"
-                            : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-300 hover:bg-slate-100"
+                            : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-300 hover:bg-slate-100 dark:bg-slate-800"
                     }
                     `}
                 >
