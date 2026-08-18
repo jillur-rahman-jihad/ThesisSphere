@@ -45,6 +45,7 @@ const Sidebar = ({ currentUser }) => {
     : [
         { name: 'Workload Dashboard', icon: LayoutDashboard, path: '/' },
         { name: 'Post Topics', icon: Lightbulb, path: '/post-topics' },
+        { name: 'Discussion Forum', icon: MessageSquare, path: '/discussion' },
         { name: 'Meetings', icon: Video, path: '/meetings' },
         { name: 'Messages', icon: Mail, badge: 2, path: '/messages' },
         { name: 'Calendar', icon: Calendar, path: '/calendar' },

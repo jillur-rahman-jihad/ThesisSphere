@@ -17,6 +17,7 @@ import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
+import forumRoutes from './routes/forumRoutes.js';
 import automatedReportRoutes from './routes/automatedReportRoutes.js';
 
 // Load environment variables
@@ -60,6 +61,7 @@ app.use('/api/calendar', calendarRoutes);
 app.use('/api/thesis-browse', thesisBrowseRoutes);
 app.use('/api/thesis-applications', thesisApplicationRoutes);
 app.use('/api/citations', citationRoutes);
+app.use('/api/forum', forumRoutes);
 
 app.use('/api/automated-report', automatedReportRoutes);
 
