@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthPage({ onLoginSuccess }) {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [role, setRole] = useState("student");
   const [loading, setLoading] = useState(false);
@@ -79,6 +81,9 @@ export default function AuthPage({ onLoginSuccess }) {
         if (onLoginSuccess) {
           onLoginSuccess(data.data);
         }
+        
+        // Force redirect to the main dashboard instead of staying on the current URL
+        navigate('/');
       } else {
         alert(data.message);
       }
