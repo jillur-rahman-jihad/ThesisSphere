@@ -38,7 +38,7 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <p className="text-slate-800 text-lg font-semibold">
+        <p className="text-slate-800 dark:text-slate-100 text-lg font-semibold">
           Loading profile...
         </p>
       </div>
@@ -56,7 +56,7 @@ const Profile = () => {
 
       {/* ================= HEADER ================= */}
 
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm p-8">
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
@@ -70,15 +70,15 @@ const Profile = () => {
 
             <div>
 
-              <h1 className="text-3xl font-bold text-slate-900">
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
                 {profileData?.fullName || "Student Name"}
               </h1>
 
-              <p className="text-slate-700 text-lg mt-1">
+              <p className="text-slate-700 dark:text-slate-200 text-lg mt-1">
                 {profileData?.department || "Department"}
               </p>
 
-              <p className="text-slate-600">
+              <p className="text-slate-600 dark:text-slate-300">
                 {profileData?.university || "University"}
               </p>
 
@@ -97,7 +97,7 @@ const Profile = () => {
               Edit Profile
             </button>
           ) : (
-            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">
               Faculty profile editing will be added later.
             </div>
           )}
@@ -112,9 +112,9 @@ const Profile = () => {
 
         {/* Academic */}
 
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm p-6">
 
-          <h2 className="text-xl font-bold text-slate-900 mb-5 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-5 flex items-center gap-2">
 
             <GraduationCap size={22} />
 
@@ -154,9 +154,9 @@ const Profile = () => {
 
         {/* Thesis */}
 
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm p-6">
 
-          <h2 className="text-xl font-bold text-slate-900 mb-5">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-5">
 
             Thesis Information
 
@@ -166,11 +166,11 @@ const Profile = () => {
 
             <div>
 
-              <p className="text-slate-800 font-semibold mb-2">
+              <p className="text-slate-800 dark:text-slate-100 font-semibold mb-2">
                 Thesis Title
               </p>
 
-              <p className="text-slate-700">
+              <p className="text-slate-700 dark:text-slate-200">
                 {profile.thesisTitle || "Not Added"}
               </p>
 
@@ -178,11 +178,11 @@ const Profile = () => {
 
             <div>
 
-              <p className="text-slate-800 font-semibold mb-2">
+              <p className="text-slate-800 dark:text-slate-100 font-semibold mb-2">
                 Supervisor
               </p>
 
-              <p className="text-slate-700">
+              <p className="text-slate-700 dark:text-slate-200">
                 {profile.supervisorId || "Not Assigned"}
               </p>
 
@@ -196,9 +196,9 @@ const Profile = () => {
 
       {/* ================= RESEARCH ================= */}
 
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm p-6">
 
-        <h2 className="text-xl font-bold text-slate-900 mb-5">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-5">
           Research Interests
         </h2>
 
@@ -214,7 +214,7 @@ const Profile = () => {
               </span>
             ))
           ) : (
-            <p className="text-slate-600">
+            <p className="text-slate-600 dark:text-slate-300">
               No research interests added.
             </p>
           )}
@@ -225,9 +225,9 @@ const Profile = () => {
 
       {/* ================= SKILLS ================= */}
 
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm p-6">
 
-        <h2 className="text-xl font-bold text-slate-900 mb-5">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-5">
           Technical Skills
         </h2>
 
@@ -243,7 +243,7 @@ const Profile = () => {
               </span>
             ))
           ) : (
-            <p className="text-slate-600">
+            <p className="text-slate-600 dark:text-slate-300">
               No skills added.
             </p>
           )}
@@ -263,9 +263,9 @@ const Profile = () => {
 };
 
 const InfoRow = ({ icon, label, value }) => (
-  <div className="flex justify-between items-center border-b border-slate-200 pb-2">
+  <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-2">
 
-    <div className="flex items-center gap-2 text-slate-800 font-semibold">
+    <div className="flex items-center gap-2 text-slate-800 dark:text-slate-100 font-semibold">
 
       {icon}
 
@@ -273,7 +273,7 @@ const InfoRow = ({ icon, label, value }) => (
 
     </div>
 
-    <span className="text-slate-700 font-medium">
+    <span className="text-slate-700 dark:text-slate-200 font-medium">
       {value}
     </span>
     

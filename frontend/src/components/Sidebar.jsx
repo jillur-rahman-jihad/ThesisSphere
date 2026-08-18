@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 import { 
   LayoutDashboard, 
   Search, 
@@ -14,10 +15,13 @@ import {
   BarChart2, 
   Bell, 
   User,
-  GraduationCap
+  GraduationCap,
+  Moon,
+  Sun
 } from 'lucide-react';
 
 const Sidebar = ({ currentUser }) => {
+  const { theme, toggleTheme } = useTheme();
   const isStudent = currentUser?.role === 'student';
 
   const navItems = isStudent 
@@ -34,6 +38,7 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
         { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
         { name: 'Contributions', icon: BarChart2, path: '/contributions' },
+        { name: 'Automated Report', icon: FileText, path: '/automated-report' },
         { name: 'Notifications', icon: Bell, badge: 3, path: '/notifications' },
         { name: 'My Profile', icon: User, path: '/profile' },
       ]
@@ -56,7 +61,7 @@ const Sidebar = ({ currentUser }) => {
   };
 
   return (
-    <div className="w-[260px] bg-[#1a1f2e] h-screen flex flex-col text-slate-300 font-['Inter',sans-serif] border-r border-slate-800 flex-shrink-0">
+    <div className="w-[260px] bg-[#1a1f2e] h-screen flex flex-col text-slate-300 font-['Inter',sans-serif] border-r border-slate-800 flex-shrink-0 print-hidden">
       
       {/* Logo Area */}
       <div className="p-6 pb-4">
@@ -69,10 +74,10 @@ const Sidebar = ({ currentUser }) => {
 
         {/* Role Toggle Indicator */}
         <div className="flex p-1 bg-[#131722] rounded-lg border border-slate-800/60 mb-2">
-          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${isStudent ? 'bg-amber-600 text-white' : 'text-slate-500'}`}>
+          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${isStudent ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400'}`}>
             Student
           </div>
-          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${!isStudent ? 'bg-amber-600 text-white' : 'text-slate-500'}`}>
+          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${!isStudent ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400'}`}>
             Faculty
           </div>
         </div>
@@ -109,21 +114,14 @@ const Sidebar = ({ currentUser }) => {
         ))}
       </div>
 
-      {/* User Profile Footer */}
-      <div className="p-4 border-t border-slate-800/60">
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-            {getInitials(currentUser?.fullName)}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="text-[0.85rem] font-bold text-slate-200 truncate">
-              {currentUser?.fullName || 'User Name'}
-            </h4>
-            <p className="text-[0.65rem] text-slate-500 truncate mt-0.5">
-              {isStudent ? 'Student • ThesisSphere' : currentUser?.designation || 'Faculty • ThesisSphere'}
-            </p>
-          </div>
-        </div>
+      {/* Bottom Profile Area */}
+      <div className="p-4 border-t border-slate-800/60 text-center">
+        <h4 className="text-[0.85rem] font-bold text-slate-200 truncate px-2">
+          {currentUser?.fullName || 'User Name'}
+        </h4>
+        <p className="text-[0.65rem] text-slate-500 dark:text-slate-400 truncate mt-1 px-2">
+          {isStudent ? 'Student • ThesisSphere' : currentUser?.designation || 'Faculty • ThesisSphere'}
+        </p>
       </div>
     </div>
   );

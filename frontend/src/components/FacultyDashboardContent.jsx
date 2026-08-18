@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Users,
@@ -11,7 +11,10 @@ import {
   BarChart3,
   TrendingUp,
   Inbox,
-  UserCheck
+  UserCheck,
+  X,
+  Mail,
+  GraduationCap
 } from 'lucide-react';
 
 function getInitials(name) {
@@ -26,6 +29,8 @@ function getInitials(name) {
 }
 
 function FacultyDashboardContent({ user, dashboardData, loading, error }) {
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
   const displayName = user?.fullName || dashboardData?.user?.fullName || 'Faculty Member';
   const department = dashboardData?.user?.department || user?.department || 'Department not set';
   const summary = dashboardData?.summary || {};
@@ -35,10 +40,10 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
 
   if (loading) {
     return (
-      <div className="rounded-3xl bg-white border border-slate-200 p-10 shadow-sm flex items-center justify-center min-h-[320px]">
+      <div className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-10 shadow-sm flex items-center justify-center min-h-[320px]">
         <div className="text-center space-y-3">
-          <div className="mx-auto w-10 h-10 rounded-full border-4 border-slate-200 border-t-amber-500 animate-spin" />
-          <p className="text-slate-600 font-medium">Loading your supervisor dashboard...</p>
+          <div className="mx-auto w-10 h-10 rounded-full border-4 border-slate-200 dark:border-slate-700 border-t-amber-500 animate-spin" />
+          <p className="text-slate-600 dark:text-slate-300 font-medium">Loading your supervisor dashboard...</p>
         </div>
       </div>
     );
@@ -46,13 +51,13 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
 
   if (error) {
     return (
-      <div className="rounded-3xl bg-white border border-rose-200 p-8 shadow-sm flex items-start gap-4">
+      <div className="rounded-3xl bg-white dark:bg-slate-800 border border-rose-200 p-8 shadow-sm flex items-start gap-4">
         <div className="rounded-2xl bg-rose-50 p-3 text-rose-600">
           <AlertTriangle className="w-6 h-6" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Dashboard unavailable</h2>
-          <p className="mt-2 text-slate-600">{error}</p>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Dashboard unavailable</h2>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">{error}</p>
         </div>
       </div>
     );
@@ -88,7 +93,7 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
                 </p>
               </div>
               <div className="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-amber-500 text-slate-900 font-bold flex items-center justify-center">
+                <div className="w-11 h-11 rounded-full bg-amber-500 text-slate-900 dark:text-white font-bold flex items-center justify-center">
                   {getInitials(displayName)}
                 </div>
                 <div>
@@ -103,12 +108,12 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
 
       {/* Stats Section */}
       <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-sm text-slate-500">Active Students</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{summary.activeStudentsCount || 0}</p>
-              <p className="mt-1 text-sm text-slate-500">Currently supervising</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Active Students</p>
+              <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{summary.activeStudentsCount || 0}</p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Currently supervising</p>
             </div>
             <div className="rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-3 text-white shadow-lg">
               <Users className="w-5 h-5" />
@@ -116,12 +121,12 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
           </div>
         </div>
         
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-sm text-slate-500">Pending Reviews</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{summary.pendingReviewsCount || 0}</p>
-              <p className="mt-1 text-sm text-slate-500">Papers awaiting review</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Pending Reviews</p>
+              <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{summary.pendingReviewsCount || 0}</p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Papers awaiting review</p>
             </div>
             <div className="rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-3 text-white shadow-lg">
               <FileCheck className="w-5 h-5" />
@@ -129,12 +134,12 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
           </div>
         </div>
 
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-sm text-slate-500">Meetings</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{summary.meetingsThisMonth || 0}</p>
-              <p className="mt-1 text-sm text-slate-500">Conducted this month</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Meetings</p>
+              <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{summary.meetingsThisMonth || 0}</p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Conducted this month</p>
             </div>
             <div className="rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-3 text-white shadow-lg">
               <CalendarDays className="w-5 h-5" />
@@ -142,12 +147,12 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
           </div>
         </div>
 
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-sm text-slate-500">Supervision Requests</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{summary.pendingRequestsCount || 0}</p>
-              <p className="mt-1 text-sm text-slate-500">Awaiting your decision</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Supervision Requests</p>
+              <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{summary.pendingRequestsCount || 0}</p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Awaiting your decision</p>
             </div>
             <div className="rounded-2xl bg-gradient-to-br from-violet-500 to-violet-600 p-3 text-white shadow-lg">
               <Inbox className="w-5 h-5" />
@@ -158,29 +163,34 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
 
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Student Progress Overview */}
-        <div className="xl:col-span-2 rounded-3xl bg-white border border-slate-200 p-6 shadow-sm">
+        <div className="xl:col-span-2 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Supervisee Progress Overview</h2>
-              <p className="text-sm text-slate-500 mt-1">Track the thesis completion status of your active students.</p>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Supervisee Progress Overview</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Track the thesis completion status of your active students.</p>
             </div>
             <TrendingUp className="w-5 h-5 text-slate-400" />
           </div>
 
           <div className="mt-6 space-y-5">
             {activeStudents.map((student, idx) => (
-              <div key={student._id || idx} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <div key={student._id || idx} className="rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-4">
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm">
-                      {getInitials(student.userId?.fullName)}
+                      {getInitials(student.fullName)}
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-900">{student.userId?.fullName || 'Student Name'}</p>
-                      <p className="text-xs text-slate-500">{student.thesisTopic?.title || 'No Topic Selected'}</p>
+                      <button 
+                        onClick={() => setSelectedStudent(student)}
+                        className="font-semibold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-left"
+                      >
+                        {student.fullName || 'Student Name'}
+                      </button>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{student.thesisTitle || 'No Topic Selected'}</p>
                     </div>
                   </div>
-                  <span className="font-bold text-slate-700">{student.progressPercentage || 0}%</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-200">{student.progressPercentage || 0}%</span>
                 </div>
                 <div className="w-full bg-slate-200 rounded-full h-2.5 mt-3">
                   <div 
@@ -193,18 +203,18 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
             {!activeStudents.length && (
               <div className="text-center py-8">
                 <UserCheck className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-500 font-medium">You have no active students.</p>
+                <p className="text-slate-500 dark:text-slate-400 font-medium">You have no active students.</p>
               </div>
             )}
           </div>
         </div>
 
         {/* Pending Supervision Requests */}
-        <div className="rounded-3xl bg-white border border-slate-200 p-6 shadow-sm flex flex-col">
+        <div className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 shadow-sm flex flex-col">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Pending Requests</h2>
-              <p className="text-sm text-slate-500 mt-1">Students seeking supervision.</p>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Pending Requests</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Students seeking supervision.</p>
             </div>
             <div className="rounded-full bg-violet-50 text-violet-700 px-3 py-1 text-sm font-semibold">
               {pendingRequests.length} New
@@ -213,22 +223,22 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
 
           <div className="mt-6 space-y-4 flex-1">
             {pendingRequests.map((req, idx) => (
-              <div key={req._id || idx} className="rounded-2xl border border-slate-200 p-4 hover:border-violet-300 transition-colors">
-                <p className="font-semibold text-slate-900">{req.studentName}</p>
-                <p className="text-xs text-slate-500 mt-1">{req.studentDepartment}</p>
-                <div className="mt-3 bg-slate-50 p-2 rounded-lg text-sm text-slate-700 border border-slate-100">
+              <div key={req._id || idx} className="rounded-2xl border border-slate-200 dark:border-slate-700 p-4 hover:border-violet-300 transition-colors">
+                <p className="font-semibold text-slate-900 dark:text-white">{req.studentName}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{req.studentDepartment}</p>
+                <div className="mt-3 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-lg text-sm text-slate-700 dark:text-slate-200 border border-slate-100 dark:border-slate-800">
                   <span className="font-semibold block mb-1">Topic:</span>
                   {req.topicTitle}
                 </div>
                 <div className="flex items-center justify-between mt-4">
-                  <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+                  <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded">
                     Score: {req.compatibilityScore}%
                   </span>
                   <div className="flex gap-2">
                     <button className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition" title="Decline">
                       <XCircle className="w-5 h-5" />
                     </button>
-                    <button className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition" title="Accept">
+                    <button className="p-1.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:bg-emerald-900/30 rounded-lg transition" title="Accept">
                       <CheckCircle2 className="w-5 h-5" />
                     </button>
                   </div>
@@ -238,7 +248,7 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
             {!pendingRequests.length && (
               <div className="h-full flex flex-col items-center justify-center text-center py-8">
                 <Inbox className="w-10 h-10 text-slate-300 mb-3" />
-                <p className="text-sm text-slate-500">No pending supervision requests at the moment.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">No pending supervision requests at the moment.</p>
               </div>
             )}
           </div>
@@ -246,18 +256,18 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
       </section>
 
       {/* Workload Chart (Simplified HTML Bar Chart) */}
-      <section className="rounded-3xl bg-white border border-slate-200 p-6 shadow-sm">
+      <section className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
             <BarChart3 className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Workload Overview (Past 6 Months)</h2>
-            <p className="text-sm text-slate-500">Combined meetings and paper reviews</p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Workload Overview (Past 6 Months)</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Combined meetings and paper reviews</p>
           </div>
         </div>
 
-        <div className="flex items-end gap-2 md:gap-6 h-64 mt-8 px-2 md:px-8 border-b border-slate-100 pb-2">
+        <div className="flex items-end gap-2 md:gap-6 h-64 mt-8 px-2 md:px-8 border-b border-slate-100 dark:border-slate-800 pb-2">
           {workloadChart.map((monthData, idx) => {
             const total = monthData.meetings + monthData.reviews;
             const maxVal = Math.max(...workloadChart.map(d => d.meetings + d.reviews), 10);
@@ -276,17 +286,64 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
                   style={{ height: `${Math.max(heightPercentage, 5)}%` }} // min 5% height so it's visible
                 ></div>
                 {/* Label */}
-                <div className="mt-3 text-xs md:text-sm font-medium text-slate-600">{monthName}</div>
+                <div className="mt-3 text-xs md:text-sm font-medium text-slate-600 dark:text-slate-300">{monthName}</div>
               </div>
             );
           })}
           {!workloadChart.length && (
-            <div className="w-full h-full flex items-center justify-center text-slate-500">
+            <div className="w-full h-full flex items-center justify-center text-slate-500 dark:text-slate-400">
               Not enough data to display chart.
             </div>
           )}
         </div>
       </section>
+
+      {/* Student Profile Modal */}
+      {selectedStudent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md overflow-hidden rounded-[28px] bg-white dark:bg-slate-800 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-6 py-5">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Student Profile</h2>
+              <button onClick={() => setSelectedStudent(null)} className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-xl">
+                  {getInitials(selectedStudent.fullName)}
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">{selectedStudent.fullName}</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-1">
+                    <GraduationCap size={16} /> {selectedStudent.department || 'Department not specified'}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Thesis Topic</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">{selectedStudent.thesisTitle || 'Not assigned'}</p>
+                </div>
+                
+                <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Overall Progress</p>
+                    <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{selectedStudent.progressPercentage || 0}%</span>
+                  </div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                    <div 
+                      className="bg-indigo-600 h-2 rounded-full transition-all duration-500" 
+                      style={{ width: `${selectedStudent.progressPercentage || 0}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
