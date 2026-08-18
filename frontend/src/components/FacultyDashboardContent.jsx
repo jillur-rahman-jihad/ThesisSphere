@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Users,
@@ -11,7 +11,11 @@ import {
   BarChart3,
   TrendingUp,
   Inbox,
-  UserCheck
+  Inbox,
+  UserCheck,
+  X,
+  Mail,
+  GraduationCap
 } from 'lucide-react';
 
 function getInitials(name) {
@@ -26,6 +30,8 @@ function getInitials(name) {
 }
 
 function FacultyDashboardContent({ user, dashboardData, loading, error }) {
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
   const displayName = user?.fullName || dashboardData?.user?.fullName || 'Faculty Member';
   const department = dashboardData?.user?.department || user?.department || 'Department not set';
   const summary = dashboardData?.summary || {};
@@ -173,11 +179,16 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm">
-                      {getInitials(student.userId?.fullName)}
+                      {getInitials(student.fullName)}
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">{student.userId?.fullName || 'Student Name'}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">{student.thesisTopic?.title || 'No Topic Selected'}</p>
+                      <button 
+                        onClick={() => setSelectedStudent(student)}
+                        className="font-semibold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-left"
+                      >
+                        {student.fullName || 'Student Name'}
+                      </button>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{student.thesisTitle || 'No Topic Selected'}</p>
                     </div>
                   </div>
                   <span className="font-bold text-slate-700 dark:text-slate-200">{student.progressPercentage || 0}%</span>
@@ -287,6 +298,53 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
           )}
         </div>
       </section>
+
+      {/* Student Profile Modal */}
+      {selectedStudent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md overflow-hidden rounded-[28px] bg-white dark:bg-slate-800 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-6 py-5">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Student Profile</h2>
+              <button onClick={() => setSelectedStudent(null)} className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-xl">
+                  {getInitials(selectedStudent.fullName)}
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">{selectedStudent.fullName}</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-1">
+                    <GraduationCap size={16} /> {selectedStudent.department || 'Department not specified'}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Thesis Topic</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">{selectedStudent.thesisTitle || 'Not assigned'}</p>
+                </div>
+                
+                <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Overall Progress</p>
+                    <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{selectedStudent.progressPercentage || 0}%</span>
+                  </div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                    <div 
+                      className="bg-indigo-600 h-2 rounded-full transition-all duration-500" 
+                      style={{ width: `${selectedStudent.progressPercentage || 0}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

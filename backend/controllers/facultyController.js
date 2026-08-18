@@ -113,9 +113,9 @@ export const addStudentToSupervisor = async (req, res, next) => {
     }
 
     // Check capacity
-    if (supervisorProfile.maxStudents > 0 && supervisorProfile.currentStudents >= supervisorProfile.maxStudents) {
+    if (supervisorProfile.maxStudents === 0 || supervisorProfile.currentStudents >= supervisorProfile.maxStudents) {
       res.status(400);
-      throw new Error('Supervisor has reached maximum student capacity');
+      throw new Error('Supervisor has reached maximum student capacity or is not accepting students');
     }
 
     // Check if student is already in a group with this supervisor

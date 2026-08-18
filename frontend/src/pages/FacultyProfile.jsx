@@ -134,7 +134,7 @@ const FacultyProfile = () => {
     .map((word) => word[0])
     .slice(0, 2)
     .join("");
-  const isAccepting = profile.maxStudents ? profile.currentStudents < profile.maxStudents : true;
+  const isAccepting = profile.maxStudents > 0 && profile.currentStudents < profile.maxStudents;
   const researchTags = profile.researchInterests?.length
     ? profile.researchInterests
     : profile.expertise?.length
@@ -301,6 +301,7 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
     publications: profileData.profile?.publications || [],
     website: profileData.profile?.website || '',
     bio: profileData.bio || '',
+    maxStudents: profileData.profile?.maxStudents || 0,
   });
 
   const handleToggleArray = (key, value) => {
@@ -384,7 +385,31 @@ const FacultyEditProfileModal = ({ profileData, onClose, onSave }) => {
             </div>
           </div>
 
-          <div>
+          <div className="grid gap-6 sm:grid-cols-2 mt-6">
+            <div>
+              <label className="block text-sm font-semibold text-slate-900 dark:text-white">Supervision Capacity (Max Students)</label>
+              <input
+                type="number"
+                min="0"
+                name="maxStudents"
+                value={formData.maxStudents}
+                onChange={handleChange}
+                className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-900 dark:text-white">Website</label>
+              <input
+                name="website"
+                value={formData.website}
+                onChange={handleChange}
+                placeholder="e.g. lab.university.edu"
+                className="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3 text-slate-900 dark:text-white"
+              />
+            </div>
+          </div>
+
+          <div className="mt-6">
             <label className="block text-sm font-semibold text-slate-900 dark:text-white">Topics</label>
             <p className="text-xs text-slate-500 dark:text-slate-400">Select the main research topics you supervise.</p>
             <div className="mt-3 flex flex-wrap gap-2">
