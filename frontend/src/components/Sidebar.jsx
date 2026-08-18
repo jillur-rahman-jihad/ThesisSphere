@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 import { 
   LayoutDashboard, 
   Search, 
@@ -14,10 +15,13 @@ import {
   BarChart2, 
   Bell, 
   User,
-  GraduationCap
+  GraduationCap,
+  Moon,
+  Sun
 } from 'lucide-react';
 
 const Sidebar = ({ currentUser }) => {
+  const { theme, toggleTheme } = useTheme();
   const isStudent = currentUser?.role === 'student';
 
   const navItems = isStudent 
@@ -120,6 +124,13 @@ const Sidebar = ({ currentUser }) => {
               {isStudent ? 'Student • ThesisSphere' : currentUser?.designation || 'Faculty • ThesisSphere'}
             </p>
           </div>
+          <button 
+            onClick={toggleTheme}
+            className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-400 transition-colors flex-shrink-0"
+            title="Toggle Dark Mode"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
         </div>
       </div>
     </div>

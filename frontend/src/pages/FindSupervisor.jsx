@@ -79,9 +79,9 @@ const FindSupervisor = () => {
 
   return (
     <div className="space-y-8 pb-12">
-      <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
-        <h1 className="text-3xl font-bold text-slate-900">Find Supervisor</h1>
-        <p className="text-slate-500 mt-2">Discover faculty members, explore their research interests, and find the perfect match for your thesis.</p>
+      <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Find Supervisor</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-2">Discover faculty members, explore their research interests, and find the perfect match for your thesis.</p>
         
         <div className="mt-6 flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
@@ -89,7 +89,7 @@ const FindSupervisor = () => {
             <input 
               type="text"
               placeholder="Search by name, department, or expertise..."
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 text-slate-900 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -97,7 +97,7 @@ const FindSupervisor = () => {
           <button 
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-2xl transition-colors ${
-              showFilters ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+              showFilters ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 dark:text-slate-200'
             }`}>
             <Filter className="w-5 h-5" />
             Filters
@@ -106,11 +106,11 @@ const FindSupervisor = () => {
         
         {/* Advanced Filters Drawer */}
         {showFilters && (
-          <div className="mt-4 p-5 bg-indigo-50 border border-indigo-100 rounded-2xl animate-in slide-in-from-top-2 flex flex-col md:flex-row gap-6">
+          <div className="mt-4 p-5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 rounded-2xl animate-in slide-in-from-top-2 flex flex-col md:flex-row gap-6">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Department</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">Department</label>
               <select 
-                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
                 value={filterDept}
                 onChange={(e) => setFilterDept(e.target.value)}
               >
@@ -130,9 +130,9 @@ const FindSupervisor = () => {
                     onChange={(e) => setFilterAvailableOnly(e.target.checked)}
                   />
                   <div className={`block w-12 h-7 rounded-full transition-colors ${filterAvailableOnly ? 'bg-indigo-500' : 'bg-slate-300'}`}></div>
-                  <div className={`dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-transform ${filterAvailableOnly ? 'transform translate-x-5' : ''}`}></div>
+                  <div className={`dot absolute left-1 top-1 bg-white dark:bg-slate-800 w-5 h-5 rounded-full transition-transform ${filterAvailableOnly ? 'transform translate-x-5' : ''}`}></div>
                 </div>
-                <span className="text-sm font-medium text-slate-700">Only show available slots</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Only show available slots</span>
               </label>
             </div>
           </div>
@@ -154,12 +154,12 @@ const FindSupervisor = () => {
           <div className="flex flex-col gap-4 px-2">
             <div className="flex items-center gap-3">
               <Sparkles className="w-6 h-6 text-amber-500" />
-              <h2 className="text-2xl font-bold text-slate-900">AI-Recommended for You</h2>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">AI-Recommended for You</h2>
             </div>
             
             {recommendations.metadata && (
-              <div className="flex flex-wrap items-center gap-4 text-xs font-medium bg-slate-50 border border-slate-200 p-3 rounded-xl w-fit">
-                <div className="flex items-center gap-1.5 text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-medium bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 p-3 rounded-xl w-fit">
+                <div className="flex items-center gap-1.5 text-indigo-700 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 rounded-lg border border-indigo-100">
                   <Cpu className="w-4 h-4" />
                   <span>Model: {recommendations.metadata.modelUsed}</span>
                 </div>
@@ -187,18 +187,18 @@ const FindSupervisor = () => {
                     <div 
                       key={idx} 
                       onClick={() => navigate(`/faculty-profile/${sup._id}`)}
-                      className="bg-white p-4 rounded-2xl border border-indigo-50 shadow-sm flex items-center gap-4 hover:shadow-md transition cursor-pointer"
+                      className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-indigo-50 shadow-sm flex items-center gap-4 hover:shadow-md transition cursor-pointer"
                     >
                       <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold">
                         {sup.fullName.charAt(0)}
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900">{sup.fullName}</h4>
-                        <p className="text-xs text-slate-500">{sup.department} • {sup.matchPercentage}% Match</p>
+                        <h4 className="font-semibold text-slate-900 dark:text-white">{sup.fullName}</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">{sup.department} • {sup.matchPercentage}% Match</p>
                         {sup.researchInterests && sup.researchInterests.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1">
                             {sup.researchInterests.slice(0, 2).map((interest, i) => (
-                              <span key={i} className="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md border border-indigo-100 line-clamp-1 max-w-[120px]">
+                              <span key={i} className="text-[10px] bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2 py-0.5 rounded-md border border-indigo-100 line-clamp-1 max-w-[120px]">
                                 {interest}
                               </span>
                             ))}
@@ -212,7 +212,7 @@ const FindSupervisor = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-slate-500">No strong matches found based on your profile.</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">No strong matches found based on your profile.</p>
                 )}
               </div>
             </div>
@@ -228,11 +228,11 @@ const FindSupervisor = () => {
                     <div 
                       key={idx} 
                       onClick={() => topic.supervisorId ? navigate(`/faculty-profile/${topic.supervisorId}`) : navigate('/topics')}
-                      className="bg-white p-4 rounded-2xl border border-emerald-50 shadow-sm hover:shadow-md transition cursor-pointer"
+                      className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-emerald-50 shadow-sm hover:shadow-md transition cursor-pointer"
                     >
-                      <h4 className="font-semibold text-slate-900 line-clamp-1">{topic.title}</h4>
+                      <h4 className="font-semibold text-slate-900 dark:text-white line-clamp-1">{topic.title}</h4>
                       <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs text-slate-500">By {topic.supervisor}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">By {topic.supervisor}</p>
                         <span className="text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">
                           {topic.matchPercentage}% Match
                         </span>
@@ -240,7 +240,7 @@ const FindSupervisor = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-slate-500">No strong topic matches found.</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">No strong topic matches found.</p>
                 )}
               </div>
             </div>
@@ -249,31 +249,31 @@ const FindSupervisor = () => {
       )}
 
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 px-2 mb-6">All Supervisors Directory</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white px-2 mb-6">All Supervisors Directory</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredSupervisors.map((sup, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
+            <div key={idx} className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow group">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
                   {sup.profilePicture ? (
                     <img src={sup.profilePicture} alt={sup.fullName} className="w-14 h-14 rounded-full object-cover" />
                   ) : (
-                    <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                    <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 dark:bg-indigo-900/30 group-hover:text-indigo-600 dark:text-indigo-400 transition-colors">
                       <UserCircle2 className="w-8 h-8" />
                     </div>
                   )}
                   <div>
-                    <h3 className="font-bold text-slate-900 text-lg">{sup.fullName}</h3>
-                    <p className="text-sm text-indigo-600 font-medium">{sup.designation || 'Faculty Member'}</p>
+                    <h3 className="font-bold text-slate-900 dark:text-white text-lg">{sup.fullName}</h3>
+                    <p className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">{sup.designation || 'Faculty Member'}</p>
                   </div>
                 </div>
               </div>
               
               <div className="mt-5 space-y-3">
-                <div className="flex items-center gap-2 text-sm text-slate-600">
+                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                   <span className="font-medium">Dept:</span> {sup.department}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-slate-600">
+                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                   <span className="font-medium">Capacity:</span> 
                   <span className={`${sup.currentStudents >= sup.maxStudents ? 'text-rose-500' : 'text-emerald-600'} font-semibold`}>
                     {sup.currentStudents}/{sup.maxStudents}
@@ -281,12 +281,12 @@ const FindSupervisor = () => {
                 </div>
               </div>
 
-              <div className="mt-5 pt-5 border-t border-slate-100">
+              <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-800">
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Expertise</p>
                 <div className="flex flex-wrap gap-2">
                   {sup.expertise && sup.expertise.length > 0 ? (
                     sup.expertise.slice(0, 3).map((exp, i) => (
-                      <span key={i} className="px-2.5 py-1 bg-slate-50 text-slate-600 text-xs rounded-lg border border-slate-200">
+                      <span key={i} className="px-2.5 py-1 bg-slate-50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-300 text-xs rounded-lg border border-slate-200 dark:border-slate-700">
                         {exp}
                       </span>
                     ))
@@ -294,7 +294,7 @@ const FindSupervisor = () => {
                     <span className="text-sm text-slate-400 italic">Not specified</span>
                   )}
                   {sup.expertise && sup.expertise.length > 3 && (
-                    <span className="px-2.5 py-1 bg-slate-50 text-slate-500 text-xs rounded-lg border border-slate-200">
+                    <span className="px-2.5 py-1 bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs rounded-lg border border-slate-200 dark:border-slate-700">
                       +{sup.expertise.length - 3}
                     </span>
                   )}
@@ -309,10 +309,10 @@ const FindSupervisor = () => {
             </div>
           ))}
           {filteredSupervisors.length === 0 && (
-            <div className="col-span-full py-12 text-center bg-white rounded-3xl border border-slate-200">
+            <div className="col-span-full py-12 text-center bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700">
               <UserCircle2 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-              <h3 className="text-lg font-medium text-slate-900">No supervisors found</h3>
-              <p className="text-slate-500 mt-1">Try adjusting your search criteria</p>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-white">No supervisors found</h3>
+              <p className="text-slate-500 dark:text-slate-400 mt-1">Try adjusting your search criteria</p>
             </div>
           )}
         </div>

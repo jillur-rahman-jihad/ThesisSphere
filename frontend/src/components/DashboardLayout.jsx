@@ -4,15 +4,15 @@ import Sidebar from './Sidebar.jsx';
 
 const DashboardLayout = ({ currentUser, onLogout }) => {
   return (
-    <div className="flex h-screen w-full bg-[#f8f9fa] text-slate-900 overflow-hidden font-['Inter',sans-serif]">
+    <div className="flex h-screen w-full bg-[#f8f9fa] dark:bg-slate-900 text-slate-900 dark:text-slate-100 overflow-hidden font-['Inter',sans-serif] transition-colors duration-300">
       {/* Left Sidebar */}
       <Sidebar currentUser={currentUser} />
 
       {/* Right Content Area (Main Dashboard) */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Top Header */}
-        <header className="h-[72px] bg-white border-b border-slate-200 flex items-center justify-between px-8 flex-shrink-0">
-          <h2 className="text-lg font-bold text-slate-800">
+        <header className="h-[72px] bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-8 flex-shrink-0 transition-colors duration-300">
+          <h2 className="text-lg font-bold text-slate-800 dark:text-white">
             {currentUser?.role === 'student' ? 'Dashboard' : 'Supervisor Dashboard'}
           </h2>
           

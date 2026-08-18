@@ -85,29 +85,29 @@ const Calendar = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-8 pb-12">
       {/* Main Calendar Grid */}
-      <div className="flex-1 bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+      <div className="flex-1 bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700">
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
+            <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
               <CalendarIcon className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                 {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
               </h1>
-              <p className="text-sm text-slate-500 font-medium">Academic Deadlines & Meetings</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Academic Deadlines & Meetings</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={today} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">
+            <button onClick={today} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-sm font-semibold rounded-xl transition-colors">
               Today
             </button>
-            <div className="flex items-center bg-slate-50 rounded-xl border border-slate-200 p-1">
-              <button onClick={prevMonth} className="p-1.5 hover:bg-white rounded-lg transition-colors text-slate-600">
+            <div className="flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 p-1">
+              <button onClick={prevMonth} className="p-1.5 hover:bg-white dark:bg-slate-800 rounded-lg transition-colors text-slate-600 dark:text-slate-300">
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <button onClick={nextMonth} className="p-1.5 hover:bg-white rounded-lg transition-colors text-slate-600">
+              <button onClick={nextMonth} className="p-1.5 hover:bg-white dark:bg-slate-800 rounded-lg transition-colors text-slate-600 dark:text-slate-300">
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
@@ -124,9 +124,9 @@ const Calendar = () => {
         </div>
 
         {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-px bg-slate-100 rounded-2xl overflow-hidden border border-slate-200">
+        <div className="grid grid-cols-7 gap-px bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
           {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-            <div key={`empty-${i}`} className="bg-slate-50/50 min-h-[120px]"></div>
+            <div key={`empty-${i}`} className="bg-slate-50 dark:bg-slate-900/50/50 min-h-[120px]"></div>
           ))}
           {Array.from({ length: daysInMonth }).map((_, i) => {
             const day = i + 1;
@@ -134,8 +134,8 @@ const Calendar = () => {
             const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
 
             return (
-              <div key={day} className={`min-h-[120px] bg-white p-2 transition-colors hover:bg-slate-50 ${isToday ? 'bg-indigo-50/30' : ''}`}>
-                <div className={`w-7 h-7 flex items-center justify-center rounded-full text-sm font-semibold mb-1 ${isToday ? 'bg-indigo-600 text-white' : 'text-slate-700'}`}>
+              <div key={day} className={`min-h-[120px] bg-white dark:bg-slate-800 p-2 transition-colors hover:bg-slate-50 dark:bg-slate-900/50 ${isToday ? 'bg-indigo-50 dark:bg-indigo-900/30/30' : ''}`}>
+                <div className={`w-7 h-7 flex items-center justify-center rounded-full text-sm font-semibold mb-1 ${isToday ? 'bg-indigo-600 text-white' : 'text-slate-700 dark:text-slate-200'}`}>
                   {day}
                 </div>
                 <div className="space-y-1 mt-2">
@@ -171,8 +171,8 @@ const Calendar = () => {
           </button>
         )}
 
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex-1">
-          <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 flex-1">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
             <Clock className="w-5 h-5 text-slate-400" /> Upcoming Events
           </h3>
           <div className="space-y-4">
@@ -185,13 +185,13 @@ const Calendar = () => {
                   </span>
                 </div>
                 <div className={`flex-1 p-3 rounded-xl border ${e.type === 'meeting' ? 'bg-blue-50/50 border-blue-100' : 'bg-rose-50/50 border-rose-100'}`}>
-                  <h4 className="text-sm font-bold text-slate-900 line-clamp-1">{e.title}</h4>
-                  <p className="text-xs font-medium text-slate-500 mt-1">{e.groupName}</p>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1">{e.title}</h4>
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">{e.groupName}</p>
                 </div>
               </div>
             ))}
             {events.filter(e => new Date(e.date) >= new Date()).length === 0 && (
-              <p className="text-sm text-slate-500 text-center py-4">No upcoming events found.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">No upcoming events found.</p>
             )}
           </div>
         </div>
@@ -200,10 +200,10 @@ const Calendar = () => {
       {/* Create Deadline Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-slate-900">Schedule New Deadline</h2>
-              <button onClick={() => setShowModal(false)} className="p-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-500 transition-colors">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
+            <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Schedule New Deadline</h2>
+              <button onClick={() => setShowModal(false)} className="p-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-500 dark:text-slate-400 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -214,10 +214,10 @@ const Calendar = () => {
               )}
               
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">Thesis Group</label>
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-1.5">Thesis Group</label>
                 <select 
                   required
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="w-full p-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
                   value={formData.thesisGroupId}
                   onChange={(e) => setFormData({...formData, thesisGroupId: e.target.value})}
                 >
@@ -229,11 +229,11 @@ const Calendar = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">Deadline Title</label>
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-1.5">Deadline Title</label>
                 <input 
                   type="text" required
                   placeholder="e.g. Final Chapter 1 Submission"
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="w-full p-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
                 />
@@ -241,18 +241,18 @@ const Calendar = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Date & Time</label>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-1.5">Date & Time</label>
                   <input 
                     type="datetime-local" required
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-700"
+                    className="w-full p-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-700 dark:text-slate-200"
                     value={formData.date}
                     onChange={(e) => setFormData({...formData, date: e.target.value})}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Type</label>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-1.5">Type</label>
                   <select 
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                    className="w-full p-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
                     value={formData.type}
                     onChange={(e) => setFormData({...formData, type: e.target.value})}
                   >
@@ -265,10 +265,10 @@ const Calendar = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">Description (Optional)</label>
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-1.5">Description (Optional)</label>
                 <textarea 
                   rows="3"
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+                  className="w-full p-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                 ></textarea>
