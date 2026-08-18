@@ -122,7 +122,7 @@ const FacultyProfile = () => {
       <div className="rounded-[32px] bg-gradient-to-r from-indigo-700 via-violet-700 to-sky-600 p-8 shadow-2xl shadow-slate-300/20 sm:p-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-5">
-            <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white dark:bg-slate-800/10 text-3xl font-bold text-white shadow-xl shadow-indigo-200/30">
+            <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white/10 text-3xl font-bold text-white shadow-xl shadow-indigo-200/30">
               {initials || "EC"}
             </div>
             <div>
@@ -134,14 +134,14 @@ const FacultyProfile = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-4 rounded-[28px] bg-white dark:bg-slate-800/10 px-4 py-3 text-white shadow-inner shadow-slate-900/10 sm:max-w-sm">
+          <div className="flex items-center justify-between gap-4 rounded-[28px] bg-white/10 px-4 py-3 text-white shadow-inner shadow-slate-900/10 sm:max-w-sm">
             {isAccepting && (
               <span className="rounded-full bg-emerald-100/90 px-3 py-1 text-sm font-semibold text-emerald-800">Accepting Students</span>
             )}
             {canEdit && (
               <button
                 onClick={() => setShowEditModal(true)}
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white dark:bg-slate-800/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white dark:bg-slate-800/25"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/25"
               >
                 <ChevronRight size={16} />
                 Edit Profile

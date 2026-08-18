@@ -536,7 +536,7 @@ const Meetings = () => {
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="text-white/70 hover:text-white p-2 rounded-xl hover:bg-white dark:bg-slate-800/10 transition-colors"
+                  className="text-white/70 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors"
                 >
                   <X className="w-6 h-6" />
                 </button>

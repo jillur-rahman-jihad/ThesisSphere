@@ -110,28 +110,14 @@ const Sidebar = ({ currentUser }) => {
         ))}
       </div>
 
-      {/* User Profile Footer */}
-      <div className="p-4 border-t border-slate-800/60">
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-            {getInitials(currentUser?.fullName)}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="text-[0.85rem] font-bold text-slate-200 truncate">
-              {currentUser?.fullName || 'User Name'}
-            </h4>
-            <p className="text-[0.65rem] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-              {isStudent ? 'Student • ThesisSphere' : currentUser?.designation || 'Faculty • ThesisSphere'}
-            </p>
-          </div>
-          <button 
-            onClick={toggleTheme}
-            className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-400 transition-colors flex-shrink-0"
-            title="Toggle Dark Mode"
-          >
-            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
-        </div>
+      {/* Bottom Profile Area */}
+      <div className="p-4 border-t border-slate-800/60 text-center">
+        <h4 className="text-[0.85rem] font-bold text-slate-200 truncate px-2">
+          {currentUser?.fullName || 'User Name'}
+        </h4>
+        <p className="text-[0.65rem] text-slate-500 truncate mt-1 px-2">
+          {isStudent ? 'Student • ThesisSphere' : currentUser?.designation || 'Faculty • ThesisSphere'}
+        </p>
       </div>
     </div>
   );
