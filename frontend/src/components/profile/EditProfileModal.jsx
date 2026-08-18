@@ -46,6 +46,7 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
     consultationHours: profileData.profile?.consultationHours || "",
     consultationMode: profileData.profile?.consultationMode || "campus",
     website: profileData.profile?.website || "",
+    maxStudents: profileData.profile?.maxStudents || 0,
   });
   const handleChange = (e) => {
   setFormData({
@@ -144,6 +145,23 @@ const EditProfileModal = ({ profileData, onClose,  onProfileUpdated, }) => {
                 />
 
               </div>
+
+              {/* Supervision Capacity (Faculty Only) */}
+              {profileData.role === 'faculty' && (
+                <div>
+                  <label className="block text-slate-900 dark:text-white font-semibold mb-2">
+                    Supervision Capacity (Max Students)
+                  </label>
+                  <input
+                    type="number"
+                    name="maxStudents"
+                    min="0"
+                    value={formData.maxStudents}
+                    onChange={handleChange}
+                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 rounded-lg px-4 py-3 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+              )}
 
               {/* Department */}
 

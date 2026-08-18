@@ -12,6 +12,7 @@ import {
   Star,
   Activity,
   X,
+  Plus,
 } from "lucide-react";
 import { getProfile, updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
 
@@ -22,6 +23,7 @@ const FacultyProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
+  const [addingSupervisor, setAddingSupervisor] = useState(false);
 
   const isPublicView = !!id;
   const canEdit = !isPublicView && currentUser?.role === "faculty";
@@ -61,6 +63,32 @@ const FacultyProfile = () => {
       setError(err.message || "Failed to save profile updates.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddSupervisor = async () => {
+    try {
+      setAddingSupervisor(true);
+      const res = await fetch(`/api/faculty/profile/${id}/add-student`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Supervisor added successfully! A thesis group was created for you.');
+        // Refresh profile data to show updated capacity
+        await loadProfile();
+      } else {
+        alert(data.message || 'Failed to add supervisor');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred while adding the supervisor.');
+    } finally {
+      setAddingSupervisor(false);
     }
   };
 
@@ -136,7 +164,17 @@ const FacultyProfile = () => {
 
           <div className="flex items-center justify-between gap-4 rounded-[28px] bg-white dark:bg-slate-800/10 px-4 py-3 text-white shadow-inner shadow-slate-900/10 sm:max-w-sm">
             {isAccepting && (
-              <span className="rounded-full bg-emerald-100 dark:bg-emerald-900/40/90 px-3 py-1 text-sm font-semibold text-emerald-800">Accepting Students</span>
+              <span className="rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 text-sm font-semibold text-emerald-800 dark:text-emerald-300">Accepting Students</span>
+            )}
+            {isPublicView && currentUser?.role === 'student' && isAccepting && (
+              <button
+                onClick={handleAddSupervisor}
+                disabled={addingSupervisor}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50"
+              >
+                <Plus size={16} />
+                {addingSupervisor ? "Adding..." : "Add Supervisor"}
+              </button>
             )}
             {canEdit && (
               <button
