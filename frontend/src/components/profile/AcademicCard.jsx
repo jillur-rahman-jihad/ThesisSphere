@@ -2,7 +2,7 @@ import React from 'react';
 
 const AcademicCard = () => {
   return (
-    <div className="bg-white rounded-xl p-6 shadow mt-6">
+    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow mt-6">
       <h2 className="text-xl font-semibold mb-4">
         Academic Information
       </h2>
