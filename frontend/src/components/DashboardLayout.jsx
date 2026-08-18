@@ -4,7 +4,7 @@ import Sidebar from './Sidebar.jsx';
 
 const DashboardLayout = ({ currentUser, onLogout }) => {
   return (
-    <div className="flex h-screen w-full bg-[#f8f9fa] overflow-hidden font-['Inter',sans-serif]">
+    <div className="flex h-screen w-full bg-[#f8f9fa] text-slate-900 overflow-hidden font-['Inter',sans-serif]">
       {/* Left Sidebar */}
       <Sidebar currentUser={currentUser} />
 
