@@ -97,7 +97,7 @@ const FindSupervisor = () => {
           <button 
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-2xl transition-colors ${
-              showFilters ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 dark:text-slate-200'
+              showFilters ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200'
             }`}>
             <Filter className="w-5 h-5" />
             Filters
@@ -159,15 +159,15 @@ const FindSupervisor = () => {
             
             {recommendations.metadata && (
               <div className="flex flex-wrap items-center gap-4 text-xs font-medium bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 p-3 rounded-xl w-fit">
-                <div className="flex items-center gap-1.5 text-indigo-700 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 rounded-lg border border-indigo-100">
+                <div className="flex items-center gap-1.5 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 rounded-lg border border-indigo-100 dark:border-indigo-800/50">
                   <Cpu className="w-4 h-4" />
                   <span>Model: {recommendations.metadata.modelUsed}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1.5 rounded-lg border border-emerald-100 dark:border-emerald-800/50">
                   <Clock className="w-4 h-4" />
                   <span>Time: {recommendations.metadata.processingTimeMs}ms</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-amber-700 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100">
+                <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/30 px-3 py-1.5 rounded-lg border border-amber-100 dark:border-amber-800/50">
                   <Target className="w-4 h-4" />
                   <span>Parsed Input: {recommendations.metadata.input?.length > 0 ? recommendations.metadata.input.join(', ') : 'None'}</span>
                 </div>
@@ -177,8 +177,8 @@ const FindSupervisor = () => {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Recommended Supervisors */}
-            <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-3xl border border-indigo-100 shadow-sm">
-              <h3 className="text-lg font-semibold text-indigo-900 mb-4 flex items-center gap-2">
+            <div className="bg-gradient-to-br from-indigo-50 to-white dark:from-slate-800 dark:to-slate-900 p-6 rounded-3xl border border-indigo-100 dark:border-slate-700 shadow-sm">
+              <h3 className="text-lg font-semibold text-indigo-900 dark:text-indigo-300 mb-4 flex items-center gap-2">
                 <GraduationCap className="w-5 h-5" /> Top Supervisor Matches
               </h3>
               <div className="space-y-4">
@@ -218,8 +218,8 @@ const FindSupervisor = () => {
             </div>
 
             {/* Recommended Topics */}
-            <div className="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-3xl border border-emerald-100 shadow-sm">
-              <h3 className="text-lg font-semibold text-emerald-900 mb-4 flex items-center gap-2">
+            <div className="bg-gradient-to-br from-emerald-50 to-white dark:from-slate-800 dark:to-slate-900 p-6 rounded-3xl border border-emerald-100 dark:border-slate-700 shadow-sm">
+              <h3 className="text-lg font-semibold text-emerald-900 dark:text-emerald-300 mb-4 flex items-center gap-2">
                 <BookOpen className="w-5 h-5" /> Top Topic Matches
               </h3>
               <div className="space-y-4">
