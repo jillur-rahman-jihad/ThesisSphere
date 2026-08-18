@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" initialize-with=". " page-range-format="minimal-two" default-locale="en-US">
+  <info>
+    <title>Modern Language Association 9th edition</title>
+    <id>http://www.zotero.org/styles/modern-language-association</id>
+    <link href="http://www.zotero.org/styles/modern-language-association" rel="self"/>
+    <link href="http://www.zotero.org/styles/modern-language-association-8" rel="template"/>
+    <link href="https://style.mla.org" rel="documentation"/>
+    <author>
+      <name>Citation Style Language</name>
+    </author>
+    <category citation-format="author-date"/>
+    <category field="generic-base"/>
+    <summary>MLA (Modern Language Association) 9th edition style.</summary>
+    <updated>2024-07-02T00:00:00+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+  </info>
+  <macro name="author">
+    <names variable="author">
+      <name and="text" delimiter=", " name-as-sort-order="all" sort-separator=", " initialize-with=". " delimiter-precedes-last="always"/>
+      <substitute>
+        <names variable="editor"/>
+        <names variable="translator"/>
+        <text term="anonymous"/>
+      </substitute>
+    </names>
+  </macro>
+  <macro name="title">
+    <group delimiter=" ">
+      <text variable="title" font-style="italic"/>
+    </group>
+  </macro>
+  <macro name="container-title">
+    <group delimiter=", ">
+      <text variable="container-title" font-style="italic"/>
+      <text variable="volume"/>
+      <text variable="issue"/>
+      <text variable="page"/>
+    </group>
+  </macro>
+  <macro name="publisher">
+    <group delimiter=", ">
+      <text variable="publisher"/>
+      <text variable="publisher-place"/>
+    </group>
+  </macro>
+  <macro name="access">
+    <group delimiter=", ">
+      <text term="accessed" text-case="capitalize-first"/>
+      <date variable="accessed">
+        <date-part name="day"/>
+        <date-part name="month" form="long"/>
+        <date-part name="year"/>
+      </date>
+    </group>
+  </macro>
+  <citation>
+    <layout prefix="(" suffix=")" delimiter="; ">
+      <text macro="author"/>
+      <date variable="issued">
+        <date-part name="year"/>
+      </date>
+    </layout>
+  </citation>
+  <bibliography hanging-indent="true" et-al-min="3" et-al-use-first="1" entry-spacing="0" line-spacing="2">
+    <layout suffix=".">
+      <group delimiter=". ">
+        <text macro="author"/>
+        <text macro="title"/>
+        <choose>
+          <if type="article-journal article-magazine article-newspaper" match="any">
+            <text macro="container-title"/>
+          </if>
+          <else-if type="book chapter paper-conference" match="any">
+            <text macro="publisher"/>
+          </else-if>
+          <else>
+            <text variable="container-title"/>
+          </else>
+        </choose>
+        <group delimiter=", ">
+          <date variable="issued">
+            <date-part name="year"/>
+          </date>
+          <text variable="DOI" prefix="https://doi.org/"/>
+          <text variable="URL"/>
+        </group>
+        <text macro="access"/>
+      </group>
+    </layout>
+  </bibliography>
+</style>
