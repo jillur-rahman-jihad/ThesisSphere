@@ -10,11 +10,13 @@ import messageRoutes from './routes/messageRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
-
+import studentProfileRoutes from "./routes/studentProfileRoutes.js";
 import meetingRoutes from './routes/meetingRoutes.js';
 import thesisPostRoutes from './routes/thesisPostRoutes.js';
 import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
+import thesisGroupRoutes from "./routes/thesisGroupRoutes.js";
+
 import calendarRoutes from './routes/calendarRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
 import forumRoutes from './routes/forumRoutes.js';
@@ -54,12 +56,14 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+app.use("/api/student-profile", studentProfileRoutes);
 
 app.use('/api/meetings', meetingRoutes);
 app.use('/api/thesis-post', thesisPostRoutes);
 app.use('/api/calendar', calendarRoutes);
 app.use('/api/thesis-browse', thesisBrowseRoutes);
 app.use('/api/thesis-applications', thesisApplicationRoutes);
+app.use('/api/thesis-groups', thesisGroupRoutes);
 app.use('/api/citations', citationRoutes);
 app.use('/api/forum', forumRoutes);
 

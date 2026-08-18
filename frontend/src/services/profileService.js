@@ -1,24 +1,42 @@
-const API_URL = "/api/auth/profile";
+const API_URL = "/api/student-profile";
+
+
+// ==========================================
+// GET LOGGED-IN STUDENT PROFILE
+// ==========================================
 
 const getToken = () => {
-  const user = JSON.parse(localStorage.getItem("thesisSphereUser"));
+  const user = JSON.parse(
+    localStorage.getItem("thesisSphereUser")
+  );
+
   return user?.token;
 };
 
+
 export const getProfile = async () => {
   const response = await fetch(API_URL, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${getToken()}`,
     },
   });
 
- if (!response.ok) {
-  const errorData = await response.json();
-  throw new Error(errorData.message || "Failed to update profile");
-}
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+
+    throw new Error(
+      errorData.message || "Failed to fetch student profile"
+    );
+  }
 
   return response.json();
 };
+
+
+// ==========================================
+// UPDATE LOGGED-IN STUDENT PROFILE
+// ==========================================
 
 export const updateProfile = async (profileData) => {
   const response = await fetch(API_URL, {
@@ -31,11 +49,21 @@ export const updateProfile = async (profileData) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update profile");
+    const errorData = await response.json().catch(() => ({}));
+
+    throw new Error(
+      errorData.message || "Failed to update student profile"
+    );
   }
 
   return response.json();
 };
+
+
+// ==========================================
+// FACULTY PROFILE
+// DO NOT CHANGE - TEAMMATE'S CODE
+// ==========================================
 
 export const updateFacultyProfile = async (profileData) => {
   const response = await fetch("/api/faculty/profile", {
@@ -49,11 +77,15 @@ export const updateFacultyProfile = async (profileData) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || "Failed to update faculty profile");
+
+    throw new Error(
+      errorData.message || "Failed to update faculty profile"
+    );
   }
 
   return response.json();
 };
+
 
 export const getFacultyProfileById = async (id) => {
   const response = await fetch(`/api/faculty/profile/${id}`, {
@@ -64,7 +96,10 @@ export const getFacultyProfileById = async (id) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to fetch faculty profile");
+
+    throw new Error(
+      errorData.message || "Failed to fetch faculty profile"
+    );
   }
 
   return response.json();
