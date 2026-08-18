@@ -7,7 +7,7 @@ const TagList = ({ title }) => {
       : ["React", "Node.js", "MongoDB", "Express"];
 
   return (
-    <div className="bg-white rounded-xl shadow p-6">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6">
       <h2 className="text-xl font-semibold mb-4">
         {title}
       </h2>

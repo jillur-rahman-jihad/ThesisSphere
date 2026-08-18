@@ -35,18 +35,18 @@ const MyApplications = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'accepted': 
-        return <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Accepted</span>;
+        return <span className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Accepted</span>;
       case 'rejected': 
         return <span className="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Rejected</span>;
       default: 
-        return <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Pending Review</span>;
+        return <span className="bg-amber-100 text-amber-700 dark:text-amber-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Pending Review</span>;
     }
   };
 
   if (currentUser?.role !== 'student') {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-slate-500 font-medium">This page is only available to students.</p>
+        <p className="text-slate-500 dark:text-slate-400 font-medium">This page is only available to students.</p>
       </div>
     );
   }
@@ -54,8 +54,8 @@ const MyApplications = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-800">My Applications</h1>
-        <p className="text-slate-500 text-sm mt-1">Track the status of the thesis topics you have applied for.</p>
+        <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">My Applications</h1>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Track the status of the thesis topics you have applied for.</p>
       </div>
 
       {loading ? (
@@ -68,30 +68,30 @@ const MyApplications = () => {
           <p>{error}</p>
         </div>
       ) : applications.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center">
-          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-12 text-center">
+          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <FileText className="w-8 h-8 text-slate-400" />
           </div>
-          <h3 className="text-lg font-bold text-slate-700 mb-2">No applications yet</h3>
-          <p className="text-slate-500 text-sm max-w-sm mx-auto">
+          <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-2">No applications yet</h3>
+          <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm mx-auto">
             You haven't applied for any thesis topics. Go to Browse Topics to find one that interests you.
           </p>
         </div>
       ) : (
         <div className="space-y-4">
           {applications.map(app => (
-            <div key={app._id} className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5 transition-all">
+            <div key={app._id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5 transition-all">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     {getStatusIcon(app.status)}
-                    <h3 className="font-bold text-slate-800 text-lg leading-tight">
+                    <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg leading-tight">
                       {app.topicId?.title || 'Unknown Topic'}
                     </h3>
                   </div>
                   
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
                     <p>
                       <span className="font-medium">Supervisor:</span> {app.topicId?.supervisorId?.fullName || 'N/A'}
                     </p>
@@ -101,7 +101,7 @@ const MyApplications = () => {
                   </div>
                   
                   {app.message && (
-                    <div className="mt-4 p-3 bg-slate-50 rounded-lg text-sm text-slate-600 border border-slate-100">
+                    <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg text-sm text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
                       <span className="font-semibold text-xs uppercase tracking-wider text-slate-400 block mb-1">Your Message:</span>
                       {app.message}
                     </div>

@@ -16,6 +16,10 @@ const progressReportSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Please specify the week number'],
     },
+    title: {
+      type: String,
+      default: '',
+    },
     summary: {
       type: String,
       default: '',
@@ -23,6 +27,10 @@ const progressReportSchema = new mongoose.Schema(
     progressPercentage: {
       type: Number,
       default: 0,
+    },
+    supervisorFeedback: {
+      type: String,
+      default: '',
     },
     generatedPdf: {
       type: String,

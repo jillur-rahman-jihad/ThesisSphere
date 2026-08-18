@@ -18,6 +18,13 @@
     background: #f8fafc;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Dark mode global overrides */
+  html.dark body {
+    color: #f1f5f9;
+    background: #0f172a;
   }
 
   * {
@@ -78,4 +85,12 @@
 }
 .animate-message-slide {
   animation: messageSlide 0.3s ease forwards;
+}
+
+/* Print rules: hide sidebar and adjust background for PDF/print */
+@media print {
+  .print-hidden { display: none !important; }
+  body { background: #ffffff !important; color: #000 !important; }
+  /* Improve print layout: make report container use full width */
+  #automated-report-content { width: 100% !important; padding: 12px !important; }
 }
