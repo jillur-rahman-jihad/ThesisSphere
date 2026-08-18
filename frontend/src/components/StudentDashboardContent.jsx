@@ -181,7 +181,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
       <section className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-8 shadow-xl shadow-slate-900/10 border border-slate-800">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="space-y-4 max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white dark:bg-slate-800/5 px-4 py-2 text-sm text-slate-200">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
               <Sparkles className="w-4 h-4 text-amber-400" />
               Student dashboard overview
             </div>
@@ -196,15 +196,15 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4">
                 <p className="text-slate-400">Department</p>
                 <p className="mt-1 font-semibold text-white">{department}</p>
               </div>
-              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4">
                 <p className="text-slate-400">Semester</p>
                 <p className="mt-1 font-semibold text-white">{semester}</p>
               </div>
-              <div className="rounded-2xl bg-white dark:bg-slate-800/5 border border-white/10 p-4 flex items-center gap-3">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center gap-3">
                 <div className="w-11 h-11 rounded-full bg-amber-500 text-slate-900 dark:text-white font-bold flex items-center justify-center">
                   {getInitials(displayName)}
                 </div>
@@ -216,7 +216,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
             </div>
           </div>
 
-          <div className="rounded-3xl bg-white dark:bg-slate-800/5 border border-white/10 p-5 w-full lg:max-w-sm">
+          <div className="rounded-3xl bg-white/5 border border-white/10 p-5 w-full lg:max-w-sm">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-300">Today</p>
