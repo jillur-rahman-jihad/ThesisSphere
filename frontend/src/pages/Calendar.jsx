@@ -134,7 +134,7 @@ const Calendar = () => {
             const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
 
             return (
-              <div key={day} className={`min-h-[120px] bg-white dark:bg-slate-800 p-2 transition-colors hover:bg-slate-50 dark:bg-slate-900/50 ${isToday ? 'bg-indigo-50 dark:bg-indigo-900/30/30' : ''}`}>
+              <div key={day} className={`min-h-[120px] bg-white dark:bg-slate-800 p-2 transition-colors hover:bg-slate-50 dark:hover:bg-slate-700 ${isToday ? 'bg-indigo-50 dark:bg-indigo-900/40' : ''}`}>
                 <div className={`w-7 h-7 flex items-center justify-center rounded-full text-sm font-semibold mb-1 ${isToday ? 'bg-indigo-600 text-white' : 'text-slate-700 dark:text-slate-200'}`}>
                   {day}
                 </div>
@@ -144,8 +144,8 @@ const Calendar = () => {
                       key={e._id} 
                       className={`text-[10px] p-1.5 rounded-lg border font-medium truncate ${
                         e.type === 'meeting' 
-                          ? 'bg-blue-50 text-blue-700 border-blue-100' 
-                          : 'bg-rose-50 text-rose-700 border-rose-100'
+                          ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800/50' 
+                          : 'bg-rose-50 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 border-rose-100 dark:border-rose-800/50'
                       }`}
                       title={e.title}
                     >
@@ -180,11 +180,11 @@ const Calendar = () => {
               <div key={e._id} className="flex gap-4 group">
                 <div className="flex flex-col items-center min-w-[3rem]">
                   <span className="text-xs font-bold text-slate-400 uppercase">{monthNames[new Date(e.date).getMonth()].slice(0,3)}</span>
-                  <span className={`text-xl font-bold ${e.type === 'meeting' ? 'text-blue-600' : 'text-rose-600'}`}>
+                  <span className={`text-xl font-bold ${e.type === 'meeting' ? 'text-blue-600 dark:text-blue-400' : 'text-rose-600 dark:text-rose-400'}`}>
                     {new Date(e.date).getDate()}
                   </span>
                 </div>
-                <div className={`flex-1 p-3 rounded-xl border ${e.type === 'meeting' ? 'bg-blue-50/50 border-blue-100' : 'bg-rose-50/50 border-rose-100'}`}>
+                <div className={`flex-1 p-3 rounded-xl border ${e.type === 'meeting' ? 'bg-blue-50/50 dark:bg-blue-900/30 border-blue-100 dark:border-blue-800/50' : 'bg-rose-50/50 dark:bg-rose-900/30 border-rose-100 dark:border-rose-800/50'}`}>
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1">{e.title}</h4>
                   <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">{e.groupName}</p>
                 </div>
