@@ -11,7 +11,6 @@ import {
   BarChart3,
   TrendingUp,
   Inbox,
-  Inbox,
   UserCheck,
   X,
   Mail,
