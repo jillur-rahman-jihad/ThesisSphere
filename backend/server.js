@@ -1,4 +1,6 @@
 import express from 'express';
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -21,6 +23,8 @@ import calendarRoutes from './routes/calendarRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
 import forumRoutes from './routes/forumRoutes.js';
 import automatedReportRoutes from './routes/automatedReportRoutes.js';
+import videoMeetingRoutes from './routes/videoMeetingRoutes.js';
+import initializeSocket from './config/socketHandler.js';
 
 // Load environment variables
 dotenv.config();
@@ -29,6 +33,16 @@ dotenv.config();
 connectDB();
 
 const app = express();
+const server = http.createServer(app);
+
+// Initialize Socket.IO
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+initializeSocket(io);
 
 // Middlewares
 app.use(cors());
@@ -68,6 +82,7 @@ app.use('/api/citations', citationRoutes);
 app.use('/api/forum', forumRoutes);
 
 app.use('/api/automated-report', automatedReportRoutes);
+app.use('/api/video-meetings', videoMeetingRoutes);
 
 
 // Error Middlewares
@@ -76,6 +91,6 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5050;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
