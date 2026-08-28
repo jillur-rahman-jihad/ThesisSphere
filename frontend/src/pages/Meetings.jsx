@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import {
   Plus,
   Calendar,
@@ -14,7 +14,11 @@ import {
   AlertCircle,
   ExternalLink,
   Users,
-  ChevronRight
+  ChevronRight,
+  Copy,
+  Check,
+  PhoneCall,
+  Loader2
 } from 'lucide-react';
 import {
   getMeetings,
@@ -23,9 +27,11 @@ import {
   updateMeeting,
   deleteMeeting
 } from '../services/meetingService';
+import { createVideoMeeting } from '../services/videoMeetingService';
 
 const Meetings = () => {
   const { currentUser } = useOutletContext();
+  const navigate = useNavigate();
   const isFaculty = currentUser?.role === 'faculty';
 
   // State Variables
@@ -54,6 +60,13 @@ const Meetings = () => {
 
   // Filter Tabs
   const [activeTab, setActiveTab] = useState('upcoming'); // 'upcoming' | 'completed' | 'cancelled'
+
+  // Video Call State
+  const [showVideoCallModal, setShowVideoCallModal] = useState(false);
+  const [videoCallCreating, setVideoCallCreating] = useState(false);
+  const [createdMeetingId, setCreatedMeetingId] = useState(null);
+  const [videoLinkCopied, setVideoLinkCopied] = useState(false);
+  const [joinMeetingId, setJoinMeetingId] = useState('');
 
   // Fetch initial data
   useEffect(() => {
@@ -267,7 +280,19 @@ const Meetings = () => {
               Organize, log, and update your research consultations and group discussions.
             </p>
           </div>
-          <div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                setShowVideoCallModal(true);
+                setCreatedMeetingId(null);
+                setJoinMeetingId('');
+                setVideoLinkCopied(false);
+              }}
+              className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <PhoneCall className="w-4 h-4" />
+              <span>Start Video Call</span>
+            </button>
             <button
               onClick={handleOpenCreateModal}
               className="flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
@@ -691,6 +716,154 @@ const Meetings = () => {
                   </div>
                 </div>
               </form>
+            </div>
+          </div>,
+          document.body
+        )}
+
+        {/* ===== Video Call Modal ===== */}
+        {showVideoCallModal && ReactDOM.createPortal(
+          <div className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-200 dark:border-slate-700">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
+                    <Video className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-white">Video Call</h3>
+                </div>
+                <button
+                  onClick={() => setShowVideoCallModal(false)}
+                  className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-slate-400" />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="p-6 space-y-5">
+                {!createdMeetingId ? (
+                  <>
+                    {/* Create new meeting */}
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">New Meeting</h4>
+                      <button
+                        onClick={async () => {
+                          setVideoCallCreating(true);
+                          try {
+                            const res = await createVideoMeeting();
+                            setCreatedMeetingId(res.data.meetingId);
+                          } catch (err) {
+                            setErrorMessage(err.message || 'Failed to create video meeting');
+                            setTimeout(() => setErrorMessage(''), 4000);
+                          } finally {
+                            setVideoCallCreating(false);
+                          }
+                        }}
+                        disabled={videoCallCreating}
+                        className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-semibold px-5 py-3 rounded-xl shadow-md transition-all"
+                      >
+                        {videoCallCreating ? (
+                          <><Loader2 className="w-4 h-4 animate-spin" /> Creating...</>
+                        ) : (
+                          <><Plus className="w-4 h-4" /> Create New Video Meeting</>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+                      <span className="text-xs text-slate-400 font-medium">OR</span>
+                      <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+                    </div>
+
+                    {/* Join existing meeting */}
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Join Existing Meeting</h4>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Enter meeting ID (e.g., 8f32a91c)"
+                          value={joinMeetingId}
+                          onChange={(e) => setJoinMeetingId(e.target.value.trim())}
+                          className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-sm font-mono placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                          maxLength={8}
+                        />
+                        <button
+                          onClick={() => {
+                            if (joinMeetingId.length > 0) {
+                              setShowVideoCallModal(false);
+                              navigate(`/video-meeting/${joinMeetingId}`);
+                            }
+                          }}
+                          disabled={!joinMeetingId}
+                          className="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 disabled:bg-slate-300 dark:disabled:bg-slate-600 text-white font-semibold rounded-xl text-sm transition-colors"
+                        >
+                          Join
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  /* Meeting created successfully */
+                  <div className="space-y-5">
+                    <div className="text-center space-y-2">
+                      <div className="w-14 h-14 mx-auto bg-emerald-100 dark:bg-emerald-900/40 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <h4 className="text-lg font-bold text-slate-800 dark:text-white">Meeting Created!</h4>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Share this link with your participant</p>
+                    </div>
+
+                    {/* Copy link row */}
+                    <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 rounded-xl p-3">
+                      <span className="flex-1 text-sm font-mono text-slate-700 dark:text-slate-200 truncate">
+                        {window.location.origin}/video-meeting/{createdMeetingId}
+                      </span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/video-meeting/${createdMeetingId}`);
+                          setVideoLinkCopied(true);
+                          setTimeout(() => setVideoLinkCopied(false), 2000);
+                        }}
+                        className="flex-shrink-0 p-2 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors"
+                        title="Copy link"
+                      >
+                        {videoLinkCopied
+                          ? <Check className="w-4 h-4 text-emerald-500" />
+                          : <Copy className="w-4 h-4 text-slate-400" />
+                        }
+                      </button>
+                    </div>
+
+                    <div className="text-center">
+                      <span className="text-xs text-slate-400">Meeting ID: </span>
+                      <span className="text-sm font-mono font-bold text-amber-600">{createdMeetingId}</span>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => {
+                          setShowVideoCallModal(false);
+                          navigate(`/video-meeting/${createdMeetingId}`);
+                        }}
+                        className="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3 rounded-xl transition-colors"
+                      >
+                        <Video className="w-4 h-4" /> Join Now
+                      </button>
+                      <button
+                        onClick={() => setShowVideoCallModal(false)}
+                        className="px-5 py-3 border-2 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>,
           document.body
