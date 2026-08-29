@@ -1,4 +1,6 @@
 import express from 'express';
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -10,16 +12,20 @@ import messageRoutes from './routes/messageRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
-
+import studentProfileRoutes from "./routes/studentProfileRoutes.js";
 import meetingRoutes from './routes/meetingRoutes.js';
 import thesisPostRoutes from './routes/thesisPostRoutes.js';
 import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
+import thesisGroupRoutes from "./routes/thesisGroupRoutes.js";
+
 import calendarRoutes from './routes/calendarRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
 import forumRoutes from './routes/forumRoutes.js';
 import automatedReportRoutes from './routes/automatedReportRoutes.js';
 import contributionTrackerRoutes from './routes/contributionTrackerRoutes.js';
+import videoMeetingRoutes from './routes/videoMeetingRoutes.js';
+import initializeSocket from './config/socketHandler.js';
 
 // Load environment variables
 dotenv.config();
@@ -28,6 +34,16 @@ dotenv.config();
 connectDB();
 
 const app = express();
+const server = http.createServer(app);
+
+// Initialize Socket.IO
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+initializeSocket(io);
 
 // Middlewares
 app.use(cors());
@@ -55,17 +71,20 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+app.use("/api/student-profile", studentProfileRoutes);
 
 app.use('/api/meetings', meetingRoutes);
 app.use('/api/thesis-post', thesisPostRoutes);
 app.use('/api/calendar', calendarRoutes);
 app.use('/api/thesis-browse', thesisBrowseRoutes);
 app.use('/api/thesis-applications', thesisApplicationRoutes);
+app.use('/api/thesis-groups', thesisGroupRoutes);
 app.use('/api/citations', citationRoutes);
 app.use('/api/forum', forumRoutes);
 
 app.use('/api/automated-report', automatedReportRoutes);
 app.use('/api/contribution-tracker', contributionTrackerRoutes);
+app.use('/api/video-meetings', videoMeetingRoutes);
 
 
 // Error Middlewares
@@ -74,6 +93,6 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5050;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
