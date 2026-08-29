@@ -20,8 +20,14 @@ const CreateThesisGroup = ({
   const [groupName, setGroupName] = useState("");
   const [topicId, setTopicId] = useState("");
 
+  // NEW: Selected supervisor
+  const [supervisorId, setSupervisorId] = useState("");
+
   const [topics, setTopics] = useState([]);
   const [students, setStudents] = useState([]);
+
+  // NEW: Faculty/supervisors
+  const [supervisors, setSupervisors] = useState([]);
 
   const [members, setMembers] = useState([]);
 
@@ -46,7 +52,7 @@ const CreateThesisGroup = ({
   const currentUser = getCurrentUser();
 
   // ==========================================
-  // LOAD TOPICS + STUDENTS
+  // LOAD TOPICS + STUDENTS + SUPERVISORS
   // ==========================================
 
   useEffect(() => {
@@ -88,14 +94,17 @@ const CreateThesisGroup = ({
         if (!userResponse.ok) {
           throw new Error(
             userData.message ||
-              "Failed to load students"
+              "Failed to load users"
           );
         }
 
         const allUsers =
           userData.data || [];
 
+        // --------------------------------------
         // Only students
+        // --------------------------------------
+
         const studentUsers =
           allUsers.filter(
             (user) =>
@@ -103,6 +112,19 @@ const CreateThesisGroup = ({
           );
 
         setStudents(studentUsers);
+
+        // --------------------------------------
+        // Only faculty members
+        // These will be shown as supervisors
+        // --------------------------------------
+
+        const facultyUsers =
+          allUsers.filter(
+            (user) =>
+              user.role === "faculty"
+          );
+
+        setSupervisors(facultyUsers);
 
         // --------------------------------------
         // Automatically add logged-in student
@@ -141,7 +163,6 @@ const CreateThesisGroup = ({
             ]);
           }
         }
-
       } catch (err) {
         console.error(err);
         setError(err.message);
@@ -281,6 +302,17 @@ const CreateThesisGroup = ({
     }
 
     // ------------------------------------------
+    // Supervisor
+    // ------------------------------------------
+
+    if (!supervisorId) {
+      setError(
+        "Please select a supervisor."
+      );
+      return;
+    }
+
+    // ------------------------------------------
     // Minimum 2 members
     // ------------------------------------------
 
@@ -405,9 +437,8 @@ const CreateThesisGroup = ({
               })
             ),
 
-          // Backend will use the
-          // topic's supervisor
-          supervisorId: null,
+          // Selected supervisor from database
+          supervisorId,
         });
 
       alert(
@@ -457,7 +488,7 @@ const CreateThesisGroup = ({
             className="text-slate-700
                        font-medium"
           >
-            Loading thesis topics and students...
+            Loading thesis topics, students and supervisors...
           </p>
         </div>
       </div>
@@ -644,6 +675,83 @@ const CreateThesisGroup = ({
                            mt-2"
               >
                 No available thesis topics found.
+              </p>
+            )}
+          </div>
+
+
+          {/* ====================================
+              SUPERVISOR
+          ==================================== */}
+
+          <div>
+            <label
+              className="block
+                         text-sm
+                         font-semibold
+                         text-slate-800
+                         mb-2"
+            >
+              Supervisor
+            </label>
+
+            <select
+              value={supervisorId}
+              onChange={(e) =>
+                setSupervisorId(
+                  e.target.value
+                )
+              }
+              className="w-full
+                         border
+                         border-slate-300
+                         rounded-xl
+                         px-4
+                         py-3
+                         bg-white
+                         text-slate-900
+                         focus:outline-none
+                         focus:ring-2
+                         focus:ring-blue-500"
+            >
+              <option value="">
+                Select a supervisor
+              </option>
+
+              {supervisors.map(
+                (supervisor) => (
+                  <option
+                    key={supervisor._id}
+                    value={supervisor._id}
+                  >
+                    {supervisor.fullName ||
+                      supervisor.name ||
+                      supervisor.email}
+                    {supervisor.department
+                      ? ` — ${supervisor.department}`
+                      : ""}
+                  </option>
+                )
+              )}
+            </select>
+
+            {supervisors.length === 0 && (
+              <p
+                className="text-sm
+                           text-amber-600
+                           mt-2"
+              >
+                No faculty supervisors found.
+              </p>
+            )}
+
+            {supervisorId && (
+              <p
+                className="text-xs
+                           text-blue-700
+                           mt-2"
+              >
+                Selected supervisor will be assigned to this thesis group.
               </p>
             )}
           </div>
@@ -1025,6 +1133,7 @@ const CreateThesisGroup = ({
                 loading ||
                 loadingData ||
                 topics.length === 0 ||
+                supervisors.length === 0 ||
                 members.length < 2
               }
               className="px-5

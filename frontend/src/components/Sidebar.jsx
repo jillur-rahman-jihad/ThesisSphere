@@ -1,30 +1,28 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
-import { 
-  LayoutDashboard, 
-  Search, 
-  MessageSquare, 
-  Users, 
-  Lightbulb, 
-  Video, 
-  Mail, 
-  Calendar, 
-  FileText, 
-  BookOpen, 
-  BarChart2, 
-  Bell, 
+import {
+  LayoutDashboard,
+  Search,
+  MessageSquare,
+  Users,
+  Lightbulb,
+  Video,
+  Mail,
+  Calendar,
+  FileText,
+  BookOpen,
+  BarChart2,
+  Bell,
   User,
   GraduationCap,
-  Moon,
-  Sun
 } from 'lucide-react';
 
 const Sidebar = ({ currentUser }) => {
   const { theme, toggleTheme } = useTheme();
   const isStudent = currentUser?.role === 'student';
 
-  const navItems = isStudent 
+  const navItems = isStudent
     ? [
         { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
         { name: 'Find Supervisor', icon: Search, badge: 3, path: '/find-supervisor' },
@@ -46,6 +44,10 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Workload Dashboard', icon: LayoutDashboard, path: '/' },
         { name: 'Post Topics', icon: Lightbulb, path: '/post-topics' },
         { name: 'Discussion Forum', icon: MessageSquare, path: '/discussion' },
+
+        // Thesis Group & Student Manager
+        { name: 'Group Manager', icon: Users, path: '/supervisor/group-manager' },
+
         { name: 'Meetings', icon: Video, path: '/meetings' },
         { name: 'Messages', icon: Mail, badge: 2, path: '/messages' },
         { name: 'Calendar', icon: Calendar, path: '/calendar' },
@@ -57,27 +59,48 @@ const Sidebar = ({ currentUser }) => {
 
   const getInitials = (name) => {
     if (!name) return 'U';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
   };
 
   return (
     <div className="w-[260px] bg-[#1a1f2e] h-screen flex flex-col text-slate-300 font-['Inter',sans-serif] border-r border-slate-800 flex-shrink-0 print-hidden">
-      
+
       {/* Logo Area */}
       <div className="p-6 pb-4">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center text-white">
             <GraduationCap className="w-5 h-5" />
           </div>
-          <span className="text-xl font-bold text-white tracking-tight">ThesisSphere</span>
+
+          <span className="text-xl font-bold text-white tracking-tight">
+            ThesisSphere
+          </span>
         </div>
 
         {/* Role Toggle Indicator */}
         <div className="flex p-1 bg-[#131722] rounded-lg border border-slate-800/60 mb-2">
-          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${isStudent ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400'}`}>
+          <div
+            className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${
+              isStudent
+                ? 'bg-amber-600 text-white'
+                : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
             Student
           </div>
-          <div className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${!isStudent ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400'}`}>
+
+          <div
+            className={`flex-1 text-center py-1.5 text-xs font-semibold rounded-md ${
+              !isStudent
+                ? 'bg-amber-600 text-white'
+                : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
             Faculty
           </div>
         </div>
@@ -86,23 +109,37 @@ const Sidebar = ({ currentUser }) => {
       {/* Navigation Links */}
       <div className="flex-1 overflow-y-auto px-4 py-2 space-y-1 custom-scrollbar">
         {navItems.map((item, index) => (
-          <NavLink 
+          <NavLink
             key={index}
             to={item.path}
-            className={({ isActive }) => `w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${
-              isActive 
-                ? 'bg-amber-600/10 text-amber-500' 
-                : 'hover:bg-slate-800/50 text-slate-400 hover:text-slate-200'
-            }`}
+            className={({ isActive }) =>
+              `w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors group ${
+                isActive
+                  ? 'bg-amber-600/10 text-amber-500'
+                  : 'hover:bg-slate-800/50 text-slate-400 hover:text-slate-200'
+              }`
+            }
           >
             {({ isActive }) => (
               <>
                 <div className="flex items-center gap-3">
-                  <item.icon className={`w-4 h-4 ${isActive ? 'text-amber-500' : 'text-slate-400 group-hover:text-slate-200'}`} />
-                  <span className={`text-[0.85rem] font-medium ${isActive ? 'text-amber-500' : ''}`}>
+                  <item.icon
+                    className={`w-4 h-4 ${
+                      isActive
+                        ? 'text-amber-500'
+                        : 'text-slate-400 group-hover:text-slate-200'
+                    }`}
+                  />
+
+                  <span
+                    className={`text-[0.85rem] font-medium ${
+                      isActive ? 'text-amber-500' : ''
+                    }`}
+                  >
                     {item.name}
                   </span>
                 </div>
+
                 {item.badge && (
                   <span className="bg-amber-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
                     {item.badge}
@@ -119,8 +156,11 @@ const Sidebar = ({ currentUser }) => {
         <h4 className="text-[0.85rem] font-bold text-slate-200 truncate px-2">
           {currentUser?.fullName || 'User Name'}
         </h4>
+
         <p className="text-[0.65rem] text-slate-500 dark:text-slate-400 truncate mt-1 px-2">
-          {isStudent ? 'Student • ThesisSphere' : currentUser?.designation || 'Faculty • ThesisSphere'}
+          {isStudent
+            ? 'Student • ThesisSphere'
+            : currentUser?.designation || 'Faculty • ThesisSphere'}
         </p>
       </div>
     </div>

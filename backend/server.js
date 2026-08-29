@@ -18,6 +18,7 @@ import thesisPostRoutes from './routes/thesisPostRoutes.js';
 import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
 import thesisGroupRoutes from "./routes/thesisGroupRoutes.js";
+import supervisorGroupManagerRoutes from './routes/supervisorGroupManagerRoutes.js';
 
 import calendarRoutes from './routes/calendarRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
@@ -83,7 +84,7 @@ app.use('/api/forum', forumRoutes);
 
 app.use('/api/automated-report', automatedReportRoutes);
 app.use('/api/video-meetings', videoMeetingRoutes);
-
+app.use('/api/supervisor-group-manager', supervisorGroupManagerRoutes);
 
 // Error Middlewares
 app.use(notFound);
