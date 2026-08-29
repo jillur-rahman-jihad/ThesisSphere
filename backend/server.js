@@ -19,6 +19,7 @@ import calendarRoutes from './routes/calendarRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
 import forumRoutes from './routes/forumRoutes.js';
 import automatedReportRoutes from './routes/automatedReportRoutes.js';
+import contributionTrackerRoutes from './routes/contributionTrackerRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -64,6 +65,7 @@ app.use('/api/citations', citationRoutes);
 app.use('/api/forum', forumRoutes);
 
 app.use('/api/automated-report', automatedReportRoutes);
+app.use('/api/contribution-tracker', contributionTrackerRoutes);
 
 
 // Error Middlewares

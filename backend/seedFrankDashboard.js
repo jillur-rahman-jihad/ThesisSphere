@@ -101,12 +101,37 @@ const seedFrankDashboard = async () => {
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
 
+  // Create or update fellow teammates in Frank's group
+  const teammateData = [
+    { fullName: 'Sarah Chen', email: 'sarah.c@test.com', studentId: '23101235', cgpa: 3.88, department: 'CSE' },
+    { fullName: 'Marcus Obinna', email: 'marcus.o@test.com', studentId: '23101236', cgpa: 3.65, department: 'CSE' },
+    { fullName: 'Ji-ho Park', email: 'jiho.p@test.com', studentId: '23101237', cgpa: 3.92, department: 'CSE' },
+  ];
+
+  const teammateUserIds = [];
+  for (const t of teammateData) {
+    let tUser = await User.findOne({ email: t.email });
+    if (!tUser) {
+      tUser = await User.create({
+        role: 'student',
+        fullName: t.fullName,
+        email: t.email,
+        password: 'password123',
+        department: 'Computer Science and Engineering',
+        university: 'BRAC University',
+      });
+    }
+    teammateUserIds.push(tUser._id);
+  }
+
+  const allGroupMembers = [frank._id, ...teammateUserIds];
+
   const group = await ThesisGroup.findOneAndUpdate(
     { groupName: 'Frank Thesis Group' },
     {
       groupName: 'Frank Thesis Group',
       leaderId: frank._id,
-      members: [frank._id],
+      members: allGroupMembers,
       supervisorId: supervisor._id,
       topicId: topic._id,
       progress: 68,
@@ -127,6 +152,23 @@ const seedFrankDashboard = async () => {
     },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
+
+  for (let idx = 0; idx < teammateData.length; idx++) {
+    const t = teammateData[idx];
+    const uId = teammateUserIds[idx];
+    await StudentProfile.findOneAndUpdate(
+      { userId: uId },
+      {
+        userId: uId,
+        studentId: t.studentId,
+        semester: 'Fall 2026',
+        cgpa: t.cgpa,
+        thesisGroupId: group._id,
+        supervisorId: supervisor._id,
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  }
 
   await removeExistingDashboardData(frank._id, group._id);
 
@@ -223,13 +265,44 @@ const seedFrankDashboard = async () => {
     generatedPdf: '',
   });
 
-  await Contribution.create({
-    thesisGroupId: group._id,
-    studentId: frank._id,
-    task: 'Prepared proposal outline and meeting notes',
-    hoursSpent: 14,
-    contributionPercentage: 42,
-  });
+  await Contribution.create([
+    {
+      thesisGroupId: group._id,
+      studentId: frank._id,
+      task: 'Prepared proposal outline and meeting notes',
+      category: 'Research',
+      hoursSpent: 14,
+      status: 'Completed',
+      milestone: 'Phase 1 - Proposal',
+    },
+    {
+      thesisGroupId: group._id,
+      studentId: teammateUserIds[0], // Sarah Chen
+      task: 'Designed & Implemented Frontend Dashboard Component Architecture',
+      category: 'Frontend',
+      hoursSpent: 22,
+      status: 'Completed',
+      milestone: 'Phase 2 - Development',
+    },
+    {
+      thesisGroupId: group._id,
+      studentId: teammateUserIds[1], // Marcus Obinna
+      task: 'Configured REST API & MongoDB Schema Design',
+      category: 'Backend',
+      hoursSpent: 18,
+      status: 'Completed',
+      milestone: 'Phase 2 - Development',
+    },
+    {
+      thesisGroupId: group._id,
+      studentId: teammateUserIds[2], // Ji-ho Park
+      task: 'Dataset Preprocessing & Hyperparameter Tuning Pipeline',
+      category: 'Data Analysis',
+      hoursSpent: 20,
+      status: 'Completed',
+      milestone: 'Phase 2 - Development',
+    },
+  ]);
 
   await PaperReview.create({
     thesisGroupId: group._id,

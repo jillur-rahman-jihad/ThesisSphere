@@ -24,6 +24,28 @@ const contributionSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    category: {
+      type: String,
+      enum: ['Research', 'Frontend', 'Backend', 'Documentation', 'Testing', 'Data Analysis', 'Presentation', 'Other'],
+      default: 'Research',
+    },
+    status: {
+      type: String,
+      enum: ['Completed', 'In Progress', 'Pending Verification'],
+      default: 'Completed',
+    },
+    milestone: {
+      type: String,
+      default: 'General Progress',
+    },
+    proofLink: {
+      type: String,
+      default: '',
+    },
+    logDate: {
+      type: Date,
+      default: Date.now,
+    },
     submittedAt: {
       type: Date,
       default: Date.now,
