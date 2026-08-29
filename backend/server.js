@@ -23,6 +23,7 @@ import calendarRoutes from './routes/calendarRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
 import forumRoutes from './routes/forumRoutes.js';
 import automatedReportRoutes from './routes/automatedReportRoutes.js';
+import contributionTrackerRoutes from './routes/contributionTrackerRoutes.js';
 import videoMeetingRoutes from './routes/videoMeetingRoutes.js';
 import initializeSocket from './config/socketHandler.js';
 
@@ -82,6 +83,7 @@ app.use('/api/citations', citationRoutes);
 app.use('/api/forum', forumRoutes);
 
 app.use('/api/automated-report', automatedReportRoutes);
+app.use('/api/contribution-tracker', contributionTrackerRoutes);
 app.use('/api/video-meetings', videoMeetingRoutes);
 
 

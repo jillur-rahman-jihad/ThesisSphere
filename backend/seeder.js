@@ -146,7 +146,24 @@ const importData = async () => {
 
         // Update Student Profiles with Group ID and Supervisor ID
         for (const member of groupMembers) {
-            await StudentProfile.findOneAndUpdate({ userId: member._id }, { thesisGroupId: group._id, supervisorId: supervisor._id });
+          await StudentProfile.findOneAndUpdate({ userId: member._id }, { thesisGroupId: group._id, supervisorId: supervisor._id });
+          
+          // Seed initial contributions for member
+          const categories = ['Research', 'Frontend', 'Backend', 'Documentation', 'Testing', 'Data Analysis'];
+          for (let k = 0; k < 3; k++) {
+            await Contribution.create({
+              thesisGroupId: group._id,
+              studentId: member._id,
+              task: faker.hacker.phrase(),
+              hoursSpent: faker.number.int({ min: 5, max: 25 }),
+              contributionPercentage: 0,
+              category: faker.helpers.arrayElement(categories),
+              status: faker.helpers.arrayElement(['Completed', 'In Progress']),
+              milestone: `Sprint ${k + 1}`,
+              proofLink: 'https://github.com/ThesisSphere/repo',
+              logDate: faker.date.recent({ days: 30 }),
+            });
+          }
         }
       }
     }

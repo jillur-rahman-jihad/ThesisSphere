@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 import connectDB from './config/db.js';
 import User from './models/userModel.js';
 import SupervisorProfile from './models/SupervisorProfile.js';
@@ -49,23 +50,27 @@ const seedFacultyDashboard = async () => {
   await SupervisionRequest.deleteMany({ supervisorId: faculty._id });
 
   // Create Mock Students
-  const students = await User.insertMany([
-    {
-      role: 'student', fullName: 'Sarah Chen', email: 'sarah.c@test.com', password: 'password123', department: 'CS'
-    },
-    {
-      role: 'student', fullName: 'Marcus Obinna', email: 'marcus.o@test.com', password: 'password123', department: 'CS'
-    },
-    {
-      role: 'student', fullName: 'Ji-ho Park', email: 'jiho.p@test.com', password: 'password123', department: 'CS'
-    },
-    {
-      role: 'student', fullName: 'Fatima Al-Rashidi', email: 'fatima.a@test.com', password: 'password123', department: 'Environmental CS'
-    },
-    {
-      role: 'student', fullName: 'Kwame Asante', email: 'kwame.a@test.com', password: 'password123', department: 'Computer Engineering'
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash('password123', salt);
+
+  const studentData = [
+    { role: 'student', fullName: 'Sarah Chen', email: 'sarah.c@test.com', password: hashedPassword, department: 'CS' },
+    { role: 'student', fullName: 'Marcus Obinna', email: 'marcus.o@test.com', password: hashedPassword, department: 'CS' },
+    { role: 'student', fullName: 'Ji-ho Park', email: 'jiho.p@test.com', password: hashedPassword, department: 'CS' },
+    { role: 'student', fullName: 'Fatima Al-Rashidi', email: 'fatima.a@test.com', password: hashedPassword, department: 'Environmental CS' },
+    { role: 'student', fullName: 'Kwame Asante', email: 'kwame.a@test.com', password: hashedPassword, department: 'Computer Engineering' }
+  ];
+
+  const students = [];
+  for (const s of studentData) {
+    let exist = await User.findOne({ email: s.email });
+    if (!exist) {
+      exist = await User.create(s);
+    } else {
+      await User.updateOne({ _id: exist._id }, { $set: { password: hashedPassword } });
     }
-  ]);
+    students.push(exist);
+  }
 
   // Create Thesis Groups for the first 3 students (Active Supervisees)
   const group1 = await ThesisGroup.create({
