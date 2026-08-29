@@ -22,6 +22,7 @@ import PostTopics from './pages/PostTopics';
 import Citations from './pages/Citations';
 import AutomatedReport from './pages/AutomatedReport';
 import VideoMeetingRoom from './pages/VideoMeetingRoom';
+import SupervisorGroupManager from "./pages/SupervisorGroupManager";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -83,6 +84,7 @@ export default function App() {
               <Route path="post-topics" element={<PostTopics />} />
               <Route path="citations" element={<Citations />} />
               <Route path="automated-report" element={<AutomatedReport />} />
+              <Route path="/supervisor/group-manager" element={<SupervisorGroupManager />} />
               
               {/* Catch-all for logged in users */}
               <Route path="*" element={<Navigate to="/" replace />} />

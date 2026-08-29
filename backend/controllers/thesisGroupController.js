@@ -56,7 +56,6 @@ export const getMyGroup = async (req, res, next) => {
         "fullName email"
       );
 
-
     if (!group) {
       return res.status(404).json({
         success: false,
@@ -72,7 +71,6 @@ export const getMyGroup = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // ==========================================
 // BROWSE ALL THESIS GROUPS
@@ -91,7 +89,7 @@ export const getAllGroups = async (req, res, next) => {
         "topicId",
         "title description"
       )
-       .populate(
+      .populate(
         "joinRequests.studentId",
         "fullName email"
       );
@@ -106,10 +104,11 @@ export const getAllGroups = async (req, res, next) => {
   }
 };
 
-
-// @desc    Request to join a thesis group
-// @route   POST /api/thesis-groups/:id/request
-// @access  Private
+// ==========================================
+// REQUEST TO JOIN A THESIS GROUP
+// POST /api/thesis-groups/:id/request
+// Protected
+// ==========================================
 export const requestToJoinGroup = async (req, res, next) => {
   try {
     const group = await ThesisGroup.findById(req.params.id);
@@ -173,7 +172,8 @@ export const requestToJoinGroup = async (req, res, next) => {
 
     // Add activity
     group.recentActivity.push({
-      description: "A student requested to join the group",
+      description:
+        "A student requested to join the group",
       createdAt: new Date(),
     });
 
@@ -187,7 +187,6 @@ export const requestToJoinGroup = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // ==========================================
 // ACCEPT JOIN REQUEST
@@ -205,10 +204,7 @@ export const acceptJoinRequest = async (req, res, next) => {
       });
     }
 
-    // ==========================================
     // ONLY GROUP LEADER CAN ACCEPT
-    // ==========================================
-
     if (
       group.leaderId.toString() !==
       req.user._id.toString()
@@ -220,10 +216,7 @@ export const acceptJoinRequest = async (req, res, next) => {
       });
     }
 
-    // ==========================================
     // CHECK MAXIMUM MEMBERS
-    // ==========================================
-
     if (group.members.length >= 5) {
       return res.status(400).json({
         success: false,
@@ -232,10 +225,7 @@ export const acceptJoinRequest = async (req, res, next) => {
       });
     }
 
-    // ==========================================
     // GET ROLE AND CHAPTER FROM REQUEST
-    // ==========================================
-
     const { role, chapter } = req.body;
 
     // Validate role
@@ -256,10 +246,7 @@ export const acceptJoinRequest = async (req, res, next) => {
       });
     }
 
-    // ==========================================
     // FIND JOIN REQUEST
-    // ==========================================
-
     const request = group.joinRequests.id(
       req.params.requestId
     );
@@ -271,10 +258,7 @@ export const acceptJoinRequest = async (req, res, next) => {
       });
     }
 
-    // ==========================================
     // CHECK REQUEST STATUS
-    // ==========================================
-
     if (request.status !== "pending") {
       return res.status(400).json({
         success: false,
@@ -285,10 +269,7 @@ export const acceptJoinRequest = async (req, res, next) => {
 
     const studentId = request.studentId;
 
-    // ==========================================
     // CHECK WHETHER STUDENT IS ALREADY MEMBER
-    // ==========================================
-
     const alreadyMember = group.members.some(
       (memberId) =>
         memberId.toString() ===
@@ -303,10 +284,7 @@ export const acceptJoinRequest = async (req, res, next) => {
       });
     }
 
-    // ==========================================
     // CHECK WHETHER STUDENT IS IN ANOTHER GROUP
-    // ==========================================
-
     const studentProfile =
       await StudentProfile.findOne({
         userId: studentId,
@@ -320,65 +298,41 @@ export const acceptJoinRequest = async (req, res, next) => {
       });
     }
 
-    // ==========================================
     // GET STUDENT INFORMATION
-    // ==========================================
-
     const student = await User.findById(
       studentId
     ).select("fullName");
 
-    // ==========================================
     // ADD STUDENT TO GROUP
-    // ==========================================
-
     group.members.push(studentId);
 
-    // ==========================================
     // ADD MEMBER ROLE + CHAPTER
-    // ==========================================
-
     group.memberDetails.push({
       userId: studentId,
       role: role.trim(),
       chapter: chapter.trim(),
     });
 
-    // ==========================================
     // MARK REQUEST AS ACCEPTED
-    // ==========================================
-
     request.status = "accepted";
 
-    // ==========================================
     // ADD RECENT ACTIVITY
-    // ==========================================
-
     group.recentActivity.push({
       description: `${student?.fullName || "A student"} joined the thesis group as ${role.trim()} and was assigned to ${chapter.trim()}`,
       createdAt: new Date(),
     });
 
-    // ==========================================
     // SAVE GROUP
-    // ==========================================
-
     await group.save();
 
-    // ==========================================
     // UPDATE STUDENT PROFILE
-    // ==========================================
-
     if (studentProfile) {
       studentProfile.thesisGroupId = group._id;
 
       await studentProfile.save();
     }
 
-    // ==========================================
     // RETURN UPDATED GROUP
-    // ==========================================
-
     const populatedGroup =
       await ThesisGroup.findById(group._id)
         .populate(
@@ -417,7 +371,6 @@ export const acceptJoinRequest = async (req, res, next) => {
   }
 };
 
-
 // ==========================================
 // REJECT JOIN REQUEST
 // POST /api/thesis-groups/:id/requests/:requestId/reject
@@ -441,7 +394,8 @@ export const rejectJoinRequest = async (req, res, next) => {
     ) {
       return res.status(403).json({
         success: false,
-        message: "Only the group leader can reject requests",
+        message:
+          "Only the group leader can reject requests",
       });
     }
 
@@ -459,7 +413,8 @@ export const rejectJoinRequest = async (req, res, next) => {
     if (request.status !== "pending") {
       return res.status(400).json({
         success: false,
-        message: "This request has already been processed",
+        message:
+          "This request has already been processed",
       });
     }
 
@@ -487,7 +442,6 @@ export const rejectJoinRequest = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // ==========================================
 // CREATE THESIS GROUP
@@ -572,7 +526,8 @@ export const createThesisGroup = async (req, res, next) => {
     if (members.length < 2) {
       return res.status(400).json({
         success: false,
-        message: "A thesis group must have at least 2 members",
+        message:
+          "A thesis group must have at least 2 members",
       });
     }
 
@@ -580,7 +535,8 @@ export const createThesisGroup = async (req, res, next) => {
     if (members.length > 5) {
       return res.status(400).json({
         success: false,
-        message: "A thesis group can have a maximum of 5 members",
+        message:
+          "A thesis group can have a maximum of 5 members",
       });
     }
 
@@ -610,7 +566,8 @@ export const createThesisGroup = async (req, res, next) => {
     if (uniqueMemberIds.length !== members.length) {
       return res.status(400).json({
         success: false,
-        message: "A student cannot be added more than once",
+        message:
+          "A student cannot be added more than once",
       });
     }
 
@@ -625,7 +582,8 @@ export const createThesisGroup = async (req, res, next) => {
     if (!creatorIncluded) {
       return res.status(400).json({
         success: false,
-        message: "The group creator must be included as a member",
+        message:
+          "The group creator must be included as a member",
       });
     }
 
@@ -640,7 +598,8 @@ export const createThesisGroup = async (req, res, next) => {
     if (users.length !== uniqueMemberIds.length) {
       return res.status(400).json({
         success: false,
-        message: "One or more selected users do not exist",
+        message:
+          "One or more selected users do not exist",
       });
     }
 
@@ -655,7 +614,8 @@ export const createThesisGroup = async (req, res, next) => {
     if (nonStudents.length > 0) {
       return res.status(400).json({
         success: false,
-        message: "Only students can be members of a thesis group",
+        message:
+          "Only students can be members of a thesis group",
       });
     }
 
@@ -678,7 +638,9 @@ export const createThesisGroup = async (req, res, next) => {
 
       const alreadyInGroupUsers = users
         .filter((user) =>
-          alreadyInGroupIds.includes(user._id.toString())
+          alreadyInGroupIds.includes(
+            user._id.toString()
+          )
         )
         .map((user) => user.fullName);
 
@@ -697,7 +659,8 @@ export const createThesisGroup = async (req, res, next) => {
     if (!Array.isArray(memberDetails)) {
       return res.status(400).json({
         success: false,
-        message: "Member roles and chapters are required",
+        message:
+          "Member roles and chapters are required",
       });
     }
 
@@ -723,28 +686,40 @@ export const createThesisGroup = async (req, res, next) => {
         });
       }
 
-      if (!mongoose.Types.ObjectId.isValid(detail.userId)) {
+      if (
+        !mongoose.Types.ObjectId.isValid(
+          detail.userId
+        )
+      ) {
         return res.status(400).json({
           success: false,
-          message: "Invalid member detail user ID",
+          message:
+            "Invalid member detail user ID",
         });
       }
 
       if (!detail.role || !detail.role.trim()) {
         return res.status(400).json({
           success: false,
-          message: "Every member must have a role",
+          message:
+            "Every member must have a role",
         });
       }
 
-      if (!detail.chapter || !detail.chapter.trim()) {
+      if (
+        !detail.chapter ||
+        !detail.chapter.trim()
+      ) {
         return res.status(400).json({
           success: false,
-          message: "Every member must have a thesis chapter",
+          message:
+            "Every member must have a thesis chapter",
         });
       }
 
-      detailUserIds.push(detail.userId.toString());
+      detailUserIds.push(
+        detail.userId.toString()
+      );
     }
 
     // ==========================================
@@ -752,7 +727,8 @@ export const createThesisGroup = async (req, res, next) => {
     // ==========================================
 
     const missingDetails = uniqueMemberIds.filter(
-      (memberId) => !detailUserIds.includes(memberId)
+      (memberId) =>
+        !detailUserIds.includes(memberId)
     );
 
     if (missingDetails.length > 0) {
@@ -783,41 +759,52 @@ export const createThesisGroup = async (req, res, next) => {
     }
 
     // ==========================================
-    // 16. Validate supervisor if provided
+    // 16. VALIDATE SUPERVISOR
     // ==========================================
 
-    let finalSupervisorId = supervisorId || topic.supervisorId;
+    // Supervisor is required
+    if (!supervisorId) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Supervisor is required when creating a thesis group",
+      });
+    }
 
-    if (finalSupervisorId) {
-      if (
-        !mongoose.Types.ObjectId.isValid(
-          finalSupervisorId
-        )
-      ) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid supervisor ID",
-        });
-      }
+    // Validate supervisor ID
+    if (
+      !mongoose.Types.ObjectId.isValid(
+        supervisorId
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid supervisor ID",
+      });
+    }
 
-      const supervisor = await User.findById(
-        finalSupervisorId
-      ).select("_id role");
+    // Find supervisor
+    const supervisor = await User.findById(
+      supervisorId
+    ).select(
+      "_id fullName email role department university"
+    );
 
-      if (!supervisor) {
-        return res.status(404).json({
-          success: false,
-          message: "Supervisor not found",
-        });
-      }
+    // Supervisor must exist
+    if (!supervisor) {
+      return res.status(404).json({
+        success: false,
+        message: "Supervisor not found",
+      });
+    }
 
-      if (supervisor.role !== "faculty") {
-        return res.status(400).json({
-          success: false,
-          message:
-            "The selected supervisor must be a faculty member",
-        });
-      }
+    // Supervisor must be faculty
+    if (supervisor.role !== "faculty") {
+      return res.status(400).json({
+        success: false,
+        message:
+          "The selected supervisor must be a faculty member",
+      });
     }
 
     // ==========================================
@@ -831,7 +818,7 @@ export const createThesisGroup = async (req, res, next) => {
 
       members: uniqueMemberIds,
 
-      supervisorId: finalSupervisorId || null,
+      supervisorId: supervisorId,
 
       topicId: topic._id,
 
@@ -905,7 +892,8 @@ export const createThesisGroup = async (req, res, next) => {
 
     return res.status(201).json({
       success: true,
-      message: "Thesis group created successfully",
+      message:
+        "Thesis group created successfully",
       data: populatedGroup,
     });
   } catch (error) {
