@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthPage from './AuthPage.jsx';
 import DashboardLayout from './components/DashboardLayout.jsx';
+import { NotificationProvider } from './context/NotificationContext.js';
 
 // Pages
 import DashboardHome from './pages/DashboardHome';
@@ -66,7 +67,14 @@ export default function App() {
             <Route path="/video-meeting/:meetingId" element={<VideoMeetingRoom />} />
 
             {/* Protected Routes wrapped in DashboardLayout */}
-            <Route path="/" element={<DashboardLayout currentUser={currentUser} onLogout={handleLogout} />}>
+            <Route 
+              path="/" 
+              element={
+                <NotificationProvider currentUser={currentUser}>
+                  <DashboardLayout currentUser={currentUser} onLogout={handleLogout} />
+                </NotificationProvider>
+              }
+            >
               <Route index element={<DashboardHome />} />
               <Route path="find-supervisor" element={<FindSupervisor />} />
               <Route path="discussion" element={<DiscussionForum />} />

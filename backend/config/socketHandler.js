@@ -45,6 +45,9 @@ const initializeSocket = (io) => {
 
   io.on('connection', (socket) => {
     console.log(`[Socket.IO] User connected: ${socket.user.fullName} (${socket.id})`);
+    
+    // Join a room based on the user's ID to receive direct notifications
+    socket.join(socket.user._id.toString());
 
     /**
      * Event: join-meeting
