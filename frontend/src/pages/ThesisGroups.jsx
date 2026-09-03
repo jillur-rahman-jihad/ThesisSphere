@@ -4,58 +4,50 @@ import {
   User,
   BookOpen,
   Activity,
-  Plus,
   Search,
   UserCheck,
   UserX,
   X,
+  Pencil,
+  Save,
 } from "lucide-react";
 
 import {
   getMyGroup,
+  updateThesisGroup,
   acceptJoinRequest,
   rejectJoinRequest,
 } from "../services/thesisGroupService";
 
 import BrowseGroups from "../components/thesisGroups/BrowseGroups";
-import CreateThesisGroup from "../components/thesisGroups/CreateThesisGroup";
 
 const ThesisGroups = () => {
   const [myGroup, setMyGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [showBrowseGroups, setShowBrowseGroups] =
-    useState(false);
+  const [showBrowseGroups, setShowBrowseGroups] = useState(false);
 
-  const [showCreateGroup, setShowCreateGroup] =
-    useState(false);
+  const [isEditingGroup, setIsEditingGroup] = useState(false);
+  const [groupNameDraft, setGroupNameDraft] = useState("");
+  const [memberDetailsDraft, setMemberDetailsDraft] = useState([]);
+  const [savingGroup, setSavingGroup] = useState(false);
 
   // ==========================================
   // JOIN REQUEST ACTION STATE
   // ==========================================
 
-  const [processingRequestId, setProcessingRequestId] =
-    useState(null);
+  const [processingRequestId, setProcessingRequestId] = useState(null);
 
   // ==========================================
   // ACCEPT MEMBER MODAL STATE
   // ==========================================
 
-  const [showAcceptModal, setShowAcceptModal] =
-    useState(false);
-
-  const [selectedRequest, setSelectedRequest] =
-    useState(null);
-
-  const [memberRole, setMemberRole] =
-    useState("");
-
-  const [memberChapter, setMemberChapter] =
-    useState("");
-
-  const [acceptError, setAcceptError] =
-    useState("");
+  const [showAcceptModal, setShowAcceptModal] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [memberRole, setMemberRole] = useState("");
+  const [memberChapter, setMemberChapter] = useState("");
+  const [acceptError, setAcceptError] = useState("");
 
   // ==========================================
   // REF FOR BROWSE GROUPS SECTION
@@ -69,9 +61,7 @@ const ThesisGroups = () => {
 
   const getCurrentUser = () => {
     try {
-      const storedUser = localStorage.getItem(
-        "thesisSphereUser"
-      );
+      const storedUser = localStorage.getItem("thesisSphereUser");
 
       if (!storedUser) {
         return null;
@@ -79,11 +69,7 @@ const ThesisGroups = () => {
 
       return JSON.parse(storedUser);
     } catch (error) {
-      console.error(
-        "Failed to read logged-in user:",
-        error
-      );
-
+      console.error("Failed to read logged-in user:", error);
       return null;
     }
   };
@@ -117,8 +103,7 @@ const ThesisGroups = () => {
       console.error(err);
 
       setError(
-        err?.message ||
-          "Failed to load your thesis group"
+        err?.message || "Failed to load your thesis group"
       );
 
       setMyGroup(null);
@@ -150,8 +135,7 @@ const ThesisGroups = () => {
 
     if (!leaderId) {
       leaderId =
-        myGroup.leaderId?.toString?.() ||
-        null;
+        myGroup.leaderId?.toString?.() || null;
     }
 
     if (!leaderId) {
@@ -159,8 +143,7 @@ const ThesisGroups = () => {
     }
 
     return (
-      leaderId.toString() ===
-      currentUserId.toString()
+      leaderId.toString() === currentUserId.toString()
     );
   };
 
@@ -178,8 +161,7 @@ const ThesisGroups = () => {
 
   const pendingJoinRequests =
     myGroup?.joinRequests?.filter(
-      (request) =>
-        request.status === "pending"
+      (request) => request.status === "pending"
     ) || [];
 
   // ==========================================
@@ -189,7 +171,6 @@ const ThesisGroups = () => {
   const openAcceptModal = (request) => {
     setSelectedRequest(request);
 
-    // Clear previous values
     setMemberRole("");
     setMemberChapter("");
     setAcceptError("");
@@ -222,7 +203,6 @@ const ThesisGroups = () => {
       return;
     }
 
-    // Validate role
     if (!memberRole.trim()) {
       setAcceptError(
         "Please enter a role for this member."
@@ -230,7 +210,6 @@ const ThesisGroups = () => {
       return;
     }
 
-    // Validate chapter
     if (!memberChapter.trim()) {
       setAcceptError(
         "Please enter a thesis chapter for this member."
@@ -239,9 +218,7 @@ const ThesisGroups = () => {
     }
 
     try {
-      setProcessingRequestId(
-        selectedRequest._id
-      );
+      setProcessingRequestId(selectedRequest._id);
 
       setAcceptError("");
 
@@ -254,25 +231,19 @@ const ThesisGroups = () => {
         }
       );
 
-      alert(
-        "Join request accepted successfully!"
-      );
+      alert("Join request accepted successfully!");
 
-      // Close modal
       setShowAcceptModal(false);
       setSelectedRequest(null);
       setMemberRole("");
       setMemberChapter("");
 
-      // Reload group so the new member
-      // and assigned role/chapter appear
       await loadMyGroup();
     } catch (err) {
       console.error(err);
 
       setAcceptError(
-        err?.message ||
-          "Failed to accept join request"
+        err?.message || "Failed to accept join request"
       );
     } finally {
       setProcessingRequestId(null);
@@ -283,9 +254,7 @@ const ThesisGroups = () => {
   // REJECT JOIN REQUEST
   // ==========================================
 
-  const handleRejectRequest = async (
-    requestId
-  ) => {
+  const handleRejectRequest = async (requestId) => {
     try {
       setProcessingRequestId(requestId);
 
@@ -294,20 +263,101 @@ const ThesisGroups = () => {
         requestId
       );
 
-      alert(
-        "Join request rejected successfully!"
-      );
+      alert("Join request rejected successfully!");
 
       await loadMyGroup();
     } catch (err) {
       console.error(err);
 
       alert(
-        err?.message ||
-          "Failed to reject join request"
+        err?.message || "Failed to reject join request"
       );
     } finally {
       setProcessingRequestId(null);
+    }
+  };
+
+  // ==========================================
+  // EDIT GROUP
+  // ==========================================
+
+  const startEditingGroup = () => {
+    setGroupNameDraft(myGroup.groupName || "");
+
+    setMemberDetailsDraft(
+      (myGroup.members || []).map((member) => {
+        const details = myGroup.memberDetails?.find(
+          (item) =>
+            (
+              item.userId?._id ||
+              item.userId
+            )?.toString() === member._id?.toString()
+        );
+
+        return {
+          userId: member._id,
+          role: details?.role || "",
+          chapter: details?.chapter || "",
+        };
+      })
+    );
+
+    setError("");
+    setIsEditingGroup(true);
+  };
+
+  const updateMemberDetailDraft = (
+    userId,
+    field,
+    value
+  ) => {
+    setMemberDetailsDraft((details) =>
+      details.map((detail) =>
+        detail.userId.toString() === userId.toString()
+          ? { ...detail, [field]: value }
+          : detail
+      )
+    );
+  };
+
+  const saveGroupDetails = async () => {
+    if (!groupNameDraft.trim()) {
+      setError("Group name is required.");
+      return;
+    }
+
+    if (
+      memberDetailsDraft.some(
+        (detail) =>
+          !detail.role.trim() ||
+          !detail.chapter.trim()
+      )
+    ) {
+      setError("Each member needs a role and chapter.");
+      return;
+    }
+
+    try {
+      setSavingGroup(true);
+      setError("");
+
+      const response = await updateThesisGroup(
+        myGroup._id,
+        {
+          groupName: groupNameDraft.trim(),
+          memberDetails: memberDetailsDraft,
+        }
+      );
+
+      setMyGroup(response.data);
+      setIsEditingGroup(false);
+    } catch (err) {
+      setError(
+        err?.message ||
+          "Failed to update thesis group"
+      );
+    } finally {
+      setSavingGroup(false);
     }
   };
 
@@ -317,7 +367,7 @@ const ThesisGroups = () => {
 
   if (loading) {
     return (
-      <div className="p-8 text-slate-700">
+      <div className="p-8 text-slate-700 dark:text-slate-300">
         Loading thesis groups...
       </div>
     );
@@ -339,13 +389,15 @@ const ThesisGroups = () => {
           <h1
             className="text-3xl
                        font-bold
-                       text-slate-900"
+                       text-slate-900
+                       dark:text-white"
           >
             Thesis Groups
           </h1>
 
           <p
             className="text-slate-600
+                       dark:text-slate-400
                        mt-1"
           >
             Manage your thesis group and explore
@@ -379,33 +431,18 @@ const ThesisGroups = () => {
                        px-5 py-3
                        rounded-xl
                        border border-slate-300
+                       dark:border-slate-700
                        bg-white
+                       dark:bg-slate-800
                        text-slate-700
+                       dark:text-slate-200
                        font-semibold
                        hover:bg-slate-50
+                       dark:hover:bg-slate-700
                        transition"
           >
             <Search size={18} />
             Browse Groups
-          </button>
-
-          {/* ================= CREATE GROUP ================= */}
-
-          <button
-            onClick={() =>
-              setShowCreateGroup(true)
-            }
-            className="flex items-center gap-2
-                       px-5 py-3
-                       rounded-xl
-                       bg-blue-600
-                       hover:bg-blue-700
-                       text-white
-                       font-semibold
-                       transition"
-          >
-            <Plus size={18} />
-            Create Group
           </button>
 
         </div>
@@ -416,8 +453,11 @@ const ThesisGroups = () => {
       {error && (
         <div
           className="bg-red-50
+                     dark:bg-red-950/40
                      border border-red-200
+                     dark:border-red-900
                      text-red-700
+                     dark:text-red-300
                      rounded-xl
                      p-4"
         >
@@ -430,9 +470,12 @@ const ThesisGroups = () => {
       {!myGroup && !error && (
         <div
           className="bg-white
+                     dark:bg-slate-900
                      border border-slate-200
+                     dark:border-slate-800
                      rounded-2xl
                      shadow-sm
+                     dark:shadow-none
                      p-10
                      text-center"
         >
@@ -441,7 +484,9 @@ const ThesisGroups = () => {
                        mx-auto
                        rounded-full
                        bg-blue-100
+                       dark:bg-blue-950/50
                        text-blue-600
+                       dark:text-blue-400
                        flex items-center
                        justify-center"
           >
@@ -452,6 +497,7 @@ const ThesisGroups = () => {
             className="text-xl
                        font-bold
                        text-slate-900
+                       dark:text-white
                        mt-5"
           >
             You are not in a thesis group
@@ -459,6 +505,7 @@ const ThesisGroups = () => {
 
           <p
             className="text-slate-600
+                       dark:text-slate-400
                        mt-2
                        max-w-md
                        mx-auto"
@@ -477,9 +524,12 @@ const ThesisGroups = () => {
 
           <div
             className="bg-white
+                       dark:bg-slate-900
                        border border-slate-200
+                       dark:border-slate-800
                        rounded-2xl
                        shadow-sm
+                       dark:shadow-none
                        p-6"
           >
 
@@ -498,21 +548,48 @@ const ThesisGroups = () => {
                   className="text-sm
                              font-semibold
                              text-blue-600
+                             dark:text-blue-400
                              uppercase
                              tracking-wide"
                 >
                   My Thesis Group
                 </p>
 
-                <h2
-                  className="text-2xl
-                             font-bold
-                             text-slate-900
-                             mt-1"
-                >
-                  {myGroup.groupName ||
-                    "Thesis Group"}
-                </h2>
+                {isEditingGroup ? (
+                  <input
+                    value={groupNameDraft}
+                    onChange={(event) =>
+                      setGroupNameDraft(
+                        event.target.value
+                      )
+                    }
+                    className="mt-1 w-full max-w-md
+                               rounded-lg
+                               border border-slate-300
+                               dark:border-slate-700
+                               bg-white
+                               dark:bg-slate-800
+                               px-3 py-2
+                               text-xl font-bold
+                               text-slate-900
+                               dark:text-white
+                               focus:outline-none
+                               focus:ring-2
+                               focus:ring-blue-500"
+                    aria-label="Group name"
+                  />
+                ) : (
+                  <h2
+                    className="text-2xl
+                               font-bold
+                               text-slate-900
+                               dark:text-white
+                               mt-1"
+                  >
+                    {myGroup.groupName ||
+                      "Thesis Group"}
+                  </h2>
+                )}
               </div>
 
               <div
@@ -531,12 +608,67 @@ const ThesisGroups = () => {
                               ${
                                 myGroup.status ===
                                 "active"
-                                  ? "bg-green-100 text-green-700"
-                                  : "bg-slate-100 text-slate-600"
+                                  ? "bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-400"
+                                  : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
                               }`}
                 >
                   ● {myGroup.status || "Active"}
                 </div>
+
+                {isGroupLeader() && (
+                  <button
+                    onClick={
+                      isEditingGroup
+                        ? saveGroupDetails
+                        : startEditingGroup
+                    }
+                    disabled={savingGroup}
+                    className="flex items-center gap-2
+                               rounded-lg
+                               bg-blue-600
+                               px-4 py-2
+                               text-sm font-semibold
+                               text-white
+                               transition
+                               hover:bg-blue-700
+                               disabled:opacity-60"
+                  >
+                    {isEditingGroup ? (
+                      <Save size={16} />
+                    ) : (
+                      <Pencil size={16} />
+                    )}
+
+                    {savingGroup
+                      ? "Saving..."
+                      : isEditingGroup
+                      ? "Save"
+                      : "Edit group"}
+                  </button>
+                )}
+
+                {isEditingGroup && (
+                  <button
+                    onClick={() =>
+                      setIsEditingGroup(false)
+                    }
+                    disabled={savingGroup}
+                    className="rounded-lg
+                               border border-slate-300
+                               dark:border-slate-700
+                               px-4 py-2
+                               text-sm font-semibold
+                               text-slate-700
+                               dark:text-slate-200
+                               bg-white
+                               dark:bg-slate-800
+                               hover:bg-slate-50
+                               dark:hover:bg-slate-700
+                               disabled:opacity-60"
+                  >
+                    Cancel
+                  </button>
+                )}
 
               </div>
 
@@ -549,13 +681,16 @@ const ThesisGroups = () => {
                          p-5
                          rounded-xl
                          bg-slate-50
-                         border border-slate-200"
+                         dark:bg-slate-800/70
+                         border border-slate-200
+                         dark:border-slate-700"
             >
               <div
                 className="flex
                            items-center
                            gap-2
                            text-slate-800
+                           dark:text-slate-200
                            font-semibold"
               >
                 <BookOpen size={19} />
@@ -566,6 +701,7 @@ const ThesisGroups = () => {
                 className="text-lg
                            font-semibold
                            text-slate-900
+                           dark:text-white
                            mt-2"
               >
                 {myGroup.topicId?.title ||
@@ -575,6 +711,7 @@ const ThesisGroups = () => {
               {myGroup.topicId?.description && (
                 <p
                   className="text-slate-600
+                             dark:text-slate-400
                              mt-2"
                 >
                   {myGroup.topicId.description}
@@ -597,6 +734,7 @@ const ThesisGroups = () => {
                              items-center
                              gap-2
                              text-slate-900
+                             dark:text-white
                              font-bold"
                 >
                   <Users size={20} />
@@ -606,93 +744,172 @@ const ThesisGroups = () => {
                 <span
                   className="text-sm
                              font-semibold
-                             text-slate-600"
+                             text-slate-600
+                             dark:text-slate-400"
                 >
-                  {myGroup.members?.length ||
-                    0}{" "}
-                  / 5
+                  {myGroup.members?.length || 0} / 5
                 </span>
               </div>
 
               <div className="space-y-3">
 
-                {myGroup.members?.map(
-                  (member) => {
+                {myGroup.members?.map((member) => {
 
-                    const details =
-                      myGroup.memberDetails?.find(
-                        (item) =>
-                          (
-                            item.userId?._id ||
-                            item.userId
-                          )?.toString() ===
-                          member._id?.toString()
-                      );
+                  const details =
+                    myGroup.memberDetails?.find(
+                      (item) =>
+                        (
+                          item.userId?._id ||
+                          item.userId
+                        )?.toString() ===
+                        member._id?.toString()
+                    );
 
-                    return (
+                  return (
+                    <div
+                      key={member._id}
+                      className="border
+                                 border-slate-200
+                                 dark:border-slate-700
+                                 rounded-xl
+                                 p-4
+                                 bg-white
+                                 dark:bg-slate-800/50"
+                    >
+
                       <div
-                        key={member._id}
-                        className="border
-                                   border-slate-200
-                                   rounded-xl
-                                   p-4"
+                        className="flex
+                                   items-start
+                                   gap-4"
                       >
 
                         <div
-                          className="flex
-                                     items-start
-                                     gap-4"
+                          className="w-11 h-11
+                                     rounded-full
+                                     bg-blue-100
+                                     dark:bg-blue-950/50
+                                     text-blue-600
+                                     dark:text-blue-400
+                                     flex
+                                     items-center
+                                     justify-center
+                                     shrink-0"
                         >
+                          <User size={22} />
+                        </div>
 
-                          <div
-                            className="w-11 h-11
-                                       rounded-full
-                                       bg-blue-100
-                                       text-blue-600
-                                       flex
-                                       items-center
-                                       justify-center
-                                       shrink-0"
+                        <div className="flex-1">
+
+                          <h3
+                            className="font-bold
+                                       text-slate-900
+                                       dark:text-white"
                           >
-                            <User size={22} />
-                          </div>
+                            {member.fullName ||
+                              member.name ||
+                              "Student"}
+                          </h3>
 
-                          <div className="flex-1">
-
-                            <h3
-                              className="font-bold
-                                         text-slate-900"
+                          {isEditingGroup ? (
+                            <div
+                              className="mt-2
+                                         grid gap-2
+                                         sm:grid-cols-2"
                             >
-                              {member.fullName ||
-                                member.name ||
-                                "Student"}
-                            </h3>
+                              <input
+                                value={
+                                  memberDetailsDraft.find(
+                                    (item) =>
+                                      item.userId.toString() ===
+                                      member._id.toString()
+                                  )?.role || ""
+                                }
+                                onChange={(event) =>
+                                  updateMemberDetailDraft(
+                                    member._id,
+                                    "role",
+                                    event.target.value
+                                  )
+                                }
+                                className="rounded-lg
+                                           border border-slate-300
+                                           dark:border-slate-700
+                                           bg-white
+                                           dark:bg-slate-800
+                                           px-3 py-2
+                                           text-sm
+                                           text-slate-900
+                                           dark:text-white
+                                           placeholder:text-slate-400
+                                           focus:outline-none
+                                           focus:ring-2
+                                           focus:ring-blue-500"
+                                placeholder="Role"
+                                aria-label={`${member.fullName || "Member"} role`}
+                              />
 
-                            <p
-                              className="text-sm
-                                         text-slate-600"
-                            >
-                              {details?.role ||
-                                "Group Member"}
-                            </p>
+                              <input
+                                value={
+                                  memberDetailsDraft.find(
+                                    (item) =>
+                                      item.userId.toString() ===
+                                      member._id.toString()
+                                  )?.chapter || ""
+                                }
+                                onChange={(event) =>
+                                  updateMemberDetailDraft(
+                                    member._id,
+                                    "chapter",
+                                    event.target.value
+                                  )
+                                }
+                                className="rounded-lg
+                                           border border-slate-300
+                                           dark:border-slate-700
+                                           bg-white
+                                           dark:bg-slate-800
+                                           px-3 py-2
+                                           text-sm
+                                           text-slate-900
+                                           dark:text-white
+                                           placeholder:text-slate-400
+                                           focus:outline-none
+                                           focus:ring-2
+                                           focus:ring-blue-500"
+                                placeholder="Chapter"
+                                aria-label={`${member.fullName || "Member"} chapter`}
+                              />
+                            </div>
+                          ) : (
+                            <>
+                              <p
+                                className="text-sm
+                                           text-slate-600
+                                           dark:text-slate-400"
+                              >
+                                {details?.role ||
+                                  "Group Member"}
+                              </p>
 
-                            <p
-                              className="text-sm
-                                         text-slate-500
-                                         mt-1"
-                            >
-                              {details?.chapter ||
-                                "Chapter not assigned"}
-                            </p>
-
-                          </div>
+                              <p
+                                className="text-sm
+                                           text-slate-500
+                                           dark:text-slate-500
+                                           mt-1"
+                              >
+                                {details?.chapter ||
+                                  "Chapter not assigned"}
+                              </p>
+                            </>
+                          )}
 
                         </div>
 
                       </div>
-                    );
-                  }
-                )}
+
+                    </div>
+                  );
+                })}
 
               </div>
 
@@ -715,6 +932,7 @@ const ThesisGroups = () => {
                                items-center
                                gap-2
                                text-slate-900
+                               dark:text-white
                                font-bold"
                   >
                     <UserCheck size={20} />
@@ -726,7 +944,9 @@ const ThesisGroups = () => {
                       className="px-3 py-1
                                  rounded-full
                                  bg-blue-100
+                                 dark:bg-blue-950/50
                                  text-blue-700
+                                 dark:text-blue-400
                                  text-sm
                                  font-bold"
                     >
@@ -741,11 +961,16 @@ const ThesisGroups = () => {
                   <div
                     className="border
                                border-slate-200
+                               dark:border-slate-700
                                rounded-xl
                                p-5
-                               bg-slate-50"
+                               bg-slate-50
+                               dark:bg-slate-800/70"
                   >
-                    <p className="text-slate-600">
+                    <p
+                      className="text-slate-600
+                                 dark:text-slate-400"
+                    >
                       No pending join requests.
                     </p>
                   </div>
@@ -774,9 +999,11 @@ const ThesisGroups = () => {
                             key={request._id}
                             className="border
                                        border-slate-200
+                                       dark:border-slate-700
                                        rounded-xl
                                        p-4
-                                       bg-white"
+                                       bg-white
+                                       dark:bg-slate-800/50"
                           >
 
                             <div
@@ -800,7 +1027,9 @@ const ThesisGroups = () => {
                                   className="w-11 h-11
                                              rounded-full
                                              bg-blue-100
+                                             dark:bg-blue-950/50
                                              text-blue-600
+                                             dark:text-blue-400
                                              flex
                                              items-center
                                              justify-center
@@ -813,7 +1042,8 @@ const ThesisGroups = () => {
 
                                   <h3
                                     className="font-bold
-                                               text-slate-900"
+                                               text-slate-900
+                                               dark:text-white"
                                   >
                                     {studentName}
                                   </h3>
@@ -821,7 +1051,8 @@ const ThesisGroups = () => {
                                   {student?.email && (
                                     <p
                                       className="text-sm
-                                                 text-slate-500"
+                                                 text-slate-500
+                                                 dark:text-slate-400"
                                     >
                                       {student.email}
                                     </p>
@@ -831,6 +1062,7 @@ const ThesisGroups = () => {
                                     <p
                                       className="text-xs
                                                  text-slate-400
+                                                 dark:text-slate-500
                                                  mt-1"
                                     >
                                       Requested{" "}
@@ -847,8 +1079,7 @@ const ThesisGroups = () => {
                               {/* ACTION BUTTONS */}
 
                               <div
-                                className="flex
-                                           gap-2"
+                                className="flex gap-2"
                               >
 
                                 {/* ACCEPT */}
@@ -868,8 +1099,7 @@ const ThesisGroups = () => {
                                              items-center
                                              justify-center
                                              gap-2
-                                             px-4
-                                             py-2.5
+                                             px-4 py-2.5
                                              rounded-xl
                                              bg-green-600
                                              hover:bg-green-700
@@ -894,19 +1124,19 @@ const ThesisGroups = () => {
                                       request._id
                                     )
                                   }
-                                  disabled={
-                                    isProcessing
-                                  }
+                                  disabled={isProcessing}
                                   className="flex
                                              items-center
                                              justify-center
                                              gap-2
-                                             px-4
-                                             py-2.5
+                                             px-4 py-2.5
                                              rounded-xl
                                              bg-red-100
+                                             dark:bg-red-950/40
                                              hover:bg-red-200
+                                             dark:hover:bg-red-950/60
                                              text-red-700
+                                             dark:text-red-400
                                              font-semibold
                                              transition
                                              disabled:opacity-50
@@ -944,14 +1174,16 @@ const ThesisGroups = () => {
               >
                 <span
                   className="font-semibold
-                             text-slate-800"
+                             text-slate-800
+                             dark:text-slate-200"
                 >
                   Thesis Progress
                 </span>
 
                 <span
                   className="font-bold
-                             text-blue-600"
+                             text-blue-600
+                             dark:text-blue-400"
                 >
                   {myGroup.progress || 0}%
                 </span>
@@ -961,12 +1193,14 @@ const ThesisGroups = () => {
                 className="w-full
                            h-3
                            bg-slate-200
+                           dark:bg-slate-700
                            rounded-full
                            overflow-hidden"
               >
                 <div
                   className="h-full
                              bg-blue-600
+                             dark:bg-blue-500
                              rounded-full
                              transition-all"
                   style={{
@@ -985,9 +1219,12 @@ const ThesisGroups = () => {
 
           <div
             className="bg-white
+                       dark:bg-slate-900
                        border border-slate-200
+                       dark:border-slate-800
                        rounded-2xl
                        shadow-sm
+                       dark:shadow-none
                        p-6"
           >
 
@@ -998,6 +1235,7 @@ const ThesisGroups = () => {
                          text-xl
                          font-bold
                          text-slate-900
+                         dark:text-white
                          mb-5"
             >
               <Activity size={21} />
@@ -1022,6 +1260,7 @@ const ThesisGroups = () => {
                         className="w-2 h-2
                                    rounded-full
                                    bg-blue-600
+                                   dark:bg-blue-500
                                    mt-2"
                       />
 
@@ -1029,6 +1268,7 @@ const ThesisGroups = () => {
 
                         <p
                           className="text-slate-800
+                                     dark:text-slate-200
                                      font-medium"
                         >
                           {activity.description}
@@ -1038,6 +1278,7 @@ const ThesisGroups = () => {
                           <p
                             className="text-sm
                                        text-slate-500
+                                       dark:text-slate-500
                                        mt-1"
                           >
                             {new Date(
@@ -1056,7 +1297,10 @@ const ThesisGroups = () => {
 
             ) : (
 
-              <p className="text-slate-600">
+              <p
+                className="text-slate-600
+                           dark:text-slate-400"
+              >
                 No recent activity.
               </p>
 
@@ -1073,27 +1317,14 @@ const ThesisGroups = () => {
         <div
           ref={browseGroupsRef}
           className="bg-slate-50
+                     dark:bg-slate-900
                      border border-slate-200
+                     dark:border-slate-800
                      rounded-2xl
                      p-6"
         >
           <BrowseGroups />
         </div>
-      )}
-
-      {/* ================= CREATE GROUP ================= */}
-
-      {showCreateGroup && (
-        <CreateThesisGroup
-          onClose={() =>
-            setShowCreateGroup(false)
-          }
-          onGroupCreated={async () => {
-            setShowCreateGroup(false);
-
-            await loadMyGroup();
-          }}
-        />
       )}
 
       {/* ===================================================== */}
@@ -1108,6 +1339,7 @@ const ThesisGroups = () => {
                      items-center
                      justify-center
                      bg-black/50
+                     dark:bg-black/70
                      px-4"
         >
 
@@ -1115,6 +1347,9 @@ const ThesisGroups = () => {
             className="w-full
                        max-w-md
                        bg-white
+                       dark:bg-slate-900
+                       border border-transparent
+                       dark:border-slate-800
                        rounded-2xl
                        shadow-xl
                        p-6"
@@ -1130,10 +1365,12 @@ const ThesisGroups = () => {
             >
 
               <div>
+
                 <h2
                   className="text-xl
                              font-bold
-                             text-slate-900"
+                             text-slate-900
+                             dark:text-white"
                 >
                   Accept Member
                 </h2>
@@ -1141,11 +1378,13 @@ const ThesisGroups = () => {
                 <p
                   className="text-sm
                              text-slate-500
+                             dark:text-slate-400
                              mt-1"
                 >
                   Assign a role and thesis chapter
                   to this member.
                 </p>
+
               </div>
 
               <button
@@ -1154,7 +1393,9 @@ const ThesisGroups = () => {
                 className="p-2
                            rounded-lg
                            hover:bg-slate-100
+                           dark:hover:bg-slate-800
                            text-slate-500
+                           dark:text-slate-400
                            disabled:opacity-50"
               >
                 <X size={20} />
@@ -1170,23 +1411,29 @@ const ThesisGroups = () => {
                            p-3
                            rounded-xl
                            bg-blue-50
-                           border border-blue-100"
+                           dark:bg-blue-950/40
+                           border border-blue-100
+                           dark:border-blue-900"
               >
+
                 <p
                   className="text-sm
-                             text-slate-500"
+                             text-slate-500
+                             dark:text-slate-400"
                 >
                   Student
                 </p>
 
                 <p
                   className="font-bold
-                             text-slate-900"
+                             text-slate-900
+                             dark:text-white"
                 >
                   {selectedRequest.studentId.fullName ||
                     selectedRequest.studentId.name ||
                     "Student"}
                 </p>
+
               </div>
             )}
 
@@ -1199,6 +1446,7 @@ const ThesisGroups = () => {
                            text-sm
                            font-semibold
                            text-slate-700
+                           dark:text-slate-300
                            mb-2"
               >
                 Role
@@ -1213,16 +1461,20 @@ const ThesisGroups = () => {
                 placeholder="e.g. Developer, Researcher, Designer"
                 disabled={!!processingRequestId}
                 className="w-full
-                           px-4
-                           py-3
+                           px-4 py-3
                            border border-slate-300
+                           dark:border-slate-700
                            rounded-xl
+                           bg-white
+                           dark:bg-slate-800
                            text-slate-900
+                           dark:text-white
                            placeholder:text-slate-400
                            focus:outline-none
                            focus:ring-2
                            focus:ring-blue-500
-                           disabled:bg-slate-100"
+                           disabled:bg-slate-100
+                           dark:disabled:bg-slate-800"
               />
 
             </div>
@@ -1236,6 +1488,7 @@ const ThesisGroups = () => {
                            text-sm
                            font-semibold
                            text-slate-700
+                           dark:text-slate-300
                            mb-2"
               >
                 Thesis Chapter
@@ -1250,16 +1503,20 @@ const ThesisGroups = () => {
                 placeholder="e.g. Introduction, Methodology, Results"
                 disabled={!!processingRequestId}
                 className="w-full
-                           px-4
-                           py-3
+                           px-4 py-3
                            border border-slate-300
+                           dark:border-slate-700
                            rounded-xl
+                           bg-white
+                           dark:bg-slate-800
                            text-slate-900
+                           dark:text-white
                            placeholder:text-slate-400
                            focus:outline-none
                            focus:ring-2
                            focus:ring-blue-500
-                           disabled:bg-slate-100"
+                           disabled:bg-slate-100
+                           dark:disabled:bg-slate-800"
               />
 
             </div>
@@ -1272,8 +1529,11 @@ const ThesisGroups = () => {
                            p-3
                            rounded-xl
                            bg-red-50
+                           dark:bg-red-950/40
                            border border-red-200
+                           dark:border-red-900
                            text-red-700
+                           dark:text-red-300
                            text-sm"
               >
                 {acceptError}
@@ -1292,14 +1552,17 @@ const ThesisGroups = () => {
                 onClick={closeAcceptModal}
                 disabled={!!processingRequestId}
                 className="flex-1
-                           px-4
-                           py-3
+                           px-4 py-3
                            rounded-xl
                            border border-slate-300
+                           dark:border-slate-700
                            bg-white
+                           dark:bg-slate-800
                            text-slate-700
+                           dark:text-slate-200
                            font-semibold
                            hover:bg-slate-50
+                           dark:hover:bg-slate-700
                            transition
                            disabled:opacity-50"
               >
@@ -1310,8 +1573,7 @@ const ThesisGroups = () => {
                 onClick={handleAcceptRequest}
                 disabled={!!processingRequestId}
                 className="flex-1
-                           px-4
-                           py-3
+                           px-4 py-3
                            rounded-xl
                            bg-green-600
                            hover:bg-green-700

@@ -1,6 +1,9 @@
 import ThesisApplication from '../models/ThesisApplication.js';
 import ThesisTopic from '../models/ThesisTopic.js';
 import Notification from '../models/Notification.js';
+import ThesisGroup from '../models/ThesisGroup.js';
+import StudentProfile from '../models/StudentProfileModel.js';
+import User from '../models/userModel.js';
 
 // @desc    Apply for a thesis topic
 // @route   POST /api/thesis-applications
@@ -157,6 +160,50 @@ export const updateApplicationStatus = async (req, res, next) => {
       // Mark topic as assigned
       topic.status = 'assigned';
       await topic.save();
+
+      const student = await User.findById(application.studentId).select('fullName');
+      const studentProfile = await StudentProfile.findOne({
+        userId: application.studentId,
+      });
+
+      if (studentProfile?.thesisGroupId) {
+        res.status(400);
+        throw new Error('This student already belongs to a thesis group');
+      }
+
+      const group = await ThesisGroup.create({
+        groupName: `${student?.fullName || 'Student'}'s Thesis Group`,
+        leaderId: application.studentId,
+        members: [application.studentId],
+        supervisorId: topic.supervisorId,
+        topicId: topic._id,
+        memberDetails: [
+          {
+            userId: application.studentId,
+            role: 'Thesis Leader',
+            chapter: 'All chapters',
+          },
+        ],
+        recentActivity: [
+          {
+            description: 'Thesis group created after the topic application was accepted',
+          },
+        ],
+      });
+
+      if (studentProfile) {
+        studentProfile.thesisGroupId = group._id;
+        studentProfile.thesisTitle = topic.title;
+        studentProfile.supervisorId = topic.supervisorId;
+        await studentProfile.save();
+      } else {
+        await StudentProfile.create({
+          userId: application.studentId,
+          thesisGroupId: group._id,
+          thesisTitle: topic.title,
+          supervisorId: topic.supervisorId,
+        });
+      }
     }
 
     application.status = status;

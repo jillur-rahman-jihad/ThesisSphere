@@ -62,6 +62,25 @@ export const getAllGroups = async () => {
   return data;
 };
 
+// ==========================================
+// UPDATE THESIS GROUP
+// ==========================================
+export const updateThesisGroup = async (groupId, groupData) => {
+  const response = await fetch(`${API_URL}/${groupId}`, {
+    method: "PATCH",
+    headers: getHeaders(),
+    body: JSON.stringify(groupData),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to update thesis group");
+  }
+
+  return data;
+};
+
 
 // ==========================================
 // CREATE THESIS GROUP
