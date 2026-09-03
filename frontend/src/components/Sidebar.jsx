@@ -22,6 +22,7 @@ import {
 
 const Sidebar = ({ currentUser }) => {
   const { theme, toggleTheme } = useTheme();
+  const { unreadCount } = useNotification();
   const { socket } = useSocket();
   const isStudent = currentUser?.role === 'student';
 

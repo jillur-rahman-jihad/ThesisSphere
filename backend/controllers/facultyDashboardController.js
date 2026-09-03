@@ -55,7 +55,7 @@ export const getFacultyDashboard = async (req, res, next) => {
       Meeting.find({ supervisorId: facultyId }).lean(),
       
       // Fetch all paper reviews for workload chart and pending count
-      PaperReview.find({ reviewer: facultyId }).lean(),
+      PaperReview.find({ reviewedBy: facultyId }).lean(),
 
       // Fetch pending supervision requests and populate student details
       SupervisionRequest.find({ supervisorId: facultyId, status: 'pending' })
