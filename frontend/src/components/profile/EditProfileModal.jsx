@@ -26,8 +26,6 @@ const EditProfileModal = ({
     cgpa: "",
     publications: 0,
 
-    thesisTitle: "",
-
     researchInterests: [],
     skills: [],
   });
@@ -51,8 +49,6 @@ const EditProfileModal = ({
       semester: profile.semester || "",
       cgpa: profile.cgpa ?? "",
       publications: profile.publications ?? 0,
-
-      thesisTitle: profile.thesisTitle || "",
 
       researchInterests: profile.researchInterests || [],
       skills: profile.skills || [],
@@ -130,8 +126,6 @@ const EditProfileModal = ({
           formData.publications === ""
             ? 0
             : Number(formData.publications),
-
-        thesisTitle: formData.thesisTitle,
 
         researchInterests:
           formData.researchInterests,
@@ -399,26 +393,6 @@ const EditProfileModal = ({
                   onChange={handleChange}
                   min="0"
                   className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-
-              </div>
-
-
-              {/* Thesis Title */}
-
-              <div className="md:col-span-2">
-
-                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
-                  Thesis Title
-                </label>
-
-                <input
-                  type="text"
-                  name="thesisTitle"
-                  value={formData.thesisTitle}
-                  onChange={handleChange}
-                  placeholder="Enter your thesis title"
-                  className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-white bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
               </div>
