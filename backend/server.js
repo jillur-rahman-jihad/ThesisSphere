@@ -28,6 +28,7 @@ import forumRoutes from './routes/forumRoutes.js';
 import automatedReportRoutes from './routes/automatedReportRoutes.js';
 import contributionTrackerRoutes from './routes/contributionTrackerRoutes.js';
 import videoMeetingRoutes from './routes/videoMeetingRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 import initializeSocket from './config/socketHandler.js';
 
 // Load environment variables
@@ -46,6 +47,7 @@ const io = new SocketIOServer(server, {
     methods: ['GET', 'POST'],
   },
 });
+app.set('io', io); // Attach io to app for access in controllers
 initializeSocket(io);
 app.set('io', io);
 
@@ -91,6 +93,7 @@ app.use('/api/automated-report', automatedReportRoutes);
 app.use('/api/contribution-tracker', contributionTrackerRoutes);
 app.use('/api/video-meetings', videoMeetingRoutes);
 app.use('/api/supervisor-group-manager', supervisorGroupManagerRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.use('/api/paper-reviews', paperReviewRoutes);
 
 

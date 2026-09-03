@@ -149,23 +149,31 @@ export const createMeeting = async (req, res, next) => {
 
     for (const participantId of targetParticipants) {
       if (participantId.toString() !== req.user._id.toString()) {
-        await Notification.create({
+        const notif = await Notification.create({
           userId: participantId,
           title: 'New Meeting Scheduled',
           message: `A meeting "${title}" has been scheduled by ${scheduledBy} for ${dateString}.`,
           type: 'meeting',
         });
+        const io = req.app.get('io');
+        if (io) {
+          io.to(participantId.toString()).emit('new-notification', notif);
+        }
       }
     }
 
     // Notify supervisor if scheduled by student
     if (req.user.role === 'student' && targetSupervisorId) {
-      await Notification.create({
+      const supervisorNotif = await Notification.create({
         userId: targetSupervisorId,
         title: 'New Meeting Scheduled by Student',
         message: `A meeting "${title}" has been scheduled by student ${scheduledBy} for ${dateString}.`,
         type: 'meeting',
       });
+      const io = req.app.get('io');
+      if (io) {
+        io.to(targetSupervisorId.toString()).emit('new-notification', supervisorNotif);
+      }
     }
 
     res.status(201).json({

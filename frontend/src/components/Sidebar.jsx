@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { useNotification } from '../context/NotificationContext';
 import { useSocket } from '../context/SocketContext';
 import {
   LayoutDashboard,
@@ -99,12 +100,7 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
         { name: 'Contributions', icon: BarChart2, path: '/contributions' },
         { name: 'Automated Report', icon: FileText, path: '/automated-report' },
-        {
-          name: 'Notifications',
-          icon: Bell,
-          badge: liveCounts.unreadNotifications > 0 ? liveCounts.unreadNotifications : null,
-          path: '/notifications',
-        },
+        { name: 'Notifications', icon: Bell, badge: unreadCount > 0 ? unreadCount : null, path: '/notifications' },
         { name: 'My Profile', icon: User, path: '/profile' },
       ]
     : [
@@ -122,12 +118,7 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Calendar', icon: Calendar, path: '/calendar' },
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
         { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
-        {
-          name: 'Notifications',
-          icon: Bell,
-          badge: liveCounts.unreadNotifications > 0 ? liveCounts.unreadNotifications : null,
-          path: '/notifications',
-        },
+        { name: 'Notifications', icon: Bell, badge: unreadCount > 0 ? unreadCount : null, path: '/notifications' },
         { name: 'My Profile', icon: User, path: '/faculty-profile' },
       ];
 

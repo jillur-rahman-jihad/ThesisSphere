@@ -38,7 +38,7 @@ const FacultyProfile = () => {
           setLoading(false);
           return;
         }
-        const response = await getFacultyProfileById(currentUser?._id || "me");
+        const response = await getFacultyProfileById(currentUser._id);
         setProfileData(response.data);
       }
     } catch (err) {

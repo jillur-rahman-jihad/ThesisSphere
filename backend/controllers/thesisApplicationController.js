@@ -1,5 +1,6 @@
 import ThesisApplication from '../models/ThesisApplication.js';
 import ThesisTopic from '../models/ThesisTopic.js';
+import Notification from '../models/Notification.js';
 
 // @desc    Apply for a thesis topic
 // @route   POST /api/thesis-applications
@@ -160,6 +161,18 @@ export const updateApplicationStatus = async (req, res, next) => {
 
     application.status = status;
     await application.save();
+
+    // Create and emit notification for the student
+    const notif = await Notification.create({
+      userId: application.studentId,
+      title: `Application ${status.charAt(0).toUpperCase() + status.slice(1)}`,
+      message: `Your application for topic "${topic.title}" has been ${status}.`,
+      type: 'general',
+    });
+    const io = req.app.get('io');
+    if (io) {
+      io.to(application.studentId.toString()).emit('new-notification', notif);
+    }
 
     res.status(200).json({
       success: true,
