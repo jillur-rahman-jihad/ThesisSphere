@@ -315,8 +315,10 @@ function FacultyDashboardContent({ user, dashboardData, loading, error }) {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">{selectedStudent.fullName}</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-1">
-                    <GraduationCap size={16} /> {selectedStudent.department || 'Department not specified'}
+                  <p className="text-sm text-slate-500 dark:text-slate-400 flex flex-col gap-1 mt-1">
+                    <span className="flex items-center gap-1"><GraduationCap size={16} /> {selectedStudent.department || 'Department not specified'}</span>
+                    <span className="flex items-center gap-1"><Mail size={16} /> {selectedStudent.email || 'Email not specified'}</span>
+                    <span className="flex items-center gap-1"><Users size={16} /> {selectedStudent.studentId || 'ID not specified'}</span>
                   </p>
                 </div>
               </div>

@@ -25,6 +25,17 @@ const supervisionRequestSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    applicationType: {
+      type: String,
+      enum: ['solo', 'group'],
+      default: 'solo',
+    },
+    groupMembers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      }
+    ],
   },
   {
     timestamps: true,

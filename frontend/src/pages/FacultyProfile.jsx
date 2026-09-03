@@ -13,8 +13,11 @@ import {
   Activity,
   X,
   Plus,
+  UserPlus,
 } from "lucide-react";
 import { getProfile, updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
+import EditProfileModal from "../components/profile/EditProfileModal";
+import SupervisionRequestModal from "../components/profile/SupervisionRequestModal";
 
 const FacultyProfile = () => {
   const { currentUser } = useOutletContext() || {};
@@ -23,10 +26,12 @@ const FacultyProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showRequestModal, setShowRequestModal] = useState(false);
   const [addingSupervisor, setAddingSupervisor] = useState(false);
 
   const isPublicView = !!id;
   const canEdit = !isPublicView && currentUser?.role === "faculty";
+  const canApply = isPublicView && currentUser?.role === "student";
 
   const loadProfile = async () => {
     try {
@@ -66,7 +71,7 @@ const FacultyProfile = () => {
     }
   };
 
-  const handleAddSupervisor = async () => {
+  const handleAddSupervisor = async (requestData) => {
     try {
       setAddingSupervisor(true);
       const res = await fetch(`/api/faculty/profile/${id}/add-student`, {
@@ -75,18 +80,19 @@ const FacultyProfile = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${currentUser.token}`,
         },
+        body: JSON.stringify(requestData)
       });
       const data = await res.json();
       if (data.success) {
-        alert('Supervisor added successfully! A thesis group was created for you.');
-        // Refresh profile data to show updated capacity
+        alert('Supervision request sent successfully!');
+        setShowRequestModal(false);
         await loadProfile();
       } else {
-        alert(data.message || 'Failed to add supervisor');
+        alert(data.message || 'Failed to send supervision request');
       }
     } catch (err) {
       console.error(err);
-      alert('An error occurred while adding the supervisor.');
+      alert('An error occurred while sending the supervision request.');
     } finally {
       setAddingSupervisor(false);
     }
@@ -166,14 +172,13 @@ const FacultyProfile = () => {
             {isAccepting && (
               <span className="rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 text-sm font-semibold text-emerald-800 dark:text-emerald-300">Accepting Students</span>
             )}
-            {isPublicView && currentUser?.role === 'student' && isAccepting && (
+            {canApply && isAccepting && (
               <button
-                onClick={handleAddSupervisor}
-                disabled={addingSupervisor}
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50"
+                onClick={() => setShowRequestModal(true)}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600"
               >
-                <Plus size={16} />
-                {addingSupervisor ? "Adding..." : "Add Supervisor"}
+                <UserPlus size={16} />
+                Request Supervision
               </button>
             )}
             {canEdit && (
@@ -242,10 +247,19 @@ const FacultyProfile = () => {
         </div>
       </div>
       {showEditModal && (
-        <FacultyEditProfileModal
+        <EditProfileModal
           profileData={profileData}
           onClose={() => setShowEditModal(false)}
           onSave={handleProfileSave}
+        />
+      )}
+      {showRequestModal && (
+        <SupervisionRequestModal
+          isOpen={showRequestModal}
+          onClose={() => setShowRequestModal(false)}
+          onSubmit={handleAddSupervisor}
+          loading={addingSupervisor}
+          supervisorName={displayName}
         />
       )}
     </div>

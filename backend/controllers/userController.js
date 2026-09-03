@@ -1,4 +1,5 @@
 import User from '../models/userModel.js';
+import StudentProfile from '../models/StudentProfileModel.js';
 
 // @desc    Get all users (with a mockup fallback if DB is not connected)
 // @route   GET /api/users
@@ -88,6 +89,45 @@ export const createUser = async (req, res, next) => {
         },
       });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Lookup student by studentId
+// @route   GET /api/users/student-lookup?studentId=...
+// @access  Private
+export const lookupStudentById = async (req, res, next) => {
+  try {
+    const { studentId } = req.query;
+    if (!studentId) {
+      res.status(400);
+      throw new Error('Please provide a student ID');
+    }
+
+    const studentProfile = await StudentProfile.findOne({ studentId }).populate({
+      path: 'userId',
+      match: { role: 'student' },
+      select: 'fullName email department'
+    });
+    
+    if (!studentProfile || !studentProfile.userId) {
+      res.status(404);
+      throw new Error('Student not found with that ID');
+    }
+
+    const studentData = {
+      _id: studentProfile.userId._id,
+      fullName: studentProfile.userId.fullName,
+      email: studentProfile.userId.email,
+      department: studentProfile.userId.department,
+      studentId: studentProfile.studentId
+    };
+
+    res.status(200).json({
+      success: true,
+      data: studentData
+    });
   } catch (error) {
     next(error);
   }

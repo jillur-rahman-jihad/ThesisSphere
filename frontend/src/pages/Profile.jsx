@@ -146,6 +146,18 @@ const Profile = () => {
           </h2>
 
           <div className="space-y-4">
+            
+            <InfoRow
+              icon={<School size={18} />}
+              label="Student ID"
+              value={profile.studentId || "-"}
+            />
+            
+            <InfoRow
+              icon={<School size={18} />}
+              label="Email"
+              value={user.email || "-"}
+            />
 
             <InfoRow
               icon={<School size={18} />}
