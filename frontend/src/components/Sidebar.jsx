@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useNotification } from '../context/NotificationContext';
+import { useSocket } from '../context/SocketContext';
 import {
   LayoutDashboard,
   Search,
@@ -21,18 +22,78 @@ import {
 
 const Sidebar = ({ currentUser }) => {
   const { theme, toggleTheme } = useTheme();
-  const { unreadCount } = useNotification();
+  const { socket } = useSocket();
   const isStudent = currentUser?.role === 'student';
+
+  const [liveCounts, setLiveCounts] = useState({
+    unreadNotifications: 0,
+    unreadMessages: 0,
+  });
+
+  // Fetch real counts from backend
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchCounts = async () => {
+      if (!currentUser?.token) return;
+      try {
+        const res = await fetch('/api/dashboard/counts', {
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && isMounted) {
+            setLiveCounts(data.data);
+          }
+        }
+      } catch (err) {
+        // Silently fail if server is busy
+      }
+    };
+
+    fetchCounts();
+    const interval = setInterval(fetchCounts, 30000); // refresh every 30 seconds
+
+    // Listen for custom window event (e.g. from Messages page)
+    const handleCustomUpdate = () => fetchCounts();
+    window.addEventListener('update_unread_messages', handleCustomUpdate);
+
+    // Listen for real-time socket events
+    if (socket) {
+      socket.on('new_message', handleCustomUpdate);
+      socket.on('conversation_read', handleCustomUpdate);
+      socket.on('message_read', handleCustomUpdate);
+    }
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+      window.removeEventListener('update_unread_messages', handleCustomUpdate);
+      if (socket) {
+        socket.off('new_message', handleCustomUpdate);
+        socket.off('conversation_read', handleCustomUpdate);
+        socket.off('message_read', handleCustomUpdate);
+      }
+    };
+  }, [currentUser?.token, socket]);
+
 
   const navItems = isStudent
     ? [
         { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
-        { name: 'Find Supervisor', icon: Search, badge: 3, path: '/find-supervisor' },
+        { name: 'Find Supervisor', icon: Search, path: '/find-supervisor' },
         { name: 'Discussion Forum', icon: MessageSquare, path: '/discussion' },
         { name: 'Thesis Groups', icon: Users, path: '/groups' },
         { name: 'Browse Topics', icon: Lightbulb, path: '/topics' },
         { name: 'Meetings', icon: Video, path: '/meetings' },
-        { name: 'Messages', icon: Mail, badge: 3, path: '/messages' },
+        {
+          name: 'Messages',
+          icon: Mail,
+          badge: liveCounts.unreadMessages > 0 ? liveCounts.unreadMessages : null,
+          path: '/messages',
+        },
         { name: 'Deadline Calendar', icon: Calendar, path: '/calendar' },
         { name: 'My Applications', icon: FileText, path: '/applications' },
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
@@ -46,12 +107,14 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Workload Dashboard', icon: LayoutDashboard, path: '/' },
         { name: 'Post Topics', icon: Lightbulb, path: '/post-topics' },
         { name: 'Discussion Forum', icon: MessageSquare, path: '/discussion' },
-
-        // Thesis Group & Student Manager
         { name: 'Group Manager', icon: Users, path: '/supervisor/group-manager' },
-
         { name: 'Meetings', icon: Video, path: '/meetings' },
-        { name: 'Messages', icon: Mail, badge: 2, path: '/messages' },
+        {
+          name: 'Messages',
+          icon: Mail,
+          badge: liveCounts.unreadMessages > 0 ? liveCounts.unreadMessages : null,
+          path: '/messages',
+        },
         { name: 'Calendar', icon: Calendar, path: '/calendar' },
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
         { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
@@ -71,14 +134,12 @@ const Sidebar = ({ currentUser }) => {
 
   return (
     <div className="w-[260px] bg-[#1a1f2e] h-screen flex flex-col text-slate-300 font-['Inter',sans-serif] border-r border-slate-800 flex-shrink-0 print-hidden">
-
       {/* Logo Area */}
       <div className="p-6 pb-4">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center text-white">
             <GraduationCap className="w-5 h-5" />
           </div>
-
           <span className="text-xl font-bold text-white tracking-tight">
             ThesisSphere
           </span>
@@ -132,7 +193,6 @@ const Sidebar = ({ currentUser }) => {
                         : 'text-slate-400 group-hover:text-slate-200'
                     }`}
                   />
-
                   <span
                     className={`text-[0.85rem] font-medium ${
                       isActive ? 'text-amber-500' : ''
@@ -142,8 +202,8 @@ const Sidebar = ({ currentUser }) => {
                   </span>
                 </div>
 
-                {item.badge && (
-                  <span className="bg-amber-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                {Boolean(item.badge) && (
+                  <span className="bg-amber-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-sm">
                     {item.badge}
                   </span>
                 )}
@@ -161,8 +221,10 @@ const Sidebar = ({ currentUser }) => {
 
         <p className="text-[0.65rem] text-slate-500 dark:text-slate-400 truncate mt-1 px-2">
           {isStudent
-            ? 'Student • ThesisSphere'
-            : currentUser?.designation || 'Faculty • ThesisSphere'}
+            ? currentUser?.department
+              ? `${currentUser.department} • Student`
+              : 'Student • ThesisSphere'
+            : currentUser?.designation || currentUser?.department || 'Faculty • ThesisSphere'}
         </p>
       </div>
     </div>
