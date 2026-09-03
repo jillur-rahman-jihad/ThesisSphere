@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   CalendarDays,
@@ -13,23 +13,20 @@ import {
   Target,
   TrendingUp,
   Users,
+  Video,
+  ExternalLink,
+  Loader2,
+  Check,
+  Circle,
 } from 'lucide-react';
 
 const quickLinks = [
   { label: 'Find Supervisor', path: '/find-supervisor', icon: Search },
   { label: 'Browse Topics', path: '/topics', icon: Sparkles },
   { label: 'Thesis Groups', path: '/groups', icon: Users },
-  { label: 'Reports', path: '/reports', icon: FileText },
-  { label: 'Calendar', path: '/calendar', icon: CalendarDays },
+  { label: 'Automated Reports', path: '/automated-report', icon: FileText },
+  { label: 'Deadline Calendar', path: '/calendar', icon: CalendarDays },
   { label: 'Meetings', path: '/meetings', icon: Layers3 },
-];
-
-const progressMilestones = [
-  { title: 'Topic selected', completed: true },
-  { title: 'Supervisor assigned', completed: true },
-  { title: 'Proposal submitted', completed: true },
-  { title: 'Literature review draft', completed: false },
-  { title: 'Methodology chapter', completed: false },
 ];
 
 function getInitials(name) {
@@ -102,7 +99,9 @@ function mapDeadlineLabel(type) {
   return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
-function StudentDashboardContent({ user, dashboardData, loading, error }) {
+function StudentDashboardContent({ user, dashboardData, loading, error, onRefresh }) {
+  const [updatingMilestoneIndex, setUpdatingMilestoneIndex] = useState(null);
+
   const displayName = user?.fullName || dashboardData?.user?.fullName || 'Student';
   const semester = dashboardData?.profile?.semester || user?.semester || 'Semester not set';
   const department = dashboardData?.user?.department || user?.department || 'Department not set';
@@ -119,44 +118,63 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
     status: mapDeadlineLabel(deadline.type),
   }));
 
-  const recentActivity = [];
+  const upcomingMeetings = dashboardData?.upcomingMeetings || [];
+  const nextMeeting = upcomingMeetings[0] || null;
 
-  if (dashboardData?.recentNotifications?.length) {
-    dashboardData.recentNotifications.forEach((notification) => {
-      recentActivity.push({
-        title: notification.title,
-        time: formatRelativeTime(notification.createdAt),
-        detail: notification.message || notification.type || 'Notification from your dashboard',
+  // Real, user-modifiable milestones from MongoDB database
+  const milestones = dashboardData?.milestones || [];
+
+  // Toggle milestone in database
+  const handleToggleMilestone = async (index, currentCompleted) => {
+    if (!dashboardData?.thesisGroup?._id) {
+      alert('You must be assigned to a thesis group to update milestones.');
+      return;
+    }
+
+    setUpdatingMilestoneIndex(index);
+    try {
+      const response = await fetch('/api/dashboard/student/milestones', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          milestoneIndex: index,
+          completed: !currentCompleted,
+        }),
       });
-    });
-  }
 
-  if (dashboardData?.recentMessages?.length) {
-    dashboardData.recentMessages.forEach((message) => {
-      recentActivity.push({
-        title: `Message from ${message.sender?.fullName || 'team member'}`,
-        time: formatRelativeTime(message.createdAt),
-        detail: message.message,
-      });
-    });
-  }
+      const result = await response.json();
+      if (response.ok && result.success) {
+        if (onRefresh) {
+          await onRefresh();
+        }
+      } else {
+        alert(result.message || 'Failed to update milestone');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error updating milestone in database');
+    } finally {
+      setUpdatingMilestoneIndex(null);
+    }
+  };
 
-  const progressMilestones = [
-    { title: 'Topic selected', completed: Boolean(dashboardData?.thesisTopic) },
-    { title: 'Supervisor assigned', completed: Boolean(dashboardData?.profile?.supervisorId) },
-    { title: 'Proposal submitted', completed: (dashboardData?.progressReports || []).length > 0 },
-    { title: 'Literature review draft', completed: Number(summary.progressPercentage || 0) >= 50 },
-    { title: 'Methodology chapter', completed: Number(summary.progressPercentage || 0) >= 75 },
-  ];
-
-  const nextMeeting = dashboardData?.upcomingMeetings?.[0] || null;
+  // Use rich database-driven activity stream
+  const recentActivity = (dashboardData?.recentActivity || []).map((act) => ({
+    title: act.title,
+    detail: act.detail,
+    time: formatRelativeTime(act.createdAt),
+    type: act.type,
+  }));
 
   if (loading) {
     return (
       <div className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-10 shadow-sm flex items-center justify-center min-h-[320px]">
         <div className="text-center space-y-3">
           <div className="mx-auto w-10 h-10 rounded-full border-4 border-slate-200 dark:border-slate-700 border-t-amber-500 animate-spin" />
-          <p className="text-slate-600 dark:text-slate-300 font-medium">Loading your dashboard from the backend...</p>
+          <p className="text-slate-600 dark:text-slate-300 font-medium">Loading your student dashboard from database...</p>
         </div>
       </div>
     );
@@ -178,6 +196,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
 
   return (
     <div className="space-y-8">
+      {/* Header Section */}
       <section className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-8 shadow-xl shadow-slate-900/10 border border-slate-800">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="space-y-4 max-w-3xl">
@@ -236,14 +255,15 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
                 <span className="font-semibold">{nextMeeting?.meetingDate ? new Date(nextMeeting.meetingDate).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' }) : 'Not scheduled'}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span>Current goal</span>
-                <span className="font-semibold">{dashboardData?.latestProgress?.summary || dashboardData?.thesisTopic?.title || 'Thesis planning'}</span>
+                <span>Current topic</span>
+                <span className="font-semibold truncate max-w-[170px] text-right">{dashboardData?.thesisTopic?.title || dashboardData?.thesisGroup?.groupName || 'Thesis planning'}</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Stats Section */}
       <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         {stats.map((stat) => {
           const Icon = stat.icon;
@@ -264,36 +284,78 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
         })}
       </section>
 
+      {/* Dynamic Milestones and Deadlines */}
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Interactive Milestones */}
         <div className="xl:col-span-2 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">Progress milestones</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Track the major steps of your thesis journey.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Click any milestone to mark complete or pending in your database.
+              </p>
             </div>
             <div className="rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-3 py-1 text-sm font-semibold">
-              {progressMilestones.filter((item) => item.completed).length} of {progressMilestones.length} complete
+              {milestones.filter((item) => item.completed).length} of {milestones.length} complete
             </div>
           </div>
 
-          <div className="mt-6 space-y-4">
-            {progressMilestones.map((item) => (
-              <div key={item.title} className="flex items-center gap-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 px-4 py-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${item.completed ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400' : 'bg-slate-200 text-slate-400'}`}>
-                  <CheckCircle2 className="w-5 h-5" />
+          <div className="mt-6 space-y-3">
+            {milestones.map((item, index) => {
+              const isUpdating = updatingMilestoneIndex === index;
+              return (
+                <div
+                  key={item._id || item.title}
+                  onClick={() => !isUpdating && handleToggleMilestone(index, item.completed)}
+                  className={`flex items-center gap-4 rounded-2xl p-4 transition cursor-pointer border ${
+                    item.completed
+                      ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40'
+                      : 'bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-700 hover:border-amber-400'
+                  }`}
+                >
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                      item.completed
+                        ? 'bg-emerald-500 text-white shadow-sm'
+                        : 'border-2 border-slate-300 dark:border-slate-600 text-transparent hover:border-amber-500'
+                    }`}
+                  >
+                    {isUpdating ? (
+                      <Loader2 className="w-4 h-4 animate-spin text-slate-500" />
+                    ) : item.completed ? (
+                      <Check className="w-5 h-5 stroke-[3]" />
+                    ) : null}
+                  </div>
+
+                  <div className="flex-1">
+                    <p className={`font-semibold text-sm ${item.completed ? 'text-slate-900 dark:text-white line-through opacity-80' : 'text-slate-900 dark:text-white'}`}>
+                      {item.title}
+                    </p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      {item.completed
+                        ? item.completedAt
+                          ? `Completed on ${formatShortDate(item.completedAt)}`
+                          : 'Completed'
+                        : 'Click to mark as done in database'}
+                    </p>
+                  </div>
+
+                  <span
+                    className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                      item.completed
+                        ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300'
+                        : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                    }`}
+                  >
+                    {item.completed ? 'Done' : 'Pending'}
+                  </span>
                 </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-slate-900 dark:text-white">{item.title}</p>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">{item.completed ? 'Completed' : 'Pending'}</p>
-                </div>
-                <div className={`text-sm font-semibold ${item.completed ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
-                  {item.completed ? 'Done' : 'Next'}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
+        {/* Upcoming Deadlines */}
         <div className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
@@ -318,25 +380,80 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
               </div>
             ))}
             {!upcomingDeadlines.length && (
-              <p className="text-sm text-slate-500 dark:text-slate-400">No deadlines found yet. Your supervisor or group can add them in the backend.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">No deadlines scheduled right now.</p>
             )}
           </div>
         </div>
       </section>
 
+      {/* Upcoming Meetings Section */}
+      {upcomingMeetings.length > 0 && (
+        <section className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Scheduled Thesis Meetings</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Upcoming supervisory sessions and group discussions.</p>
+            </div>
+            <Link to="/meetings" className="text-sm font-semibold text-amber-600 dark:text-amber-400 hover:underline">
+              View all meetings
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {upcomingMeetings.map((meeting) => (
+              <div key={meeting._id} className="p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-lg">
+                      {meeting.meetingDate ? new Date(meeting.meetingDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Scheduled'}
+                    </span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                      {meeting.meetingDate ? new Date(meeting.meetingDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : ''}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-slate-900 dark:text-white mt-3">{meeting.title}</h3>
+                  {meeting.agenda && (
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{meeting.agenda}</p>
+                  )}
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                  <span className="text-xs capitalize font-medium text-slate-600 dark:text-slate-400">{meeting.status}</span>
+                  {meeting.meetingLink ? (
+                    <a
+                      href={meeting.meetingLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400 hover:underline"
+                    >
+                      <Video className="w-3.5 h-3.5" /> Join Room
+                    </a>
+                  ) : (
+                    <Link to="/meetings" className="text-xs font-medium text-slate-500 hover:underline">
+                      Details
+                    </Link>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Activity and Quick Actions */}
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 shadow-sm xl:col-span-2">
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">Recent activity</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Latest updates from your thesis workspace.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Live updates from your thesis workspace.</p>
             </div>
             <MessageSquare className="w-5 h-5 text-slate-400" />
           </div>
 
           <div className="mt-6 space-y-4">
-            {recentActivity.slice(0, 4).map((activity) => (
-              <div key={activity.title} className="rounded-2xl bg-slate-50 dark:bg-slate-900/50 px-4 py-4">
+            {recentActivity.map((activity, idx) => (
+              <div key={idx} className="rounded-2xl bg-slate-50 dark:bg-slate-900/50 px-4 py-4">
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">{activity.title}</p>
@@ -347,7 +464,7 @@ function StudentDashboardContent({ user, dashboardData, loading, error }) {
               </div>
             ))}
             {!recentActivity.length && (
-              <p className="text-sm text-slate-500 dark:text-slate-400">No recent backend activity yet.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">No recent activity recorded yet.</p>
             )}
           </div>
         </div>

@@ -39,6 +39,24 @@ const thesisGroupSchema = new mongoose.Schema(
       default: 0,
     },
 
+    // Persistent and user-modifiable thesis milestones
+    milestones: [
+      {
+        title: {
+          type: String,
+          required: true,
+        },
+        completed: {
+          type: Boolean,
+          default: false,
+        },
+        completedAt: {
+          type: Date,
+          default: null,
+        },
+      },
+    ],
+
     // ================= NEW FIELDS =================
 
     // Active / inactive group

@@ -64,7 +64,8 @@ export const updateFacultyProfile = async (req, res, next) => {
 // @access  Private
 export const getFacultyProfileById = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
+    const targetId = (!req.params.id || req.params.id === 'me') ? req.user._id : req.params.id;
+    const user = await User.findById(targetId).select('-password');
 
     if (!user) {
       res.status(404);
@@ -75,7 +76,7 @@ export const getFacultyProfileById = async (req, res, next) => {
 
     if (!supervisorProfile) {
       // Return basic data if profile doesn't exist yet
-      supervisorProfile = { userId: user._id };
+      supervisorProfile = { userId: user._id, maxStudents: 5, currentStudents: 0 };
     }
 
     res.status(200).json({

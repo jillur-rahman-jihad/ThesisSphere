@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, Navigate } from "react-router-dom";
 import {
   GraduationCap,
   School,
@@ -62,19 +62,11 @@ const Profile = () => {
   }
 
   // ==========================================
-  // STUDENT CHECK
+  // STUDENT CHECK (REDIRECT FACULTY AUTOMATICALLY)
   // ==========================================
 
   if (!isStudent) {
-    return (
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8">
-          <p className="text-slate-700 font-semibold">
-            This page is for student profiles.
-          </p>
-        </div>
-      </div>
-    );
+    return <Navigate to="/faculty-profile" replace />;
   }
 
   // ==========================================

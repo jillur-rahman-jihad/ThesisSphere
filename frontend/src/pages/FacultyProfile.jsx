@@ -15,7 +15,7 @@ import {
   Plus,
   UserPlus,
 } from "lucide-react";
-import { getProfile, updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
+import { updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
 import EditFacultyProfileModal from "../components/profile/EditFacultyProfileModal";
 import SupervisionRequestModal from "../components/profile/SupervisionRequestModal";
 
@@ -43,7 +43,7 @@ const FacultyProfile = () => {
           setLoading(false);
           return;
         }
-        const response = await getFacultyProfileById(currentUser._id);
+        const response = await getFacultyProfileById(currentUser?._id || "me");
         setProfileData(response.data);
       }
     } catch (err) {
