@@ -14,7 +14,7 @@ import {
   X,
   Plus,
 } from "lucide-react";
-import { getProfile, updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
+import { updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
 
 const FacultyProfile = () => {
   const { currentUser } = useOutletContext() || {};
@@ -38,7 +38,7 @@ const FacultyProfile = () => {
           setLoading(false);
           return;
         }
-        const response = await getProfile();
+        const response = await getFacultyProfileById(currentUser?._id || "me");
         setProfileData(response.data);
       }
     } catch (err) {

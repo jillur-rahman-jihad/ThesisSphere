@@ -1,6 +1,10 @@
 import React from 'react';
-import StudentDashboardContent from './components/StudentDashboardContent.jsx';
+import { Navigate } from 'react-router-dom';
 
-export default function StudentDashboard({ user }) {
-  return <StudentDashboardContent user={user} />;
+/**
+ * Obsolete stub replaced by DashboardHome.
+ * Automatically redirects to the unified dynamic dashboard.
+ */
+export default function StudentDashboard() {
+  return <Navigate to="/" replace />;
 }
