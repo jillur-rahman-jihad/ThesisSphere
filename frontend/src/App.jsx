@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthPage from './AuthPage.jsx';
 import DashboardLayout from './components/DashboardLayout.jsx';
+import { SocketProvider } from './context/SocketContext';
+
 
 // Pages
 import DashboardHome from './pages/DashboardHome';
@@ -55,43 +57,45 @@ export default function App() {
   }
 
   return (
-    <Router>
-      <Routes>
-        {/* If no user, show auth page on all routes */}
-        {!currentUser ? (
-          <Route path="*" element={<AuthPage onLoginSuccess={handleLoginSuccess} />} />
-        ) : (
-          <>
-            {/* Video meeting - full screen, no sidebar */}
-            <Route path="/video-meeting/:meetingId" element={<VideoMeetingRoom />} />
+    <SocketProvider currentUser={currentUser}>
+      <Router>
+        <Routes>
+          {/* If no user, show auth page on all routes */}
+          {!currentUser ? (
+            <Route path="*" element={<AuthPage onLoginSuccess={handleLoginSuccess} />} />
+          ) : (
+            <>
+              {/* Video meeting - full screen, no sidebar */}
+              <Route path="/video-meeting/:meetingId" element={<VideoMeetingRoom />} />
 
-            {/* Protected Routes wrapped in DashboardLayout */}
-            <Route path="/" element={<DashboardLayout currentUser={currentUser} onLogout={handleLogout} />}>
-              <Route index element={<DashboardHome />} />
-              <Route path="find-supervisor" element={<FindSupervisor />} />
-              <Route path="discussion" element={<DiscussionForum />} />
-              <Route path="groups" element={<ThesisGroups />} />
-              <Route path="topics" element={<BrowseTopics />} />
-              <Route path="meetings" element={<Meetings />} />
-              <Route path="messages" element={<Messages />} />
-              <Route path="calendar" element={<Calendar />} />
-              <Route path="applications" element={<MyApplications />} />
-              <Route path="reviews" element={<PaperReviews />} />
-              <Route path="contributions" element={<Contributions />} />
-              <Route path="notifications" element={<Notifications />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="faculty-profile/:id?" element={<FacultyProfile />} />
-              <Route path="post-topics" element={<PostTopics />} />
-              <Route path="citations" element={<Citations />} />
-              <Route path="automated-report" element={<AutomatedReport />} />
-              <Route path="/supervisor/group-manager" element={<SupervisorGroupManager />} />
-              
-              {/* Catch-all for logged in users */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Route>
-          </>
-        )}
-      </Routes>
-    </Router>
+              {/* Protected Routes wrapped in DashboardLayout */}
+              <Route path="/" element={<DashboardLayout currentUser={currentUser} onLogout={handleLogout} />}>
+                <Route index element={<DashboardHome />} />
+                <Route path="find-supervisor" element={<FindSupervisor />} />
+                <Route path="discussion" element={<DiscussionForum />} />
+                <Route path="groups" element={<ThesisGroups />} />
+                <Route path="topics" element={<BrowseTopics />} />
+                <Route path="meetings" element={<Meetings />} />
+                <Route path="messages" element={<Messages />} />
+                <Route path="calendar" element={<Calendar />} />
+                <Route path="applications" element={<MyApplications />} />
+                <Route path="reviews" element={<PaperReviews />} />
+                <Route path="contributions" element={<Contributions />} />
+                <Route path="notifications" element={<Notifications />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="faculty-profile/:id?" element={<FacultyProfile />} />
+                <Route path="post-topics" element={<PostTopics />} />
+                <Route path="citations" element={<Citations />} />
+                <Route path="automated-report" element={<AutomatedReport />} />
+                <Route path="/supervisor/group-manager" element={<SupervisorGroupManager />} />
+                
+                {/* Catch-all for logged in users */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Route>
+            </>
+          )}
+        </Routes>
+      </Router>
+    </SocketProvider>
   );
 }

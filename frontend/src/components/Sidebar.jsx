@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { useSocket } from '../context/SocketContext';
 import {
   LayoutDashboard,
   Search,
@@ -20,6 +21,7 @@ import {
 
 const Sidebar = ({ currentUser }) => {
   const { theme, toggleTheme } = useTheme();
+  const { socket } = useSocket();
   const isStudent = currentUser?.role === 'student';
 
   const [liveCounts, setLiveCounts] = useState({
@@ -53,11 +55,29 @@ const Sidebar = ({ currentUser }) => {
     fetchCounts();
     const interval = setInterval(fetchCounts, 30000); // refresh every 30 seconds
 
+    // Listen for custom window event (e.g. from Messages page)
+    const handleCustomUpdate = () => fetchCounts();
+    window.addEventListener('update_unread_messages', handleCustomUpdate);
+
+    // Listen for real-time socket events
+    if (socket) {
+      socket.on('new_message', handleCustomUpdate);
+      socket.on('conversation_read', handleCustomUpdate);
+      socket.on('message_read', handleCustomUpdate);
+    }
+
     return () => {
       isMounted = false;
       clearInterval(interval);
+      window.removeEventListener('update_unread_messages', handleCustomUpdate);
+      if (socket) {
+        socket.off('new_message', handleCustomUpdate);
+        socket.off('conversation_read', handleCustomUpdate);
+        socket.off('message_read', handleCustomUpdate);
+      }
     };
-  }, [currentUser?.token]);
+  }, [currentUser?.token, socket]);
+
 
   const navItems = isStudent
     ? [

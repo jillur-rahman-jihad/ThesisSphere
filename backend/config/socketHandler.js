@@ -1,14 +1,17 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import VideoMeeting from '../models/VideoMeeting.js';
+import Message from '../models/Message.js';
 
 /**
- * Initialize Socket.IO signaling for WebRTC video meetings.
+ * Initialize Socket.IO signaling for WebRTC video meetings and real-time messaging.
  * Keeps signaling logic isolated from Express routes.
  */
 const initializeSocket = (io) => {
   // Track active participants per room: { meetingId: Map<socketId, userData> }
   const rooms = new Map();
+  // Track online users: Map<userId, Set<socketId>>
+  const userSockets = new Map();
 
   // Authenticate socket connections using JWT
   io.use(async (socket, next) => {
@@ -44,7 +47,27 @@ const initializeSocket = (io) => {
   });
 
   io.on('connection', (socket) => {
+    const userId = socket.user._id;
     console.log(`[Socket.IO] User connected: ${socket.user.fullName} (${socket.id})`);
+
+    // Join user's individual room for direct messages and notifications
+    socket.join(userId);
+    socket.join(`user:${userId}`);
+
+    // Track online status
+    if (!userSockets.has(userId)) {
+      userSockets.set(userId, new Set());
+    }
+    userSockets.get(userId).add(socket.id);
+
+    // If first socket connection for this user, broadcast online status
+    if (userSockets.get(userId).size === 1) {
+      socket.broadcast.emit('user_online', { userId });
+    }
+
+    // Send current list of online user IDs to the connected client
+    socket.emit('online_users', Array.from(userSockets.keys()));
+
 
     /**
      * Event: join-meeting
@@ -165,11 +188,115 @@ const initializeSocket = (io) => {
     });
 
     /**
+     * Real-time Direct Messaging Events
+     */
+
+    // Send a message in real-time
+    socket.on('send_message', async ({ receiverId, message, attachments }, callback) => {
+      try {
+        if (!receiverId || !message || !message.trim()) {
+          return callback?.({ success: false, message: 'Receiver and message are required' });
+        }
+
+        const newMessage = await Message.create({
+          sender: socket.user._id,
+          receiver: receiverId,
+          message: message.trim(),
+          attachments: Array.isArray(attachments) ? attachments : [],
+        });
+
+        const populated = await Message.findById(newMessage._id)
+          .populate('sender', '-password')
+          .populate('receiver', '-password');
+
+        // Emit to recipient's room(s) and sender's room(s)
+        io.to(receiverId.toString()).to(`user:${receiverId}`).emit('new_message', populated);
+        io.to(socket.user._id.toString()).to(`user:${socket.user._id}`).emit('new_message', populated);
+
+        callback?.({ success: true, data: populated });
+      } catch (err) {
+        console.error('[Socket.IO] send_message error:', err.message);
+        callback?.({ success: false, message: err.message });
+      }
+    });
+
+    // Real-time typing indicators
+    socket.on('typing', ({ receiverId }) => {
+      if (receiverId) {
+        io.to(receiverId.toString()).to(`user:${receiverId}`).emit('user_typing', {
+          senderId: socket.user._id,
+          senderName: socket.user.fullName,
+        });
+      }
+    });
+
+    socket.on('stop_typing', ({ receiverId }) => {
+      if (receiverId) {
+        io.to(receiverId.toString()).to(`user:${receiverId}`).emit('user_stop_typing', {
+          senderId: socket.user._id,
+        });
+      }
+    });
+
+    // Mark single message as read
+    socket.on('mark_read', async ({ messageId }, callback) => {
+      try {
+        if (!messageId) return;
+        const msg = await Message.findById(messageId);
+        if (msg && msg.receiver.toString() === socket.user._id.toString()) {
+          msg.isRead = true;
+          await msg.save();
+
+          io.to(msg.sender.toString()).to(`user:${msg.sender}`).emit('message_read', {
+            messageId: msg._id,
+            readerId: socket.user._id,
+          });
+          callback?.({ success: true });
+        }
+      } catch (err) {
+        console.error('[Socket.IO] mark_read error:', err.message);
+        callback?.({ success: false, message: err.message });
+      }
+    });
+
+    // Mark whole conversation with participant as read
+    socket.on('read_conversation', async ({ participantId }, callback) => {
+      try {
+        if (!participantId) return;
+        const result = await Message.updateMany(
+          { sender: participantId, receiver: socket.user._id, isRead: false },
+          { $set: { isRead: true } }
+        );
+
+        io.to(participantId.toString()).to(`user:${participantId}`).emit('conversation_read', {
+          readerId: socket.user._id,
+          participantId: participantId.toString(),
+          count: result.modifiedCount,
+        });
+
+        callback?.({ success: true, count: result.modifiedCount });
+      } catch (err) {
+        console.error('[Socket.IO] read_conversation error:', err.message);
+        callback?.({ success: false, message: err.message });
+      }
+    });
+
+    /**
      * Event: disconnect
      * Clean up when a user disconnects.
      */
     socket.on('disconnect', () => {
       console.log(`[Socket.IO] User disconnected: ${socket.user.fullName} (${socket.id})`);
+
+      // Clean up user socket tracking & presence
+      if (userSockets.has(userId)) {
+        const set = userSockets.get(userId);
+        set.delete(socket.id);
+        if (set.size === 0) {
+          userSockets.delete(userId);
+          socket.broadcast.emit('user_offline', { userId });
+        }
+      }
 
       const meetingId = socket.meetingId;
       if (meetingId && rooms.has(meetingId)) {
@@ -219,5 +346,6 @@ const initializeSocket = (io) => {
     });
   });
 };
+
 
 export default initializeSocket;
