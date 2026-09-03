@@ -255,11 +255,11 @@ const EditFacultyProfileModal = ({
                       key={interest}
                       type="button"
                       onClick={() => toggleInterest(interest)}
-                      className={\`px-4 py-2 rounded-xl text-sm font-medium border transition \${
+                      className={`px-4 py-2 rounded-xl text-sm font-medium border transition ${
                         isSelected
                           ? "bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-400"
                           : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-                      }\`}
+                      }`}
                     >
                       {interest}
                     </button>
@@ -281,11 +281,11 @@ const EditFacultyProfileModal = ({
                       key={skill}
                       type="button"
                       onClick={() => toggleExpertise(skill)}
-                      className={\`px-4 py-2 rounded-xl text-sm font-medium border transition \${
+                      className={`px-4 py-2 rounded-xl text-sm font-medium border transition ${
                         isSelected
                           ? "bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-400"
                           : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-                      }\`}
+                      }`}
                     >
                       {skill}
                     </button>
