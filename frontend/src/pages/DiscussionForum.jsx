@@ -230,59 +230,59 @@ const DiscussionForum = () => {
 
       {/* Stats Bar */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+        <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center gap-4 transition-colors">
+          <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
             <MessageSquare size={24} />
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Discussions</p>
-            <h4 className="text-2xl font-bold text-slate-800">{posts.length}</h4>
+            <p className="text-xs font-medium text-slate-400 dark:text-slate-400 uppercase tracking-wider">Total Discussions</p>
+            <h4 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{posts.length}</h4>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+        <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center gap-4 transition-colors">
+          <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center">
             <TrendingUp size={24} />
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">My Contributions</p>
-            <h4 className="text-2xl font-bold text-slate-800">{myPostsCount}</h4>
+            <p className="text-xs font-medium text-slate-400 dark:text-slate-400 uppercase tracking-wider">My Contributions</p>
+            <h4 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{myPostsCount}</h4>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+        <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center gap-4 transition-colors">
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
             <CheckCircle2 size={24} />
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Resolved Topics</p>
-            <h4 className="text-2xl font-bold text-slate-800">{resolvedCount}</h4>
+            <p className="text-xs font-medium text-slate-400 dark:text-slate-400 uppercase tracking-wider">Resolved Topics</p>
+            <h4 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{resolvedCount}</h4>
           </div>
         </div>
       </div>
 
       {/* Search & Sort Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/80 shadow-sm space-y-4 transition-colors">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Search Form */}
           <form onSubmit={handleSearchSubmit} className="relative flex-1 w-full">
-            <Search size={18} className="absolute left-4 top-3 text-slate-400" />
+            <Search size={18} className="absolute left-4 top-3 text-slate-400 dark:text-slate-500" />
             <input
               type="text"
               placeholder="Search discussions by keyword, question, or tag..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm text-slate-800 transition-all"
+              className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-all"
             />
           </form>
 
           {/* Sort Tabs & Refresh */}
           <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
-            <div className="flex bg-slate-100 p-1 rounded-xl text-xs font-semibold text-slate-600">
+            <div className="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 transition-colors">
               <button
                 onClick={() => setSortOption('latest')}
                 className={`px-3 py-1.5 rounded-lg transition-all ${
-                  sortOption === 'latest' ? 'bg-white text-indigo-600 shadow-sm' : 'hover:text-slate-800'
+                  sortOption === 'latest' ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'hover:text-slate-800 dark:hover:text-slate-200'
                 }`}
               >
                 Latest
@@ -290,7 +290,7 @@ const DiscussionForum = () => {
               <button
                 onClick={() => setSortOption('popular')}
                 className={`px-3 py-1.5 rounded-lg transition-all ${
-                  sortOption === 'popular' ? 'bg-white text-indigo-600 shadow-sm' : 'hover:text-slate-800'
+                  sortOption === 'popular' ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'hover:text-slate-800 dark:hover:text-slate-200'
                 }`}
               >
                 Most Liked
@@ -298,7 +298,7 @@ const DiscussionForum = () => {
               <button
                 onClick={() => setSortOption('unanswered')}
                 className={`px-3 py-1.5 rounded-lg transition-all ${
-                  sortOption === 'unanswered' ? 'bg-white text-indigo-600 shadow-sm' : 'hover:text-slate-800'
+                  sortOption === 'unanswered' ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'hover:text-slate-800 dark:hover:text-slate-200'
                 }`}
               >
                 Unanswered
@@ -308,7 +308,7 @@ const DiscussionForum = () => {
             <button
               onClick={fetchPosts}
               title="Refresh Discussions"
-              className="p-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-indigo-600 hover:bg-slate-50 transition-colors"
+              className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             </button>
@@ -316,8 +316,8 @@ const DiscussionForum = () => {
         </div>
 
         {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pt-2 scrollbar-none border-t border-slate-100">
-          <Filter size={14} className="text-slate-400 flex-shrink-0" />
+        <div className="flex items-center gap-2 overflow-x-auto pt-2 scrollbar-none border-t border-slate-100 dark:border-slate-700/60">
+          <Filter size={14} className="text-slate-400 dark:text-slate-500 flex-shrink-0" />
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
@@ -325,7 +325,7 @@ const DiscussionForum = () => {
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === cat
                   ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/20'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
               {cat}
@@ -338,24 +338,24 @@ const DiscussionForum = () => {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[1, 2, 3, 4].map((n) => (
-            <div key={n} className="bg-white rounded-2xl p-6 border border-slate-200/80 animate-pulse space-y-4">
+            <div key={n} className="bg-white dark:bg-slate-800/90 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-700/80 animate-pulse space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-slate-200 rounded-full" />
+                <div className="w-10 h-10 bg-slate-200 dark:bg-slate-700 rounded-full" />
                 <div className="space-y-1.5 flex-1">
-                  <div className="h-4 bg-slate-200 rounded w-1/3" />
-                  <div className="h-3 bg-slate-200 rounded w-1/4" />
+                  <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3" />
+                  <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/4" />
                 </div>
               </div>
-              <div className="h-5 bg-slate-200 rounded w-3/4" />
-              <div className="h-12 bg-slate-200 rounded w-full" />
+              <div className="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
+              <div className="h-12 bg-slate-200 dark:bg-slate-700 rounded w-full" />
             </div>
           ))}
         </div>
       ) : error ? (
-        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-8 text-center space-y-3">
-          <AlertCircle size={32} className="mx-auto text-rose-500" />
-          <h3 className="text-lg font-bold text-slate-800">Unable to load discussions</h3>
-          <p className="text-sm text-slate-600">{error}</p>
+        <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 rounded-2xl p-8 text-center space-y-3">
+          <AlertCircle size={32} className="mx-auto text-rose-500 dark:text-rose-400" />
+          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Unable to load discussions</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-300">{error}</p>
           <button
             onClick={fetchPosts}
             className="px-4 py-2 bg-rose-600 text-white font-semibold text-sm rounded-xl hover:bg-rose-700 transition-colors"
@@ -364,12 +364,12 @@ const DiscussionForum = () => {
           </button>
         </div>
       ) : posts.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 text-center border border-slate-200/80 space-y-4">
-          <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto">
+        <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-12 text-center border border-slate-200/80 dark:border-slate-700/80 space-y-4 transition-colors">
+          <div className="w-16 h-16 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mx-auto">
             <HelpCircle size={32} />
           </div>
-          <h3 className="text-xl font-bold text-slate-800">No discussions found</h3>
-          <p className="text-sm text-slate-500 max-w-md mx-auto">
+          <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">No discussions found</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
             Be the first academic member to start a discussion in this topic or try searching with different keywords!
           </p>
           <button
