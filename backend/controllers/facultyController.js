@@ -226,10 +226,10 @@ export const acceptSupervisionRequest = async (req, res, next) => {
     });
     await newGroup.save();
 
-    // Update StudentProfiles to link the group
+    // Update StudentProfiles to link the group and supervisor
     await StudentProfile.updateMany(
       { userId: { $in: members } },
-      { $set: { thesisGroupId: newGroup._id } }
+      { $set: { thesisGroupId: newGroup._id, supervisorId: facultyId } }
     );
 
     // Increment currentStudents

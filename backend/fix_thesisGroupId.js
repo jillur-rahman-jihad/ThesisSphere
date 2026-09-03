@@ -15,7 +15,7 @@ const fixThesisGroupIds = async () => {
       const memberIds = group.members;
       const res = await StudentProfile.updateMany(
         { userId: { $in: memberIds } },
-        { $set: { thesisGroupId: group._id } }
+        { $set: { thesisGroupId: group._id, supervisorId: group.supervisorId } }
       );
       console.log(`Updated ${res.modifiedCount} student profiles for group ${group.groupName}`);
     }
