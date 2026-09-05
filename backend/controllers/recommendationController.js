@@ -68,12 +68,12 @@ export const getRecommendations = async (req, res, next) => {
     };
 
     let aiData;
-    let usedModelName = "Gemini 3.6 Flash";
+    let usedModelName = "Gemini Flash Lite";
     
     try {
       // 4. Initialize Gemini API
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-flash-lite-latest" });
 
       // 5. Construct the Prompt payload
       const supDataForAI = validSupervisors.map(sup => ({

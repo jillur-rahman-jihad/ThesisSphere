@@ -75,6 +75,9 @@ const Profile = () => {
 
   const user = profileData?.user || {};
   const profile = profileData?.profile || {};
+  
+  const thesisTitle = profile.thesisTitle || profile.thesisGroupId?.topicId?.title || "Not Added";
+  const supervisorName = profile.supervisorId?.fullName || profile.thesisGroupId?.supervisorId?.fullName || "Not Assigned";
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -197,7 +200,7 @@ const Profile = () => {
               </p>
 
               <p className="text-slate-700 dark:text-slate-200">
-                {profile.thesisTitle || "Not Added"}
+                {thesisTitle}
               </p>
 
             </div>
@@ -209,7 +212,7 @@ const Profile = () => {
               </p>
 
               <p className="text-slate-700 dark:text-slate-200">
-                {profile.supervisorId || "Not Assigned"}
+                {supervisorName}
               </p>
 
             </div>
