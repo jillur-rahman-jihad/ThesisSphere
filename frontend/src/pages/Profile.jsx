@@ -197,7 +197,7 @@ const Profile = () => {
               </p>
 
               <p className="text-slate-700 dark:text-slate-200">
-                {profile.thesisTitle || "Not Added"}
+                {thesisTitle}
               </p>
 
             </div>
@@ -209,7 +209,7 @@ const Profile = () => {
               </p>
 
               <p className="text-slate-700 dark:text-slate-200">
-                {profile.supervisorId || "Not Assigned"}
+                {supervisorName}
               </p>
 
             </div>
