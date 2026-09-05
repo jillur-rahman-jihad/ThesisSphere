@@ -1323,7 +1323,7 @@ const ThesisGroups = () => {
                      rounded-2xl
                      p-6"
         >
-          <BrowseGroups />
+          <BrowseGroups hasGroup={Boolean(myGroup)} />
         </div>
       )}
 

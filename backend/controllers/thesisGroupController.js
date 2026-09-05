@@ -4,6 +4,7 @@ import ThesisTopic from "../models/ThesisTopic.js";
 import StudentProfile from "../models/StudentProfileModel.js";
 import User from "../models/userModel.js";
 import ThesisApplication from "../models/ThesisApplication.js";
+import Notification from "../models/Notification.js";
 
 // ==========================================
 // GET MY THESIS GROUP
@@ -264,6 +265,17 @@ export const requestToJoinGroup = async (req, res, next) => {
 
     const studentId = req.user._id;
 
+    const studentProfile = await StudentProfile.findOne({
+      userId: studentId,
+    });
+
+    if (studentProfile?.thesisGroupId) {
+      res.status(400);
+      throw new Error(
+        "You already belong to a thesis group"
+      );
+    }
+
     // Check whether student is already a member
     const alreadyMember = group.members.some(
       (memberId) =>
@@ -460,6 +472,21 @@ export const acceptJoinRequest = async (req, res, next) => {
       studentProfile.thesisGroupId = group._id;
 
       await studentProfile.save();
+    }
+
+    const notification = await Notification.create({
+      userId: studentId,
+      title: "Join request accepted",
+      message: `Your request to join "${group.groupName}" was accepted. You were assigned the role of ${role.trim()} for ${chapter.trim()}.`,
+      type: "thesis_group_join_accepted",
+      actionId: group._id,
+      actionType: "thesis_group",
+      actionStatus: "accepted",
+    });
+
+    const io = req.app.get("io");
+    if (io) {
+      io.to(studentId.toString()).emit("new-notification", notification);
     }
 
     // RETURN UPDATED GROUP
