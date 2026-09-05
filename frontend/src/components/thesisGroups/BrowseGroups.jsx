@@ -11,7 +11,7 @@ import {
   requestToJoinGroup,
 } from "../../services/thesisGroupService";
 
-const BrowseGroups = () => {
+const BrowseGroups = ({ hasGroup }) => {
   const [groups, setGroups] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
@@ -87,6 +87,11 @@ const BrowseGroups = () => {
   // ================= REQUEST TO JOIN =================
 
   const handleRequestToJoin = async (groupId) => {
+    if (hasGroup) {
+      alert("You are already in a thesis group.");
+      return;
+    }
+
     try {
       setRequestingGroupId(groupId);
 
