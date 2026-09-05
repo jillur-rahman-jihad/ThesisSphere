@@ -17,6 +17,21 @@ export const applyForTopic = async (req, res, next) => {
 
     const { topicId, message } = req.body;
 
+    const studentProfile = await StudentProfile.findOne({ userId: req.user._id });
+    const studentGroup = studentProfile?.thesisGroupId
+      ? await ThesisGroup.findById(studentProfile.thesisGroupId)
+      : await ThesisGroup.findOne({ members: req.user._id });
+
+    if (studentGroup && String(studentGroup.leaderId) !== String(req.user._id)) {
+      res.status(400);
+      throw new Error('Only the thesis group leader can apply for a topic on behalf of the group');
+    }
+
+    if (studentGroup?.topicId) {
+      res.status(400);
+      throw new Error('Your thesis group already has a topic assigned');
+    }
+
     const topic = await ThesisTopic.findById(topicId);
     if (!topic) {
       res.status(404);
@@ -162,21 +177,18 @@ export const updateApplicationStatus = async (req, res, next) => {
       await topic.save();
 
       const student = await User.findById(application.studentId).select('fullName');
-      const studentProfile = await StudentProfile.findOne({
+      const applicantProfile = await StudentProfile.findOne({
         userId: application.studentId,
       });
 
-      if (studentProfile?.thesisGroupId) {
-        res.status(400);
-        throw new Error('This student already belongs to a thesis group');
-      }
+      const group = applicantProfile?.thesisGroupId
+        ? await ThesisGroup.findById(applicantProfile.thesisGroupId)
+        : await ThesisGroup.findOne({ members: application.studentId });
 
-      const group = await ThesisGroup.create({
+      const targetGroup = group || await ThesisGroup.create({
         groupName: `${student?.fullName || 'Student'}'s Thesis Group`,
         leaderId: application.studentId,
         members: [application.studentId],
-        supervisorId: topic.supervisorId,
-        topicId: topic._id,
         memberDetails: [
           {
             userId: application.studentId,
@@ -184,26 +196,27 @@ export const updateApplicationStatus = async (req, res, next) => {
             chapter: 'All chapters',
           },
         ],
-        recentActivity: [
-          {
-            description: 'Thesis group created after the topic application was accepted',
-          },
-        ],
+        recentActivity: [],
       });
 
-      if (studentProfile) {
-        studentProfile.thesisGroupId = group._id;
-        studentProfile.thesisTitle = topic.title;
-        studentProfile.supervisorId = topic.supervisorId;
-        await studentProfile.save();
-      } else {
-        await StudentProfile.create({
-          userId: application.studentId,
-          thesisGroupId: group._id,
-          thesisTitle: topic.title,
-          supervisorId: topic.supervisorId,
-        });
-      }
+      targetGroup.supervisorId = topic.supervisorId;
+      targetGroup.topicId = topic._id;
+      targetGroup.recentActivity = targetGroup.recentActivity || [];
+      targetGroup.recentActivity.push({
+        description: 'Thesis topic assigned to the entire group',
+      });
+      await targetGroup.save();
+
+      await StudentProfile.updateMany(
+        { userId: { $in: targetGroup.members } },
+        {
+          $set: {
+            thesisGroupId: targetGroup._id,
+            thesisTitle: topic.title,
+            supervisorId: topic.supervisorId,
+          },
+        }
+      );
     }
 
     application.status = status;

@@ -14,7 +14,7 @@ import {
   X,
   Plus,
 } from "lucide-react";
-import { updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
+import { updateFacultyProfile, getFacultyProfileById, getProfile } from "../services/profileService";
 
 const FacultyProfile = () => {
   const { currentUser } = useOutletContext() || {};
@@ -24,6 +24,7 @@ const FacultyProfile = () => {
   const [error, setError] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [addingSupervisor, setAddingSupervisor] = useState(false);
+  const [studentAssignment, setStudentAssignment] = useState(null);
 
   const isPublicView = !!id;
   const canEdit = !isPublicView && currentUser?.role === "faculty";
@@ -40,6 +41,11 @@ const FacultyProfile = () => {
         }
         const response = await getFacultyProfileById(currentUser._id);
         setProfileData(response.data);
+      }
+
+      if (isPublicView && currentUser?.role === "student") {
+        const studentResponse = await getProfile();
+        setStudentAssignment(studentResponse.data?.profile || null);
       }
     } catch (err) {
       console.error(err);
@@ -144,6 +150,9 @@ const FacultyProfile = () => {
   const rating = profile.rating ?? 4.9;
   const reviewCount = profile.ratingCount ?? 24;
   const experienceYears = profile.experienceYears ?? 12;
+  const hasAssignedSupervisor = Boolean(
+    studentAssignment?.supervisorId || studentAssignment?.thesisGroupId?.supervisorId
+  );
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900/50 py-8 px-4 sm:px-6 lg:px-8">
@@ -166,7 +175,7 @@ const FacultyProfile = () => {
             {isAccepting && (
               <span className="rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 text-sm font-semibold text-emerald-800 dark:text-emerald-300">Accepting Students</span>
             )}
-            {isPublicView && currentUser?.role === 'student' && isAccepting && (
+            {isPublicView && currentUser?.role === 'student' && isAccepting && !hasAssignedSupervisor && (
               <button
                 onClick={handleAddSupervisor}
                 disabled={addingSupervisor}
@@ -175,6 +184,11 @@ const FacultyProfile = () => {
                 <Plus size={16} />
                 {addingSupervisor ? "Adding..." : "Add Supervisor"}
               </button>
+            )}
+            {isPublicView && currentUser?.role === 'student' && hasAssignedSupervisor && (
+              <span className="rounded-full bg-white/15 px-3 py-1 text-sm font-semibold text-white/90">
+                Supervisor already assigned
+              </span>
             )}
             {canEdit && (
               <button

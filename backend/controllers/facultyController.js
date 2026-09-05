@@ -1,6 +1,7 @@
 import User from '../models/userModel.js';
 import SupervisorProfile from '../models/SupervisorProfile.js';
 import ThesisGroup from '../models/ThesisGroup.js';
+import StudentProfile from '../models/StudentProfileModel.js';
 
 // @desc    Update faculty profile
 // @route   PUT /api/faculty/profile
@@ -119,26 +120,31 @@ export const addStudentToSupervisor = async (req, res, next) => {
       throw new Error('Supervisor has reached maximum student capacity or is not accepting students');
     }
 
-    // Check if student is already in a group with this supervisor
-    const existingGroup = await ThesisGroup.findOne({ 
-      members: req.user._id,
-      supervisorId: facultyId
-    });
+    const studentProfile = await StudentProfile.findOne({ userId: req.user._id });
+    const assignedGroup = studentProfile?.thesisGroupId
+      ? await ThesisGroup.findById(studentProfile.thesisGroupId)
+      : await ThesisGroup.findOne({ members: req.user._id, supervisorId: { $ne: null } });
+    const assignedSupervisorId = studentProfile?.supervisorId || assignedGroup?.supervisorId;
 
-    if (existingGroup) {
+    if (assignedSupervisorId) {
       res.status(400);
-      throw new Error('You are already supervised by this faculty member');
+      throw new Error('You already have a supervisor assigned');
     }
 
-    // Auto-create a Solo group for this student
-    const newGroup = new ThesisGroup({
+    // Keep the student profile and thesis group linked to the same supervisor.
+    const newGroup = assignedGroup || new ThesisGroup({
       groupName: `${req.user.fullName}'s Group`,
       leaderId: req.user._id,
       members: [req.user._id],
-      supervisorId: facultyId
     });
+    newGroup.supervisorId = facultyId;
 
     await newGroup.save();
+
+    const linkedProfile = studentProfile || new StudentProfile({ userId: req.user._id });
+    linkedProfile.thesisGroupId = newGroup._id;
+    linkedProfile.supervisorId = facultyId;
+    await linkedProfile.save();
 
     // Increment currentStudents
     supervisorProfile.currentStudents += 1;
