@@ -47,7 +47,7 @@ export const getFacultyDashboard = async (req, res, next) => {
     ] = await Promise.all([
       // Fetch thesis groups supervised by this faculty, populating members and topics
       ThesisGroup.find({ supervisorId: facultyId })
-        .populate('members', 'fullName email department profilePicture')
+        .populate('members', 'fullName email studentId department profilePicture')
         .populate('topicId', 'title description category')
         .lean(),
       
@@ -87,11 +87,20 @@ export const getFacultyDashboard = async (req, res, next) => {
       const progressPercentage = latestReport?.progressPercentage ?? group.progress ?? 0;
       const thesisTitle = group.topicId?.title || group.groupName || 'Thesis Project';
 
-      (group.members || []).forEach((member) => {
+      // Fetch student profiles for members in this group to get studentId
+      const memberIds = (group.members || []).map(m => m._id);
+      const studentProfiles = await StudentProfile.find({ userId: { $in: memberIds } }).lean();
+      const profileMap = {};
+      studentProfiles.forEach(sp => {
+        profileMap[sp.userId.toString()] = sp.studentId;
+      });
+
+      (group.members || []).forEach(member => {
         activeStudents.push({
           _id: member._id,
           fullName: member.fullName,
           email: member.email,
+          studentId: profileMap[member._id.toString()] || '-',
           department: member.department || user.department,
           profilePicture: member.profilePicture,
           groupId: group._id,

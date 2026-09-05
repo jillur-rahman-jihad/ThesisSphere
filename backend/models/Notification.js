@@ -23,6 +23,19 @@ const notificationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    actionId: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
+    },
+    actionType: {
+      type: String,
+      default: null,
+    },
+    actionStatus: {
+      type: String,
+      enum: ['pending', 'accepted', 'rejected'],
+      default: 'pending',
+    },
   },
   {
     timestamps: true,

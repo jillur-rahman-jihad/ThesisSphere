@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNotification } from '../context/NotificationContext';
-import { Bell, Calendar, Video, FileText, Check, Trash2, CheckCircle2 } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
+import { Bell, Calendar, Video, Check, Trash2, CheckCircle2, Users, CheckCircle, XCircle } from 'lucide-react';
+import SupervisionRequestDetailsModal from '../components/notifications/SupervisionRequestDetailsModal';
 
 const Notifications = () => {
-  const { notifications, markAsRead, markAllAsRead, deleteNotification, unreadCount } = useNotification();
+  const { notifications, markAsRead, markAllAsRead, deleteNotification, unreadCount, fetchNotifications } = useNotification();
+  const { currentUser } = useOutletContext();
+  const [actionLoading, setActionLoading] = useState(null);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [selectedNotificationId, setSelectedNotificationId] = useState(null);
 
   const getIcon = (type) => {
     switch (type) {
@@ -11,9 +17,40 @@ const Notifications = () => {
         return <Video className="w-5 h-5 text-indigo-500" />;
       case 'deadline':
         return <Calendar className="w-5 h-5 text-rose-500" />;
+      case 'supervision_request':
+        return <Users className="w-5 h-5 text-indigo-500" />;
+      case 'supervision_accepted':
+        return <CheckCircle className="w-5 h-5 text-emerald-500" />;
+      case 'supervision_rejected':
+        return <XCircle className="w-5 h-5 text-rose-500" />;
       case 'general':
       default:
         return <Bell className="w-5 h-5 text-amber-500" />;
+    }
+  };
+
+  const handleAction = async (notificationId, actionId, action) => {
+    try {
+      setActionLoading(notificationId);
+      const res = await fetch(`/api/faculty/profile/${currentUser._id}/${action}-request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify({ requestId: actionId, notificationId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchNotifications();
+      } else {
+        alert(data.message || 'Failed to process request');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred');
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -65,9 +102,14 @@ const Notifications = () => {
               }`}
             >
               <div className="flex gap-4">
-                <div className={`mt-1 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
+                <div className={`mt-1 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer ${
                   notification.isRead ? 'bg-slate-100 dark:bg-slate-700' : 'bg-white dark:bg-slate-800 shadow-sm'
-                }`}>
+                }`} onClick={() => {
+                  if (notification.actionType === 'supervision_request') {
+                    setSelectedRequest(notification.actionId);
+                    setSelectedNotificationId(notification._id);
+                  }
+                }}>
                   {getIcon(notification.type)}
                 </div>
                 
@@ -99,15 +141,29 @@ const Notifications = () => {
                         Mark as read
                       </button>
                     )}
-                    <button
-                      onClick={() => deleteNotification(notification._id)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-rose-50 dark:hover:bg-rose-500/10 text-slate-400 hover:text-rose-500 rounded-lg text-xs font-medium transition-colors"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      Delete
-                    </button>
+                      <button
+                        onClick={() => deleteNotification(notification._id)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-rose-50 dark:hover:bg-rose-500/10 text-slate-400 hover:text-rose-500 rounded-lg text-xs font-medium transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        Delete
+                      </button>
+                    </div>
+
+                    {notification.actionType === 'supervision_request' && notification.actionStatus === 'pending' && (
+                      <div className="mt-3 flex gap-3">
+                        <button
+                          onClick={() => {
+                            setSelectedRequest(notification.actionId);
+                            setSelectedNotificationId(notification._id);
+                          }}
+                          className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-lg text-sm font-semibold transition"
+                        >
+                          Review Request
+                        </button>
+                      </div>
+                    )}
                   </div>
-                </div>
                 
                 {!notification.isRead && (
                   <div className="flex-shrink-0 flex items-center">
@@ -119,6 +175,25 @@ const Notifications = () => {
           ))
         )}
       </div>
+      <SupervisionRequestDetailsModal
+        isOpen={!!selectedRequest}
+        onClose={() => {
+          setSelectedRequest(null);
+          setSelectedNotificationId(null);
+        }}
+        requestId={selectedRequest}
+        currentUser={currentUser}
+        onAccept={() => {
+          if (selectedNotificationId) handleAction(selectedNotificationId, selectedRequest, 'accept');
+          setSelectedRequest(null);
+          setSelectedNotificationId(null);
+        }}
+        onReject={() => {
+          if (selectedNotificationId) handleAction(selectedNotificationId, selectedRequest, 'reject');
+          setSelectedRequest(null);
+          setSelectedNotificationId(null);
+        }}
+      />
     </div>
   );
 };

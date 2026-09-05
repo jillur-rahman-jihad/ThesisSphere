@@ -13,8 +13,11 @@ import {
   Activity,
   X,
   Plus,
+  UserPlus,
 } from "lucide-react";
-import { updateFacultyProfile, getFacultyProfileById, getProfile } from "../services/profileService";
+import { updateFacultyProfile, getFacultyProfileById } from "../services/profileService";
+import EditFacultyProfileModal from "../components/profile/EditFacultyProfileModal";
+import SupervisionRequestModal from "../components/profile/SupervisionRequestModal";
 
 const FacultyProfile = () => {
   const { currentUser } = useOutletContext() || {};
@@ -23,11 +26,12 @@ const FacultyProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showRequestModal, setShowRequestModal] = useState(false);
   const [addingSupervisor, setAddingSupervisor] = useState(false);
-  const [studentAssignment, setStudentAssignment] = useState(null);
 
   const isPublicView = !!id;
   const canEdit = !isPublicView && currentUser?.role === "faculty";
+  const canApply = isPublicView && currentUser?.role === "student";
 
   const loadProfile = async () => {
     try {
@@ -39,13 +43,8 @@ const FacultyProfile = () => {
           setLoading(false);
           return;
         }
-        const response = await getFacultyProfileById(currentUser._id);
+        const response = await getFacultyProfileById(currentUser?._id || "me");
         setProfileData(response.data);
-      }
-
-      if (isPublicView && currentUser?.role === "student") {
-        const studentResponse = await getProfile();
-        setStudentAssignment(studentResponse.data?.profile || null);
       }
     } catch (err) {
       console.error(err);
@@ -72,7 +71,7 @@ const FacultyProfile = () => {
     }
   };
 
-  const handleAddSupervisor = async () => {
+  const handleAddSupervisor = async (requestData) => {
     try {
       setAddingSupervisor(true);
       const res = await fetch(`/api/faculty/profile/${id}/add-student`, {
@@ -81,18 +80,19 @@ const FacultyProfile = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${currentUser.token}`,
         },
+        body: JSON.stringify(requestData)
       });
       const data = await res.json();
       if (data.success) {
-        alert('Supervisor added successfully! A thesis group was created for you.');
-        // Refresh profile data to show updated capacity
+        alert('Supervision request sent successfully!');
+        setShowRequestModal(false);
         await loadProfile();
       } else {
-        alert(data.message || 'Failed to add supervisor');
+        alert(data.message || 'Failed to send supervision request');
       }
     } catch (err) {
       console.error(err);
-      alert('An error occurred while adding the supervisor.');
+      alert('An error occurred while sending the supervision request.');
     } finally {
       setAddingSupervisor(false);
     }
@@ -150,16 +150,13 @@ const FacultyProfile = () => {
   const rating = profile.rating ?? 4.9;
   const reviewCount = profile.ratingCount ?? 24;
   const experienceYears = profile.experienceYears ?? 12;
-  const hasAssignedSupervisor = Boolean(
-    studentAssignment?.supervisorId || studentAssignment?.thesisGroupId?.supervisorId
-  );
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900/50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="rounded-[32px] bg-gradient-to-r from-indigo-700 via-violet-700 to-sky-600 p-8 shadow-2xl shadow-slate-300/20 sm:p-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-5">
-            <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white dark:bg-slate-800/10 text-3xl font-bold text-white shadow-xl shadow-indigo-200/30">
+            <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white/20 dark:bg-slate-800/10 text-3xl font-bold text-white shadow-xl shadow-indigo-200/30 backdrop-blur-sm border border-white/30">
               {initials || "EC"}
             </div>
             <div>
@@ -171,29 +168,23 @@ const FacultyProfile = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-4 rounded-[28px] bg-white dark:bg-slate-800/10 px-4 py-3 text-white shadow-inner shadow-slate-900/10 sm:max-w-sm">
+          <div className="flex items-center justify-between gap-4 rounded-[28px] bg-white/10 dark:bg-slate-800/10 px-4 py-3 text-white shadow-inner shadow-slate-900/10 sm:max-w-sm">
             {isAccepting && (
               <span className="rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 text-sm font-semibold text-emerald-800 dark:text-emerald-300">Accepting Students</span>
             )}
-            {isPublicView && currentUser?.role === 'student' && isAccepting && !hasAssignedSupervisor && (
+            {canApply && isAccepting && (
               <button
-                onClick={handleAddSupervisor}
-                disabled={addingSupervisor}
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50"
+                onClick={() => setShowRequestModal(true)}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600"
               >
-                <Plus size={16} />
-                {addingSupervisor ? "Adding..." : "Add Supervisor"}
+                <UserPlus size={16} />
+                Request Supervision
               </button>
-            )}
-            {isPublicView && currentUser?.role === 'student' && hasAssignedSupervisor && (
-              <span className="rounded-full bg-white/15 px-3 py-1 text-sm font-semibold text-white/90">
-                Supervisor already assigned
-              </span>
             )}
             {canEdit && (
               <button
                 onClick={() => setShowEditModal(true)}
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white dark:bg-slate-800/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white dark:bg-slate-800/25"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/20 dark:bg-slate-800/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30 dark:hover:bg-slate-800/25"
               >
                 <ChevronRight size={16} />
                 Edit Profile
@@ -256,10 +247,20 @@ const FacultyProfile = () => {
         </div>
       </div>
       {showEditModal && (
-        <FacultyEditProfileModal
+        <EditFacultyProfileModal
           profileData={profileData}
           onClose={() => setShowEditModal(false)}
+          onProfileUpdated={loadProfile}
           onSave={handleProfileSave}
+        />
+      )}
+      {showRequestModal && (
+        <SupervisionRequestModal
+          isOpen={showRequestModal}
+          onClose={() => setShowRequestModal(false)}
+          onSubmit={handleAddSupervisor}
+          loading={addingSupervisor}
+          supervisorName={displayName}
         />
       )}
     </div>

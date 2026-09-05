@@ -68,12 +68,12 @@ export const getRecommendations = async (req, res, next) => {
     };
 
     let aiData;
-    let usedModelName = "Gemini 1.5 Flash";
+    let usedModelName = "Gemini 3.6 Flash";
     
     try {
       // 4. Initialize Gemini API
       const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
       // 5. Construct the Prompt payload
       const supDataForAI = validSupervisors.map(sup => ({
@@ -118,10 +118,11 @@ export const getRecommendations = async (req, res, next) => {
       // 6. Call Gemini API
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      let text = response.text();
+      let text = response.text().trim();
       
-      if (text.startsWith('```json')) {
-        text = text.replace(/```json\n?/, '').replace(/```\n?$/, '');
+      const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+      if (jsonMatch) {
+        text = jsonMatch[1];
       }
       
       aiData = JSON.parse(text);

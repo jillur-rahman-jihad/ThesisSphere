@@ -101,7 +101,12 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
         { name: 'Contributions', icon: BarChart2, path: '/contributions' },
         { name: 'Automated Report', icon: FileText, path: '/automated-report' },
-        { name: 'Notifications', icon: Bell, badge: unreadCount > 0 ? unreadCount : null, path: '/notifications' },
+        {
+          name: 'Notifications',
+          icon: Bell,
+          badge: unreadCount > 0 ? unreadCount : null,
+          path: '/notifications',
+        },
         { name: 'My Profile', icon: User, path: '/profile' },
       ]
     : [
@@ -119,7 +124,12 @@ const Sidebar = ({ currentUser }) => {
         { name: 'Calendar', icon: Calendar, path: '/calendar' },
         { name: 'Paper Reviews', icon: BookOpen, path: '/reviews' },
         { name: 'Citation Generator', icon: BookOpen, path: '/citations' },
-        { name: 'Notifications', icon: Bell, badge: unreadCount > 0 ? unreadCount : null, path: '/notifications' },
+        {
+          name: 'Notifications',
+          icon: Bell,
+          badge: unreadCount > 0 ? unreadCount : null,
+          path: '/notifications',
+        },
         { name: 'My Profile', icon: User, path: '/faculty-profile' },
       ];
 

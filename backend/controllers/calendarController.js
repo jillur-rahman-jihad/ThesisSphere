@@ -77,6 +77,8 @@ export const getCalendarEvents = async (req, res, next) => {
   }
 };
 
+import Notification from '../models/Notification.js';
+
 // @desc    Create a new deadline
 // @route   POST /api/calendar/deadline
 // @access  Private (Faculty only)
@@ -108,6 +110,21 @@ export const createDeadline = async (req, res, next) => {
       type,
       thesisGroupId
     });
+
+    // Send notifications to all group members
+    for (const memberId of group.members) {
+      const notif = new Notification({
+        userId: memberId,
+        title: 'New Deadline Set',
+        message: `A new ${type} deadline "${title}" has been set for ${new Date(date).toLocaleDateString()}.`,
+        type: 'deadline'
+      });
+      await notif.save();
+      
+      if (req.app.get('io')) {
+        req.app.get('io').to(memberId.toString()).emit('new-notification', notif);
+      }
+    }
 
     res.status(201).json({
       success: true,
