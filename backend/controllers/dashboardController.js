@@ -213,9 +213,12 @@ export const getStudentDashboard = async (req, res, next) => {
     });
 
     (recentMessages || []).forEach((m) => {
+      const isSentByCurrentUser = String(m.sender?._id || m.sender) === String(user._id);
       rawActivities.push({
         _id: m._id,
-        title: `Message from ${m.sender?.fullName || 'User'}`,
+        title: isSentByCurrentUser
+          ? 'You sent a message'
+          : `Message from ${m.sender?.fullName || 'User'}`,
         detail: m.message,
         createdAt: m.createdAt,
         type: 'message',

@@ -18,6 +18,8 @@ import {
   Loader2,
   Check,
   Circle,
+  GraduationCap,
+  UserRound,
 } from 'lucide-react';
 
 const quickLinks = [
@@ -105,6 +107,8 @@ function StudentDashboardContent({ user, dashboardData, loading, error, onRefres
   const displayName = user?.fullName || dashboardData?.user?.fullName || 'Student';
   const semester = dashboardData?.profile?.semester || user?.semester || 'Semester not set';
   const department = dashboardData?.user?.department || user?.department || 'Department not set';
+  const thesisGroup = dashboardData?.thesisGroup;
+  const advisor = thesisGroup?.supervisorId || dashboardData?.profile?.supervisorId;
   const summary = dashboardData?.summary || {};
 
   const stats = statConfig.map((stat) => ({
@@ -259,6 +263,41 @@ function StudentDashboardContent({ user, dashboardData, loading, error, onRefres
                 <span className="font-semibold truncate max-w-[170px] text-right">{dashboardData?.thesisTopic?.title || dashboardData?.thesisGroup?.groupName || 'Thesis planning'}</span>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Thesis group and advisor */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-amber-50 dark:bg-amber-900/30 p-3 text-amber-600 dark:text-amber-300">
+              <Users className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-sm text-slate-500 dark:text-slate-400">My thesis group</p>
+              <p className="mt-1 text-lg font-bold text-slate-900 dark:text-white">
+                {thesisGroup?.groupName || 'Not assigned'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-blue-50 dark:bg-blue-900/30 p-3 text-blue-600 dark:text-blue-300">
+              <GraduationCap className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm text-slate-500 dark:text-slate-400">My advisor</p>
+              <p className="mt-1 text-lg font-bold text-slate-900 dark:text-white truncate">
+                {advisor?.fullName || 'Not assigned'}
+              </p>
+              {advisor?.email && (
+                <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{advisor.email}</p>
+              )}
+            </div>
+            {!advisor && <UserRound className="ml-auto w-5 h-5 text-slate-300 dark:text-slate-600" />}
           </div>
         </div>
       </section>
