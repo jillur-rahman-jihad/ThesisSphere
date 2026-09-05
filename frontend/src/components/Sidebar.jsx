@@ -104,7 +104,7 @@ const Sidebar = ({ currentUser }) => {
         {
           name: 'Notifications',
           icon: Bell,
-          badge: liveCounts.unreadNotifications > 0 ? liveCounts.unreadNotifications : null,
+          badge: unreadCount > 0 ? unreadCount : null,
           path: '/notifications',
         },
         { name: 'My Profile', icon: User, path: '/profile' },
@@ -127,7 +127,7 @@ const Sidebar = ({ currentUser }) => {
         {
           name: 'Notifications',
           icon: Bell,
-          badge: liveCounts.unreadNotifications > 0 ? liveCounts.unreadNotifications : null,
+          badge: unreadCount > 0 ? unreadCount : null,
           path: '/notifications',
         },
         { name: 'My Profile', icon: User, path: '/faculty-profile' },

@@ -118,10 +118,11 @@ export const getRecommendations = async (req, res, next) => {
       // 6. Call Gemini API
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      let text = response.text();
+      let text = response.text().trim();
       
-      if (text.startsWith('```json')) {
-        text = text.replace(/```json\n?/, '').replace(/```\n?$/, '');
+      const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+      if (jsonMatch) {
+        text = jsonMatch[1];
       }
       
       aiData = JSON.parse(text);
