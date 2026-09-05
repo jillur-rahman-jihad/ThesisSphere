@@ -98,7 +98,8 @@ export const NotificationProvider = ({ children, currentUser }) => {
         unreadCount, 
         markAsRead, 
         markAllAsRead, 
-        deleteNotification 
+        deleteNotification,
+        fetchNotifications
       }}
     >
       {children}
