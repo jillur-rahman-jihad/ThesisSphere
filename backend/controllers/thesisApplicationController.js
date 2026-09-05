@@ -1,6 +1,9 @@
 import ThesisApplication from '../models/ThesisApplication.js';
 import ThesisTopic from '../models/ThesisTopic.js';
 import Notification from '../models/Notification.js';
+import ThesisGroup from '../models/ThesisGroup.js';
+import StudentProfile from '../models/StudentProfileModel.js';
+import User from '../models/userModel.js';
 
 // @desc    Apply for a thesis topic
 // @route   POST /api/thesis-applications
@@ -13,6 +16,21 @@ export const applyForTopic = async (req, res, next) => {
     }
 
     const { topicId, message } = req.body;
+
+    const studentProfile = await StudentProfile.findOne({ userId: req.user._id });
+    const studentGroup = studentProfile?.thesisGroupId
+      ? await ThesisGroup.findById(studentProfile.thesisGroupId)
+      : await ThesisGroup.findOne({ members: req.user._id });
+
+    if (studentGroup && String(studentGroup.leaderId) !== String(req.user._id)) {
+      res.status(400);
+      throw new Error('Only the thesis group leader can apply for a topic on behalf of the group');
+    }
+
+    if (studentGroup?.topicId) {
+      res.status(400);
+      throw new Error('Your thesis group already has a topic assigned');
+    }
 
     const topic = await ThesisTopic.findById(topicId);
     if (!topic) {
@@ -157,6 +175,48 @@ export const updateApplicationStatus = async (req, res, next) => {
       // Mark topic as assigned
       topic.status = 'assigned';
       await topic.save();
+
+      const student = await User.findById(application.studentId).select('fullName');
+      const applicantProfile = await StudentProfile.findOne({
+        userId: application.studentId,
+      });
+
+      const group = applicantProfile?.thesisGroupId
+        ? await ThesisGroup.findById(applicantProfile.thesisGroupId)
+        : await ThesisGroup.findOne({ members: application.studentId });
+
+      const targetGroup = group || await ThesisGroup.create({
+        groupName: `${student?.fullName || 'Student'}'s Thesis Group`,
+        leaderId: application.studentId,
+        members: [application.studentId],
+        memberDetails: [
+          {
+            userId: application.studentId,
+            role: 'Thesis Leader',
+            chapter: 'All chapters',
+          },
+        ],
+        recentActivity: [],
+      });
+
+      targetGroup.supervisorId = topic.supervisorId;
+      targetGroup.topicId = topic._id;
+      targetGroup.recentActivity = targetGroup.recentActivity || [];
+      targetGroup.recentActivity.push({
+        description: 'Thesis topic assigned to the entire group',
+      });
+      await targetGroup.save();
+
+      await StudentProfile.updateMany(
+        { userId: { $in: targetGroup.members } },
+        {
+          $set: {
+            thesisGroupId: targetGroup._id,
+            thesisTitle: topic.title,
+            supervisorId: topic.supervisorId,
+          },
+        }
+      );
     }
 
     application.status = status;

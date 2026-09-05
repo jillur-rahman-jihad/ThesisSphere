@@ -67,15 +67,15 @@ const ForumPostDetailModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] shadow-2xl overflow-hidden border border-slate-100 flex flex-col">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl max-w-3xl w-full max-h-[90vh] shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-700 flex flex-col transform transition-all">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200/80 flex-shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-700/80 flex-shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/50">
               {post.category || 'General Discussion'}
             </span>
             {post.isResolved && (
-              <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
+              <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
                 <CheckCircle2 size={12} />
                 Resolved
               </span>
@@ -83,7 +83,7 @@ const ForumPostDetailModal = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors"
+            className="p-1 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700 transition-colors"
           >
             <X size={20} />
           </button>
@@ -97,22 +97,22 @@ const ForumPostDetailModal = ({
               <img
                 src={authorAvatar}
                 alt={authorName}
-                className="w-11 h-11 rounded-full object-cover border border-slate-200"
+                className="w-11 h-11 rounded-full object-cover border border-slate-200 dark:border-slate-700"
               />
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-slate-800 text-sm">{authorName}</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-100 text-sm">{authorName}</span>
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize ${
                       authorRole === 'faculty'
-                        ? 'bg-purple-100 text-purple-700 border border-purple-200'
-                        : 'bg-blue-100 text-blue-700 border border-blue-200'
+                        ? 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/50'
+                        : 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50'
                     }`}
                   >
                     {authorRole}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-0.5">
+                <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                   <Clock size={12} />
                   <span>{formattedDate}</span>
                 </div>
@@ -124,8 +124,8 @@ const ForumPostDetailModal = ({
                 onClick={() => onToggleResolve(post._id)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
                   post.isResolved
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                    : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700'
+                    ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/80'
+                    : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:text-emerald-700 dark:hover:text-emerald-300'
                 }`}
               >
                 <CheckCircle2 size={14} />
@@ -135,7 +135,7 @@ const ForumPostDetailModal = ({
           </div>
 
           {/* Title */}
-          <h2 className="text-xl font-bold text-slate-900 leading-snug">{post.title}</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-snug">{post.title}</h2>
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
@@ -143,7 +143,7 @@ const ForumPostDetailModal = ({
               {post.tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md flex items-center gap-1"
+                  className="text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/50 border border-slate-200/50 dark:border-slate-700/50 px-2.5 py-1 rounded-md flex items-center gap-1"
                 >
                   <Tag size={11} />
                   {tag}
@@ -153,32 +153,32 @@ const ForumPostDetailModal = ({
           )}
 
           {/* Main Body Content */}
-          <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap bg-slate-50/60 p-4 rounded-xl border border-slate-100">
+          <div className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap bg-slate-50/60 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-700/60">
             {post.content}
           </div>
 
           {/* Engagement Bar */}
-          <div className="flex items-center justify-between py-3 border-y border-slate-100 text-xs text-slate-500">
+          <div className="flex items-center justify-between py-3 border-y border-slate-100 dark:border-slate-700/60 text-xs text-slate-500 dark:text-slate-400">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => onLike(post._id)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-semibold transition-all ${
                   isLiked
-                    ? 'bg-indigo-100 text-indigo-700 border border-indigo-200'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50'
+                    : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
                 }`}
               >
-                <ThumbsUp size={15} className={isLiked ? 'fill-indigo-700' : ''} />
+                <ThumbsUp size={15} className={isLiked ? 'fill-indigo-700 dark:fill-indigo-300' : ''} />
                 <span>{post.likes?.length || 0} Upvotes</span>
               </button>
 
-              <div className="flex items-center gap-1.5 text-slate-600 font-medium">
+              <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-medium">
                 <MessageSquare size={15} />
                 <span>{post.comments?.length || 0} Comments</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1 text-slate-400">
+            <div className="flex items-center gap-1 text-slate-400 dark:text-slate-500">
               <Eye size={15} />
               <span>{post.views || 0} Views</span>
             </div>
@@ -186,12 +186,12 @@ const ForumPostDetailModal = ({
 
           {/* Comments Thread */}
           <div className="space-y-4">
-            <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider">
               Discussion & Answers ({post.comments?.length || 0})
             </h4>
 
             {error && (
-              <div className="flex items-center gap-2 p-3 bg-rose-50 border border-rose-200 text-rose-600 text-xs rounded-xl">
+              <div className="flex items-center gap-2 p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-600 dark:text-rose-400 text-xs rounded-xl">
                 <AlertCircle size={14} />
                 <span>{error}</span>
               </div>
@@ -204,7 +204,7 @@ const ForumPostDetailModal = ({
                 placeholder="Write a constructive answer or response..."
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm text-slate-800"
+                className="flex-1 px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               />
               <button
                 type="submit"
@@ -240,36 +240,36 @@ const ForumPostDetailModal = ({
                   return (
                     <div
                       key={c._id}
-                      className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/60 flex items-start justify-between gap-3 group"
+                      className="p-4 bg-slate-50/80 dark:bg-slate-900/60 rounded-xl border border-slate-200/60 dark:border-slate-700/60 flex items-start justify-between gap-3 group transition-colors"
                     >
                       <div className="flex gap-3 flex-1">
                         <img
                           src={commentAvatar}
                           alt={commentAuthorName}
-                          className="w-9 h-9 rounded-full object-cover border border-slate-200 flex-shrink-0 mt-0.5"
+                          className="w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-700 flex-shrink-0 mt-0.5"
                         />
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-slate-800 text-xs">
+                            <span className="font-semibold text-slate-800 dark:text-slate-100 text-xs">
                               {commentAuthorName}
                             </span>
                             <span
                               className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full capitalize ${
                                 commentAuthorRole === 'faculty'
-                                  ? 'bg-purple-100 text-purple-700'
-                                  : 'bg-blue-100 text-blue-700'
+                                  ? 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300'
+                                  : 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300'
                               }`}
                             >
                               {commentAuthorRole}
                             </span>
-                            <span className="text-[10px] text-slate-400">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500">
                               {new Date(c.createdAt).toLocaleTimeString([], {
                                 hour: '2-digit',
                                 minute: '2-digit',
                               })}
                             </span>
                           </div>
-                          <p className="text-sm text-slate-700 leading-normal">{c.comment}</p>
+                          <p className="text-sm text-slate-700 dark:text-slate-200 leading-normal">{c.comment}</p>
                         </div>
                       </div>
 
@@ -277,7 +277,7 @@ const ForumPostDetailModal = ({
                         <button
                           onClick={() => onDeleteComment(post._id, c._id)}
                           title="Delete Comment"
-                          className="text-slate-300 hover:text-rose-500 p-1 transition-colors"
+                          className="text-slate-300 dark:text-slate-500 hover:text-rose-500 dark:hover:text-rose-400 p-1 transition-colors"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -286,7 +286,7 @@ const ForumPostDetailModal = ({
                   );
                 })
               ) : (
-                <div className="text-center py-6 text-slate-400 text-sm italic">
+                <div className="text-center py-6 text-slate-400 dark:text-slate-500 text-sm italic">
                   No comments yet. Be the first to share your insights!
                 </div>
               )}

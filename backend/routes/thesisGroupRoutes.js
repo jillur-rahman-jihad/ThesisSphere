@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getMyGroup,
+  updateThesisGroup,
   getAllGroups,
   requestToJoinGroup,
   createThesisGroup,
@@ -14,6 +15,8 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get("/my-group", protect, getMyGroup);
+
+router.patch("/:id", protect, updateThesisGroup);
 
 router.get("/", protect, getAllGroups);
 

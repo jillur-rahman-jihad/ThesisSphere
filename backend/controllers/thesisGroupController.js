@@ -3,6 +3,7 @@ import ThesisGroup from "../models/ThesisGroup.js";
 import ThesisTopic from "../models/ThesisTopic.js";
 import StudentProfile from "../models/StudentProfileModel.js";
 import User from "../models/userModel.js";
+import ThesisApplication from "../models/ThesisApplication.js";
 
 // ==========================================
 // GET MY THESIS GROUP
@@ -24,6 +25,57 @@ export const getMyGroup = async (req, res, next) => {
 
     // Student has no group
     if (!studentProfile.thesisGroupId) {
+      const acceptedApplication = await ThesisApplication.findOne({
+        studentId: req.user._id,
+        status: "accepted",
+      }).sort({ updatedAt: -1 });
+
+      if (acceptedApplication) {
+        const topic = await ThesisTopic.findById(acceptedApplication.topicId);
+
+        if (topic) {
+          const existingGroup = await ThesisGroup.findOne({
+            topicId: topic._id,
+            leaderId: req.user._id,
+          });
+
+          const group = existingGroup || await ThesisGroup.create({
+            groupName: `${req.user.fullName || "Student"}'s Thesis Group`,
+            leaderId: req.user._id,
+            members: [req.user._id],
+            supervisorId: topic.supervisorId,
+            topicId: topic._id,
+            memberDetails: [
+              {
+                userId: req.user._id,
+                role: "Thesis Leader",
+                chapter: "All chapters",
+              },
+            ],
+            recentActivity: [
+              {
+                description: "Thesis group created from an accepted topic application",
+              },
+            ],
+          });
+
+          studentProfile.thesisGroupId = group._id;
+          studentProfile.thesisTitle = topic.title;
+          studentProfile.supervisorId = topic.supervisorId;
+          await studentProfile.save();
+          return res.status(200).json({
+            success: true,
+            data: await ThesisGroup.findById(group._id)
+              .populate("members", "fullName email department university role")
+              .populate("leaderId", "fullName email department university role")
+              .populate("supervisorId", "fullName email department university role")
+              .populate("topicId", "title description")
+              .populate("memberDetails.userId", "fullName email")
+              .populate("joinRequests.studentId", "fullName email"),
+          });
+        }
+      }
+
       return res.status(200).json({
         success: true,
         data: null,
@@ -66,6 +118,84 @@ export const getMyGroup = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: group,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ==========================================
+// UPDATE GROUP DETAILS
+// PATCH /api/thesis-groups/:id
+// Protected (group leader only)
+// ==========================================
+export const updateThesisGroup = async (req, res, next) => {
+  try {
+    const group = await ThesisGroup.findById(req.params.id);
+
+    if (!group) {
+      return res.status(404).json({
+        success: false,
+        message: "Thesis group not found",
+      });
+    }
+
+    if (group.leaderId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Only the group leader can edit this group",
+      });
+    }
+
+    const { groupName, memberDetails } = req.body;
+
+    if (groupName !== undefined) {
+      if (!groupName.trim()) {
+        return res.status(400).json({
+          success: false,
+          message: "Group name is required",
+        });
+      }
+      group.groupName = groupName.trim();
+    }
+
+    if (memberDetails !== undefined) {
+      if (!Array.isArray(memberDetails)) {
+        return res.status(400).json({
+          success: false,
+          message: "Member details must be an array",
+        });
+      }
+
+      const memberIds = new Set(group.members.map((memberId) => memberId.toString()));
+      const updatedDetails = memberDetails.map((detail) => {
+        if (!memberIds.has(detail.userId?.toString()) || !detail.role?.trim() || !detail.chapter?.trim()) {
+          throw new Error("Each group member needs a role and chapter");
+        }
+        return {
+          userId: detail.userId,
+          role: detail.role.trim(),
+          chapter: detail.chapter.trim(),
+        };
+      });
+
+      group.memberDetails = updatedDetails;
+    }
+
+    await group.save();
+
+    const updatedGroup = await ThesisGroup.findById(group._id)
+      .populate("members", "fullName email department university role")
+      .populate("leaderId", "fullName email department university role")
+      .populate("supervisorId", "fullName email department university role")
+      .populate("topicId", "title description")
+      .populate("memberDetails.userId", "fullName email")
+      .populate("joinRequests.studentId", "fullName email");
+
+    return res.status(200).json({
+      success: true,
+      message: "Thesis group updated successfully",
+      data: updatedGroup,
     });
   } catch (error) {
     next(error);

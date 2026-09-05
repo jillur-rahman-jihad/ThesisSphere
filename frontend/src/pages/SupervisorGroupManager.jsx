@@ -19,8 +19,6 @@ import {
   updateGroupProgress,
   updateMemberResponsibility,
   removeMemberFromGroup,
-  assignStudentToGroup,
-  getAvailableStudents,
 } from "../services/supervisorGroupManagerService";
 
 const SupervisorGroupManager = () => {
@@ -42,16 +40,6 @@ const SupervisorGroupManager = () => {
   const [memberRole, setMemberRole] = useState("");
 
   const [memberChapter, setMemberChapter] = useState("");
-
-  const [showAssignModal, setShowAssignModal] = useState(false);
-
-  const [availableStudents, setAvailableStudents] = useState([]);
-
-  const [selectedStudent, setSelectedStudent] = useState("");
-
-  const [assignRole, setAssignRole] = useState("");
-
-  const [assignChapter, setAssignChapter] = useState("");
 
   const [saving, setSaving] = useState(false);
 
@@ -216,61 +204,6 @@ const SupervisorGroupManager = () => {
       await loadGroups();
     } catch (err) {
       alert(err.message || "Failed to remove member.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // ============================================================
-  // OPEN ASSIGN STUDENT MODAL
-  // ============================================================
-
-  const openAssignModal = async () => {
-    try {
-      setSaving(true);
-
-      const response = await getAvailableStudents();
-
-      setAvailableStudents(response.data || []);
-
-      setSelectedStudent("");
-      setAssignRole("");
-      setAssignChapter("");
-
-      setShowAssignModal(true);
-    } catch (err) {
-      alert(err.message || "Failed to load available students.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // ============================================================
-  // ASSIGN STUDENT
-  // ============================================================
-
-  const handleAssignStudent = async () => {
-    if (!selectedStudent) {
-      alert("Please select a student.");
-      return;
-    }
-
-    try {
-      setSaving(true);
-
-      await assignStudentToGroup(selectedGroup._id, {
-        studentId: selectedStudent,
-        role: assignRole,
-        chapter: assignChapter,
-      });
-
-      await openGroup(selectedGroup._id);
-
-      await loadGroups();
-
-      setShowAssignModal(false);
-    } catch (err) {
-      alert(err.message || "Failed to assign student.");
     } finally {
       setSaving(false);
     }
@@ -658,16 +591,6 @@ const SupervisorGroupManager = () => {
                     </p>
                   </div>
 
-                  <button
-                    onClick={openAssignModal}
-                    disabled={
-                      selectedGroup.members?.length >= 5
-                    }
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    <UserPlus size={18} />
-                    Assign Student
-                  </button>
                 </div>
 
                 <div className="space-y-4">
@@ -863,79 +786,6 @@ const SupervisorGroupManager = () => {
         </Modal>
       )}
 
-      {/* ======================================================
-          ASSIGN STUDENT MODAL
-      ====================================================== */}
-
-      {showAssignModal && (
-        <Modal
-          title="Assign Student"
-          onClose={() => setShowAssignModal(false)}
-        >
-          <label className="block text-sm font-semibold text-slate-300">
-            Student
-          </label>
-
-          <select
-            value={selectedStudent}
-            onChange={(e) => setSelectedStudent(e.target.value)}
-            className="w-full mt-2 px-4 py-3 rounded-xl border border-slate-600 bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="" className="bg-slate-800 text-white">
-              Select a student
-            </option>
-
-            {availableStudents.map((student) => (
-              <option
-                key={student._id}
-                value={student._id}
-                className="bg-slate-800 text-white"
-              >
-                {student.fullName} - {student.email}
-              </option>
-            ))}
-          </select>
-
-          <label className="block text-sm font-semibold text-slate-300 mt-4">
-            Role
-          </label>
-
-          <input
-            value={assignRole}
-            onChange={(e) => setAssignRole(e.target.value)}
-            placeholder="e.g. Researcher"
-            className="w-full mt-2 px-4 py-3 rounded-xl border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
-          <label className="block text-sm font-semibold text-slate-300 mt-4">
-            Thesis Chapter
-          </label>
-
-          <input
-            value={assignChapter}
-            onChange={(e) => setAssignChapter(e.target.value)}
-            placeholder="e.g. Literature Review"
-            className="w-full mt-2 px-4 py-3 rounded-xl border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
-          <div className="flex gap-3 mt-6">
-            <button
-              onClick={() => setShowAssignModal(false)}
-              className="flex-1 px-4 py-3 rounded-xl border border-slate-600 text-slate-200 font-semibold hover:bg-slate-700"
-            >
-              Cancel
-            </button>
-
-            <button
-              onClick={handleAssignStudent}
-              disabled={saving}
-              className="flex-1 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold disabled:opacity-50"
-            >
-              {saving ? "Assigning..." : "Assign Student"}
-            </button>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 };

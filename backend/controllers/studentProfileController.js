@@ -34,6 +34,17 @@ export const getStudentProfile = async (req, res, next) => {
       });
     }
 
+    await studentProfile.populate([
+      { path: "supervisorId", select: "fullName email department university" },
+      {
+        path: "thesisGroupId",
+        populate: [
+          { path: "topicId", select: "title description" },
+          { path: "supervisorId", select: "fullName email department university" },
+        ],
+      },
+    ]);
+
     res.status(200).json({
       success: true,
       data: {

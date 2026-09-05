@@ -873,9 +873,9 @@ export default function AutomatedReport() {
     setTimeout(() => { try { w.print(); } catch(e) { console.error(e); } }, 350);
   };
 
-  if (loading) return <div className="p-4 text-slate-700">Loading report…</div>;
-  if (error) return <div className="p-4 text-red-600">Error: {error}</div>;
-  if (!report) return <div className="p-4 text-slate-700">No report available.</div>;
+  if (loading) return <div className="p-6 text-slate-700 dark:text-slate-300">Loading report…</div>;
+  if (error) return <div className="p-6 text-rose-600 dark:text-rose-400 font-medium">Error: {error}</div>;
+  if (!report) return <div className="p-6 text-slate-700 dark:text-slate-300">No report available.</div>;
 
   const reportTabs = [
     { id: 'monthly', label: 'Monthly Progress Report', icon: BarChart2 },
@@ -885,57 +885,60 @@ export default function AutomatedReport() {
   ];
 
   return (
-    <div className="p-6 text-slate-800" id="automated-report-content">
+    <div className="p-6 text-slate-900 dark:text-slate-100 transition-colors duration-300" id="automated-report-content">
       <div className="max-w-6xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-4xl font-extrabold">Automated Report Generator</h1>
-          <p className="text-sm text-slate-600 mt-2">View personalized reports for your thesis progress</p>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Automated Report Generator</h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">View personalized reports for your thesis progress</p>
         </div>
 
-        <div className="mb-6 bg-blue-50 border border-blue-100 p-4 rounded">
-          <div className="text-sm text-blue-800">Select a report type to view your personalized data.</div>
+        <div className="mb-6 bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800/60 p-4 rounded-xl backdrop-blur-sm transition-colors">
+          <div className="text-sm text-blue-800 dark:text-blue-300 font-medium flex items-center gap-2">
+            <span className="text-blue-600 dark:text-blue-400">💡</span>
+            Select a report type to view your personalized data.
+          </div>
         </div>
 
         {/* Date Filter */}
-        <div className="mb-6 bg-white p-4 rounded-lg shadow-sm border flex gap-4 items-end">
+        <div className="mb-6 bg-white dark:bg-slate-800/90 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700/80 flex flex-wrap gap-4 items-end transition-colors">
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1">From Date</label>
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 block mb-1.5">From Date</label>
             <input
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="border border-slate-300 rounded px-3 py-2 text-sm"
+              className="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:light] dark:[color-scheme:dark] transition-colors"
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1">To Date</label>
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 block mb-1.5">To Date</label>
             <input
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="border border-slate-300 rounded px-3 py-2 text-sm"
+              className="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:light] dark:[color-scheme:dark] transition-colors"
             />
           </div>
           <button
             onClick={() => { setFromDate(''); setToDate(''); }}
-            className="px-4 py-2 text-sm bg-slate-600 text-white rounded hover:bg-slate-700"
+            className="px-4 py-2 text-sm bg-slate-600 dark:bg-slate-700 text-white font-medium rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
           >
             Clear
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div className="mb-6 border-b border-slate-300 flex gap-2 overflow-x-auto">
+        <div className="mb-6 border-b border-slate-200 dark:border-slate-700/80 flex gap-2 overflow-x-auto transition-colors">
           {reportTabs.map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-3 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                className={`px-4 py-3 text-sm font-semibold flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-slate-600 hover:text-slate-800'
+                    ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -961,21 +964,21 @@ export default function AutomatedReport() {
           const pendingItems = actionItems.filter(a => a.status === 'pending').length;
 
           return (
-          <div className="space-y-4 mb-6">
+          <div className="space-y-5 mb-6">
 
             {/* Header */}
-            <div className="bg-white border rounded-lg shadow-sm p-5">
-              <div className="flex items-center justify-between">
+            <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm p-6 transition-colors">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <BarChart2 className="w-5 h-5 text-amber-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Monthly Progress Report</h3>
+                    <BarChart2 className="w-5 h-5 text-amber-600 dark:text-amber-500" />
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Monthly Progress Report</h3>
                   </div>
-                  <p className="text-xs text-slate-500">Auto-filled from chapter completion, meetings &amp; milestones</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Auto-filled from chapter completion, meetings &amp; milestones</p>
                 </div>
                 <button
                   onClick={downloadMonthlyReport}
-                  className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition text-sm font-semibold"
+                  className="flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 dark:bg-amber-600 dark:hover:bg-amber-500 text-white rounded-xl transition-all text-sm font-semibold shadow-sm self-start sm:self-auto"
                 >
                   <DownloadCloud className="w-4 h-4" />
                   Download PDF
@@ -985,24 +988,24 @@ export default function AutomatedReport() {
               {/* KPI Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
                 {[
-                  { val: `${overallAvg}%`, lbl: 'Overall Completion', color: '#d97706', bg: '#fffbeb' },
-                  { val: `${completedChapters}/${totalChapters}`, lbl: 'Chapters Done', color: '#3b82f6', bg: '#eff6ff' },
-                  { val: meetings.length, lbl: 'Meetings Held', color: '#10b981', bg: '#f0fdf4' },
-                  { val: pendingItems, lbl: 'Pending Items', color: '#ef4444', bg: '#fef2f2' },
-                ].map(({ val, lbl, color, bg }, i) => (
-                  <div key={i} className="rounded-lg p-4 text-center border" style={{ backgroundColor: bg }}>
-                    <div className="text-2xl font-bold" style={{ color }}>{val}</div>
-                    <div className="text-xs text-slate-500 mt-1">{lbl}</div>
+                  { val: `${overallAvg}%`, lbl: 'Overall Completion', border: 'border-amber-200 dark:border-amber-900/50', bg: 'bg-amber-50 dark:bg-amber-950/40', valColor: 'text-amber-700 dark:text-amber-400' },
+                  { val: `${completedChapters}/${totalChapters}`, lbl: 'Chapters Done', border: 'border-blue-200 dark:border-blue-900/50', bg: 'bg-blue-50 dark:bg-blue-950/40', valColor: 'text-blue-700 dark:text-blue-400' },
+                  { val: meetings.length, lbl: 'Meetings Held', border: 'border-emerald-200 dark:border-emerald-900/50', bg: 'bg-emerald-50 dark:bg-emerald-950/40', valColor: 'text-emerald-700 dark:text-emerald-400' },
+                  { val: pendingItems, lbl: 'Pending Items', border: 'border-rose-200 dark:border-rose-900/50', bg: 'bg-rose-50 dark:bg-rose-950/40', valColor: 'text-rose-700 dark:text-rose-400' },
+                ].map(({ val, lbl, border, bg, valColor }, i) => (
+                  <div key={i} className={`rounded-xl p-4 text-center border ${border} ${bg} transition-colors`}>
+                    <div className={`text-2xl font-bold ${valColor}`}>{val}</div>
+                    <div className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1">{lbl}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Chapter Completion */}
-            <div className="bg-white border rounded-lg shadow-sm p-5">
-              <h4 className="font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                <span className="text-blue-600">📚</span> Chapter Completion
-                <span className="ml-auto text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{totalChapters} chapters</span>
+            <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm p-6 transition-colors">
+              <h4 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <span className="text-blue-600 dark:text-blue-400">📚</span> Chapter Completion
+                <span className="ml-auto text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2.5 py-0.5 rounded-full font-semibold">{totalChapters} chapters</span>
               </h4>
               {chapters.length > 0 ? (
                 <div className="space-y-3">
@@ -1014,13 +1017,13 @@ export default function AutomatedReport() {
                       <div key={i} className="flex items-center gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-slate-700 truncate">{ch.title}</span>
+                            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">{ch.title}</span>
                             <div className="flex items-center gap-2 flex-shrink-0 ml-2">
                               <span className="text-xs font-bold" style={{ color }}>{p}%</span>
-                              <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: `${color}20`, color }}>{label}</span>
+                              <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: `${color}20`, color }}>{label}</span>
                             </div>
                           </div>
-                          <div className="w-full bg-slate-200 rounded-full h-2">
+                          <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
                             <div className="h-2 rounded-full transition-all" style={{ width: `${p}%`, backgroundColor: color }} />
                           </div>
                         </div>
@@ -1029,56 +1032,56 @@ export default function AutomatedReport() {
                   })}
                 </div>
               ) : (
-                <p className="text-slate-500 text-sm text-center py-4">No chapter data available.</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm text-center py-4">No chapter data available.</p>
               )}
             </div>
 
             {/* Meetings */}
-            <div className="bg-white border rounded-lg shadow-sm p-5">
-              <h4 className="font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                <span className="text-green-600">📅</span> Meetings This Period
-                <span className="ml-auto text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{meetings.length} meetings</span>
+            <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm p-6 transition-colors">
+              <h4 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <span className="text-emerald-600 dark:text-emerald-400">📅</span> Meetings This Period
+                <span className="ml-auto text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2.5 py-0.5 rounded-full font-semibold">{meetings.length} meetings</span>
               </h4>
               {meetings.length > 0 ? (
                 <div className="space-y-3">
                   {meetings.slice(0, 8).map((m, i) => (
-                    <div key={i} className="flex gap-3 p-3 bg-green-50 border border-green-100 rounded-lg">
+                    <div key={i} className="flex gap-3 p-3 bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/50 rounded-xl transition-colors">
                       <div className="flex-shrink-0 text-center min-w-[52px]">
-                        <div className="text-xs font-bold text-green-700">
+                        <div className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
                           {m.date ? new Date(m.date).toLocaleDateString('en', { month: 'short' }) : '—'}
                         </div>
-                        <div className="text-lg font-bold text-green-800">
+                        <div className="text-lg font-bold text-emerald-800 dark:text-emerald-300">
                           {m.date ? new Date(m.date).getDate() : '—'}
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-semibold text-slate-800">{m.topic || 'General Discussion'}</p>
+                          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{m.topic || 'General Discussion'}</p>
                           {m.duration && m.duration !== 'N/A' && (
-                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded flex-shrink-0">{m.duration}</span>
+                            <span className="text-xs bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-md font-semibold flex-shrink-0">{m.duration}</span>
                           )}
                         </div>
-                        <p className="text-xs text-slate-600 mt-0.5">with {m.supervisor || 'Supervisor'}</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">with {m.supervisor || 'Supervisor'}</p>
                         {m.notes && m.notes !== 'No notes recorded' && (
-                          <p className="text-xs text-slate-600 mt-1 leading-relaxed">{m.notes.slice(0, 120)}</p>
+                          <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">{m.notes.slice(0, 120)}</p>
                         )}
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-500 text-sm text-center py-4">No meetings recorded for this period.</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm text-center py-4">No meetings recorded for this period.</p>
               )}
             </div>
 
             {/* Milestones & Action Items */}
-            <div className="bg-white border rounded-lg shadow-sm p-5">
-              <h4 className="font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                <span className="text-amber-600">🎯</span> Milestones &amp; Action Items
-                <span className="ml-auto text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{milestones.length} items</span>
+            <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm p-6 transition-colors">
+              <h4 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <span className="text-amber-600 dark:text-amber-400">🎯</span> Milestones &amp; Action Items
+                <span className="ml-auto text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2.5 py-0.5 rounded-full font-semibold">{milestones.length} items</span>
               </h4>
               {milestones.length > 0 ? (
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {milestones.slice(0, 10).map((item, i) => {
                     const isDeadline = item.daysRemaining !== undefined;
                     const statusLabel = isDeadline
@@ -1088,28 +1091,28 @@ export default function AutomatedReport() {
                       ? (item.daysRemaining < 7 ? '#ef4444' : item.daysRemaining < 14 ? '#f59e0b' : '#10b981')
                       : ({ completed: '#10b981', pending: '#f59e0b', overdue: '#ef4444' }[item.status] || '#6b7280');
                     return (
-                      <div key={i} className="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50 transition">
+                      <div key={i} className="flex items-center justify-between p-3 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-slate-800">{item.title || 'Milestone'}</p>
+                          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{item.title || 'Milestone'}</p>
                           {item.description && (
-                            <p className="text-xs text-slate-500 mt-0.5 truncate">{item.description.slice(0, 80)}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">{item.description.slice(0, 80)}</p>
                           )}
                           {(item.dueDate || item.date) && (
-                            <p className="text-xs text-slate-400 mt-0.5">Due: {new Date(item.dueDate || item.date).toLocaleDateString()}</p>
+                            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Due: {new Date(item.dueDate || item.date).toLocaleDateString()}</p>
                           )}
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0 ml-3">
                           {item.priority && (
-                            <span className="text-xs px-2 py-0.5 rounded font-medium bg-slate-100 text-slate-600">{item.priority}</span>
+                            <span className="text-xs px-2 py-0.5 rounded font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 capitalize">{item.priority}</span>
                           )}
-                          <span className="text-xs px-2 py-1 rounded-full font-bold" style={{ backgroundColor: `${color}20`, color }}>{statusLabel}</span>
+                          <span className="text-xs px-2.5 py-1 rounded-full font-bold" style={{ backgroundColor: `${color}20`, color }}>{statusLabel}</span>
                         </div>
                       </div>
                     );
                   })}
                 </div>
               ) : (
-                <p className="text-slate-500 text-sm text-center py-4">No milestones or action items recorded.</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm text-center py-4">No milestones or action items recorded.</p>
               )}
             </div>
 
@@ -1121,16 +1124,16 @@ export default function AutomatedReport() {
         {activeTab === 'chapter' && (
         <div className="mb-6">
           {report.chapters && report.chapters.length > 0 ? (
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-5">
 
               {/* Chapter Selector Sidebar */}
-              <div className="w-56 flex-shrink-0">
-                <div className="bg-white border rounded-lg shadow-sm overflow-hidden">
-                  <div className="bg-blue-600 px-4 py-3">
-                    <p className="text-white text-sm font-semibold">Chapters</p>
-                    <p className="text-blue-200 text-xs mt-0.5">{report.chapters.length} available</p>
+              <div className="w-full md:w-64 flex-shrink-0">
+                <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm overflow-hidden transition-colors">
+                  <div className="bg-blue-600 dark:bg-blue-700 px-4 py-3.5">
+                    <p className="text-white text-sm font-bold">Chapters</p>
+                    <p className="text-blue-100 text-xs mt-0.5 font-medium">{report.chapters.length} available</p>
                   </div>
-                  <div className="divide-y">
+                  <div className="divide-y divide-slate-100 dark:divide-slate-700/60">
                     {report.chapters.map((ch, i) => {
                       const isActive = selectedChapter === ch.title;
                       const pct = Math.min(100, ch.avgProgress || 0);
@@ -1139,18 +1142,18 @@ export default function AutomatedReport() {
                         <button
                           key={i}
                           onClick={() => setSelectedChapter(ch.title)}
-                          className={`w-full text-left px-4 py-3 transition ${
-                            isActive ? 'bg-blue-50 border-l-4 border-blue-600' : 'hover:bg-slate-50 border-l-4 border-transparent'
+                          className={`w-full text-left px-4 py-3.5 transition-colors ${
+                            isActive ? 'bg-blue-50/80 dark:bg-blue-950/50 border-l-4 border-blue-600 dark:border-blue-400' : 'hover:bg-slate-50 dark:hover:bg-slate-700/40 border-l-4 border-transparent'
                           }`}
                         >
-                          <p className={`text-sm font-medium truncate ${isActive ? 'text-blue-700' : 'text-slate-700'}`}>
+                          <p className={`text-sm font-semibold truncate ${isActive ? 'text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300'}`}>
                             {ch.title}
                           </p>
                           <div className="flex items-center gap-2 mt-1.5">
-                            <div className="flex-1 bg-slate-200 rounded-full h-1.5">
+                            <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full h-1.5">
                               <div className="h-1.5 rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: color }} />
                             </div>
-                            <span className="text-xs font-semibold" style={{ color }}>{pct}%</span>
+                            <span className="text-xs font-bold" style={{ color }}>{pct}%</span>
                           </div>
                         </button>
                       );
@@ -1162,24 +1165,24 @@ export default function AutomatedReport() {
               {/* Chapter Detail Panel */}
               <div className="flex-1 min-w-0">
                 {selectedChapterMeta ? (
-                  <div className="space-y-4">
+                  <div className="space-y-5">
 
                     {/* Header */}
-                    <div className="bg-white border rounded-lg shadow-sm p-5">
-                      <div className="flex items-start justify-between mb-4">
+                    <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm p-6 transition-colors">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <FileText className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                            <h3 className="text-lg font-bold text-slate-800 truncate">{selectedChapterMeta.title}</h3>
+                            <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white truncate">{selectedChapterMeta.title}</h3>
                           </div>
-                          <p className="text-xs text-slate-500">
+                          <p className="text-xs text-slate-500 dark:text-slate-400">
                             {chapterRevisions.length} revision{chapterRevisions.length !== 1 ? 's' : ''} recorded
                             {chapterRevisions.length > 0 && ` · Last updated ${new Date(chapterRevisions[chapterRevisions.length - 1].createdAt).toLocaleDateString()}`}
                           </p>
                         </div>
                         <button
                           onClick={downloadChapterReport}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-semibold flex-shrink-0 ml-3"
+                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white rounded-xl transition-all text-sm font-semibold shadow-sm flex-shrink-0 self-start sm:self-auto"
                         >
                           <DownloadCloud className="w-4 h-4" />
                           Download PDF
@@ -1201,20 +1204,20 @@ export default function AutomatedReport() {
                           'Status',
                           (() => { const p = selectedChapterMeta.avgProgress || 0; return p >= 95 ? '#10b981' : p >= 50 ? '#f59e0b' : '#ef4444'; })()
                         ]].map(([val, lbl, clr], i) => (
-                          <div key={i} className="bg-slate-50 rounded-lg p-3 text-center border">
+                          <div key={i} className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 text-center border border-slate-200 dark:border-slate-700/80 transition-colors">
                             <div className="text-xl font-bold" style={{ color: clr }}>{val}</div>
-                            <div className="text-xs text-slate-500 mt-0.5">{lbl}</div>
+                            <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">{lbl}</div>
                           </div>
                         ))}
                       </div>
 
                       {/* Progress Bar */}
                       <div>
-                        <div className="flex justify-between text-xs text-slate-500 mb-1">
+                        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">
                           <span>Progress</span>
                           <span>{Math.min(100, selectedChapterMeta.avgProgress || 0)}%</span>
                         </div>
-                        <div className="w-full bg-slate-200 rounded-full h-3">
+                        <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3">
                           <div
                             className="h-3 rounded-full transition-all"
                             style={{
@@ -1228,29 +1231,29 @@ export default function AutomatedReport() {
 
                     {/* Latest Summary */}
                     {selectedChapterMeta.latestSummary && (
-                      <div className="bg-white border rounded-lg shadow-sm p-5">
-                        <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                          <span className="text-blue-600">📄</span> Latest Summary
+                      <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm p-6 transition-colors">
+                        <h4 className="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                          <span className="text-blue-600 dark:text-blue-400">📄</span> Latest Summary
                         </h4>
-                        <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap border-l-4 border-blue-200 pl-4 bg-blue-50 py-3 rounded-r">
+                        <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap border-l-4 border-blue-500 dark:border-blue-400 pl-4 bg-blue-50/70 dark:bg-blue-950/40 py-3 rounded-r transition-colors">
                           {selectedChapterMeta.latestSummary}
                         </p>
                       </div>
                     )}
 
                     {/* Revision History */}
-                    <div className="bg-white border rounded-lg shadow-sm p-5">
-                      <h4 className="font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                        <span className="text-purple-600">🕐</span>
+                    <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm p-6 transition-colors">
+                      <h4 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                        <span className="text-purple-600 dark:text-purple-400">🕐</span>
                         Revision History
-                        <span className="ml-auto text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                        <span className="ml-auto text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2.5 py-0.5 rounded-full font-semibold">
                           {chapterRevisions.length} entries
                         </span>
                       </h4>
                       {chapterRevisions.length > 0 ? (
                         <div className="relative">
                           {/* Timeline line */}
-                          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-slate-200" />
+                          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700" />
                           <div className="space-y-4">
                             {chapterRevisions.map((r, i) => {
                               const rPct = Math.min(100, Number(r.progressPercentage) || 0);
@@ -1260,39 +1263,39 @@ export default function AutomatedReport() {
                                 <div key={i} className="flex gap-4 pl-2">
                                   {/* Dot */}
                                   <div className={`relative z-10 flex-shrink-0 w-5 h-5 rounded-full border-2 mt-0.5 ${
-                                    isLatest ? 'border-blue-600 bg-blue-600' : 'border-slate-300 bg-white'
+                                    isLatest ? 'border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500' : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800'
                                   }`} />
                                   {/* Card */}
-                                  <div className={`flex-1 border rounded-lg p-3 mb-1 transition ${
-                                    isLatest ? 'border-blue-200 bg-blue-50' : 'border-slate-200 bg-slate-50'
+                                  <div className={`flex-1 border rounded-xl p-3.5 mb-1 transition-colors ${
+                                    isLatest ? 'border-blue-200 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/40' : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50'
                                   }`}>
                                     <div className="flex items-center justify-between mb-2">
                                       <div className="flex items-center gap-2">
-                                        <span className="text-xs font-semibold text-slate-500">
+                                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
                                           Revision #{i + 1}
                                         </span>
                                         {isLatest && (
-                                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Latest</span>
+                                          <span className="text-xs bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-bold">Latest</span>
                                         )}
                                       </div>
                                       <span className="text-xs font-bold" style={{ color: rColor }}>{rPct}%</span>
                                     </div>
-                                    <div className="w-full bg-white rounded-full h-1.5 mb-2 border">
+                                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 mb-2">
                                       <div className="h-1.5 rounded-full" style={{ width: `${rPct}%`, backgroundColor: rColor }} />
                                     </div>
                                     {(r.summary || r.notes) && (
-                                      <p className="text-xs text-slate-700 leading-relaxed mb-2">
+                                      <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed mb-2">
                                         {(r.summary || r.notes || '').slice(0, 300)}
                                         {(r.summary || r.notes || '').length > 300 ? '…' : ''}
                                       </p>
                                     )}
                                     {r.supervisorFeedback && (
-                                      <div className="mt-2 text-xs bg-amber-50 border border-amber-200 rounded px-2 py-1.5">
-                                        <span className="font-semibold text-amber-700">Supervisor Feedback: </span>
-                                        <span className="text-amber-800">{r.supervisorFeedback.slice(0, 200)}</span>
+                                      <div className="mt-2 text-xs bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 rounded-lg px-3 py-2">
+                                        <span className="font-bold text-amber-700 dark:text-amber-400">Supervisor Feedback: </span>
+                                        <span className="text-amber-800 dark:text-amber-300">{r.supervisorFeedback.slice(0, 200)}</span>
                                       </div>
                                     )}
-                                    <p className="text-xs text-slate-400 mt-2">
+                                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">
                                       {r.createdAt ? new Date(r.createdAt).toLocaleString() : 'Date unknown'}
                                     </p>
                                   </div>
@@ -1302,20 +1305,20 @@ export default function AutomatedReport() {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-slate-500 text-sm text-center py-6">No revision entries recorded for this chapter yet.</p>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm text-center py-6">No revision entries recorded for this chapter yet.</p>
                       )}
                     </div>
 
                   </div>
                 ) : (
-                  <div className="bg-white border rounded-lg p-10 text-center text-slate-500">
+                  <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl p-10 text-center text-slate-500 dark:text-slate-400">
                     Select a chapter on the left to view its detailed breakdown.
                   </div>
                 )}
               </div>
             </div>
           ) : (
-            <div className="bg-white border rounded-lg shadow-sm p-10 text-center text-slate-500">
+            <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-sm p-10 text-center text-slate-500 dark:text-slate-400">
               No chapter data available yet.
             </div>
           )}
@@ -1324,15 +1327,15 @@ export default function AutomatedReport() {
 
         {/* Supervisor Activity Log Tab */}
         {activeTab === 'supervisor' && (
-        <div className="bg-white p-6 rounded-lg shadow-sm border mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
-              <User className="w-5 h-5 text-green-600" />
+        <div className="bg-white dark:bg-slate-800/90 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/80 mb-6 transition-colors">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <User className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               Supervisor Activity Log
             </h3>
             <button
               onClick={downloadSupervisorReport}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white rounded-xl transition-all text-sm font-semibold shadow-sm self-start sm:self-auto"
             >
               <DownloadCloud className="w-4 h-4" />
               Download PDF
@@ -1343,25 +1346,25 @@ export default function AutomatedReport() {
             <div className="space-y-6">
               {/* Meetings Section */}
               {report.supervisorActivity.meetings && report.supervisorActivity.meetings.length > 0 && (
-                <div className="border-l-4 border-green-500 pl-4">
-                  <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                    <span className="text-green-600">📅</span> Supervisor Meetings ({report.supervisorActivity.meetings.length})
+                <div className="border-l-4 border-emerald-500 dark:border-emerald-400 pl-4">
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-emerald-600 dark:text-emerald-400">📅</span> Supervisor Meetings ({report.supervisorActivity.meetings.length})
                   </h4>
                   <div className="space-y-3">
                     {report.supervisorActivity.meetings.slice(0, 10).map((meeting, i) => (
-                      <div key={i} className="p-3 border rounded bg-slate-50 hover:bg-slate-100 transition">
+                      <div key={i} className="p-3.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-700/40 transition-colors">
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <p className="font-medium text-slate-800">{meeting.topic}</p>
-                            <p className="text-sm text-slate-600">{meeting.supervisor}</p>
+                            <p className="font-semibold text-slate-900 dark:text-slate-100">{meeting.topic}</p>
+                            <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{meeting.supervisor}</p>
                           </div>
-                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                          <span className="text-xs bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 px-2 py-1 rounded-md font-semibold">
                             {meeting.duration}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-600 mb-2">{new Date(meeting.date).toLocaleString()}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">{new Date(meeting.date).toLocaleString()}</p>
                         {meeting.notes && meeting.notes !== 'No notes recorded' && (
-                          <p className="text-sm text-slate-700 bg-white p-2 rounded border-l-2 border-green-300">
+                          <p className="text-xs text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 p-2.5 rounded-lg border-l-2 border-emerald-400 dark:border-emerald-500">
                             {meeting.notes}
                           </p>
                         )}
@@ -1373,21 +1376,21 @@ export default function AutomatedReport() {
 
               {/* Feedback Section */}
               {report.supervisorActivity.feedback && report.supervisorActivity.feedback.length > 0 && (
-                <div className="border-l-4 border-blue-500 pl-4">
-                  <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                    <span className="text-blue-600">💬</span> Supervisor Feedback ({report.supervisorActivity.feedback.length})
+                <div className="border-l-4 border-blue-500 dark:border-blue-400 pl-4">
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-blue-600 dark:text-blue-400">💬</span> Supervisor Feedback ({report.supervisorActivity.feedback.length})
                   </h4>
                   <div className="space-y-3">
                     {report.supervisorActivity.feedback.slice(0, 10).map((fb, i) => (
-                      <div key={i} className="p-3 border rounded bg-slate-50 hover:bg-slate-100 transition">
+                      <div key={i} className="p-3.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-700/40 transition-colors">
                         <div className="flex items-center justify-between mb-2">
-                          <p className="font-medium text-slate-800">{fb.reportTitle}</p>
-                          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                          <p className="font-semibold text-slate-900 dark:text-slate-100">{fb.reportTitle}</p>
+                          <span className="text-xs bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-300 px-2 py-1 rounded-md font-semibold">
                             {fb.progressPercentage || 0}%
                           </span>
                         </div>
-                        <p className="text-xs text-slate-600 mb-2">{new Date(fb.date).toLocaleString()}</p>
-                        <div className="text-sm text-slate-700 bg-white p-2 rounded border-l-2 border-blue-300">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">{new Date(fb.date).toLocaleString()}</p>
+                        <div className="text-xs text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 p-2.5 rounded-lg border-l-2 border-blue-400 dark:border-blue-500">
                           {fb.feedback}
                         </div>
                       </div>
@@ -1398,9 +1401,9 @@ export default function AutomatedReport() {
 
               {/* Action Items Section */}
               {report.supervisorActivity.actionItems && report.supervisorActivity.actionItems.length > 0 && (
-                <div className="border-l-4 border-amber-500 pl-4">
-                  <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                    <span className="text-amber-600">✓</span> Action Items ({report.supervisorActivity.actionItems.length})
+                <div className="border-l-4 border-amber-500 dark:border-amber-400 pl-4">
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-amber-600 dark:text-amber-400">✓</span> Action Items ({report.supervisorActivity.actionItems.length})
                   </h4>
                   <div className="space-y-3">
                     {report.supervisorActivity.actionItems.slice(0, 10).map((item, i) => {
@@ -1415,18 +1418,18 @@ export default function AutomatedReport() {
                         overdue: '#ef4444'
                       }[item.status] || '#6b7280';
                       return (
-                        <div key={i} className="p-3 border rounded bg-slate-50 hover:bg-slate-100 transition">
+                        <div key={i} className="p-3.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-700/40 transition-colors">
                           <div className="flex items-start justify-between mb-2">
                             <div>
-                              <p className="font-medium text-slate-800">{item.title}</p>
-                              <p className="text-sm text-slate-600">{item.supervisor}</p>
+                              <p className="font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{item.supervisor}</p>
                             </div>
-                            <div className="flex gap-1">
+                            <div className="flex gap-1.5">
                               <span style={{
                                 backgroundColor: `${priorityColor}20`,
                                 color: priorityColor,
-                                padding: '2px 6px',
-                                borderRadius: '3px',
+                                padding: '2px 8px',
+                                borderRadius: '6px',
                                 fontSize: '11px',
                                 fontWeight: 'bold'
                               }}>
@@ -1435,8 +1438,8 @@ export default function AutomatedReport() {
                               <span style={{
                                 backgroundColor: `${statusColor}20`,
                                 color: statusColor,
-                                padding: '2px 6px',
-                                borderRadius: '3px',
+                                padding: '2px 8px',
+                                borderRadius: '6px',
                                 fontSize: '11px',
                                 fontWeight: 'bold'
                               }}>
@@ -1445,11 +1448,11 @@ export default function AutomatedReport() {
                             </div>
                           </div>
                           {item.description && (
-                            <p className="text-sm text-slate-700 bg-white p-2 rounded border-l-2 border-amber-300 mb-2">
+                            <p className="text-xs text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 p-2.5 rounded-lg border-l-2 border-amber-400 dark:border-amber-500 mb-2">
                               {item.description}
                             </p>
                           )}
-                          <div className="flex items-center justify-between text-xs text-slate-600">
+                          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                             <span>Assigned: {new Date(item.createdDate).toLocaleDateString()}</span>
                             {item.dueDate && (
                               <span>Due: {new Date(item.dueDate).toLocaleDateString()}</span>
@@ -1463,22 +1466,22 @@ export default function AutomatedReport() {
               )}
             </div>
           ) : (
-            <p className="text-slate-600 text-center py-6">No supervisor activity recorded yet</p>
+            <p className="text-slate-500 dark:text-slate-400 text-center py-6">No supervisor activity recorded yet</p>
           )}
         </div>
         )}
 
         {/* Final Submission Report Tab */}
         {activeTab === 'final' && (
-        <div className="bg-white p-6 rounded-lg shadow-sm border mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-emerald-600" />
+        <div className="bg-white dark:bg-slate-800/90 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/80 mb-6 transition-colors">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               Complete Thesis Package
             </h3>
             <button
               onClick={downloadFinalReport}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white rounded-xl transition-all text-sm font-semibold shadow-sm self-start sm:self-auto"
             >
               <DownloadCloud className="w-4 h-4" />
               Download PDF
@@ -1488,82 +1491,85 @@ export default function AutomatedReport() {
           {report.thesisPackage && Object.keys(report.thesisPackage).length > 0 ? (
             <div className="space-y-6">
               {/* Submission Status Badge */}
-              <div className="text-center p-4 rounded-lg" style={{
-                backgroundColor: report.thesisPackage.readyForSubmission ? '#d1fae5' : '#fef3c7'
-              }}>
-                <div className="text-lg font-bold" style={{
-                  color: report.thesisPackage.readyForSubmission ? '#065f46' : '#92400e'
-                }}>
+              <div className={`text-center p-4 rounded-xl border transition-colors ${
+                report.thesisPackage.readyForSubmission
+                  ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60'
+                  : 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60'
+              }`}>
+                <div className={`text-lg font-bold ${
+                  report.thesisPackage.readyForSubmission
+                    ? 'text-emerald-800 dark:text-emerald-300'
+                    : 'text-amber-800 dark:text-amber-300'
+                }`}>
                   {report.thesisPackage.readyForSubmission ? '✓ READY FOR SUBMISSION' : '⏳ NOT YET READY FOR SUBMISSION'}
                 </div>
-                <div className="text-sm mt-1" style={{
-                  color: report.thesisPackage.readyForSubmission ? '#047857' : '#b45309'
-                }}>
+                <div className={`text-xs font-semibold mt-1 ${
+                  report.thesisPackage.readyForSubmission
+                    ? 'text-emerald-700 dark:text-emerald-400'
+                    : 'text-amber-700 dark:text-amber-400'
+                }`}>
                   Overall Progress: {report.thesisPackage.overallProgress || 0}%
                 </div>
               </div>
 
               {/* Student Information */}
-              <div className="border rounded-lg p-4 bg-slate-50">
-                <h4 className="font-semibold text-slate-800 mb-3">Student Information</h4>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 bg-slate-50 dark:bg-slate-900/50 transition-colors">
+                <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-3">Student Information</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">Name</p>
-                    <p className="text-slate-800">{report.thesisPackage.studentInfo?.name || 'Unknown'}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Name</p>
+                    <p className="text-slate-800 dark:text-slate-200 font-medium text-sm mt-0.5">{report.thesisPackage.studentInfo?.name || 'Unknown'}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">Email</p>
-                    <p className="text-slate-800">{report.thesisPackage.studentInfo?.email || 'N/A'}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</p>
+                    <p className="text-slate-800 dark:text-slate-200 font-medium text-sm mt-0.5">{report.thesisPackage.studentInfo?.email || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">Department</p>
-                    <p className="text-slate-800">{report.thesisPackage.studentInfo?.department || 'N/A'}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Department</p>
+                    <p className="text-slate-800 dark:text-slate-200 font-medium text-sm mt-0.5">{report.thesisPackage.studentInfo?.department || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">University</p>
-                    <p className="text-slate-800">{report.thesisPackage.studentInfo?.university || 'N/A'}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">University</p>
+                    <p className="text-slate-800 dark:text-slate-200 font-medium text-sm mt-0.5">{report.thesisPackage.studentInfo?.university || 'N/A'}</p>
                   </div>
                 </div>
               </div>
 
               {/* Group & Supervisor Information */}
-              <div className="border rounded-lg p-4 bg-slate-50">
-                <h4 className="font-semibold text-slate-800 mb-3">Group & Supervisor</h4>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 bg-slate-50 dark:bg-slate-900/50 transition-colors">
+                <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-3">Group & Supervisor</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">Group Name</p>
-                    <p className="text-slate-800">{report.thesisPackage.groupInfo?.groupName || 'N/A'}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Group Name</p>
+                    <p className="text-slate-800 dark:text-slate-200 font-medium text-sm mt-0.5">{report.thesisPackage.groupInfo?.groupName || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">Group Leader</p>
-                    <p className="text-slate-800">{report.thesisPackage.groupInfo?.leaderId || 'N/A'}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Group Leader</p>
+                    <p className="text-slate-800 dark:text-slate-200 font-medium text-sm mt-0.5">{report.thesisPackage.groupInfo?.leaderId || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">Supervisor</p>
-                    <p className="text-slate-800">{report.thesisPackage.groupInfo?.supervisor || 'Not Assigned'}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Supervisor</p>
+                    <p className="text-slate-800 dark:text-slate-200 font-medium text-sm mt-0.5">{report.thesisPackage.groupInfo?.supervisor || 'Not Assigned'}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase">Thesis Topic</p>
-                    <p className="text-slate-800">{report.thesisPackage.thesisTopic?.title || 'No Topic'}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Thesis Topic</p>
+                    <p className="text-slate-800 dark:text-slate-200 font-medium text-sm mt-0.5">{report.thesisPackage.thesisTopic?.title || 'No Topic'}</p>
                   </div>
                 </div>
               </div>
 
               {/* Submission Checklist */}
-              <div className="border rounded-lg p-4">
-                <h4 className="font-semibold text-slate-800 mb-3">Submission Checklist</h4>
+              <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 bg-white dark:bg-slate-800/90 transition-colors">
+                <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-3">Submission Checklist</h4>
                 <div className="space-y-2">
                   {Object.entries(report.thesisPackage.submissionChecklist || {}).map(([key, value]) => (
-                    <div key={key} className="flex items-center justify-between p-2 rounded bg-slate-50">
-                      <span className="text-slate-700">{key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
-                      <span style={{
-                        backgroundColor: value ? '#d1fae5' : '#fee2e2',
-                        color: value ? '#065f46' : '#991b1b',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        fontWeight: 'bold'
-                      }}>
+                    <div key={key} className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700/50 transition-colors">
+                      <span className="text-slate-800 dark:text-slate-200 font-medium text-sm">{key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                      <span className={`px-2.5 py-1 rounded-md text-xs font-bold ${
+                        value
+                          ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
+                          : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'
+                      }`}>
                         {value ? '✓ Complete' : '✗ Pending'}
                       </span>
                     </div>
@@ -1572,78 +1578,75 @@ export default function AutomatedReport() {
               </div>
 
               {/* Quality Metrics */}
-              <div className="border rounded-lg p-4 bg-slate-50">
-                <h4 className="font-semibold text-slate-800 mb-4">Quality Metrics</h4>
-                <div className="grid grid-cols-4 gap-4">
-                  <div className="text-center p-3 bg-white rounded border">
-                    <div className="text-2xl font-bold text-emerald-600">
+              <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 bg-slate-50 dark:bg-slate-900/50 transition-colors">
+                <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-4">Quality Metrics</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                       {report.thesisPackage.qualityMetrics?.chaptersComplete || 0}/{report.thesisPackage.qualityMetrics?.totalChapters || 0}
                     </div>
-                    <div className="text-xs text-slate-600 mt-1">Chapters Complete</div>
+                    <div className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1">Chapters Complete</div>
                   </div>
-                  <div className="text-center p-3 bg-white rounded border">
-                    <div className="text-2xl font-bold text-emerald-600">
+                  <div className="text-center p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                       {report.thesisPackage.qualityMetrics?.completionRate || 0}%
                     </div>
-                    <div className="text-xs text-slate-600 mt-1">Completion Rate</div>
+                    <div className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1">Completion Rate</div>
                   </div>
-                  <div className="text-center p-3 bg-white rounded border">
-                    <div className="text-2xl font-bold text-emerald-600">
+                  <div className="text-center p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                       {report.thesisPackage.references?.total || 0}
                     </div>
-                    <div className="text-xs text-slate-600 mt-1">References</div>
+                    <div className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1">References</div>
                   </div>
-                  <div className="text-center p-3 bg-white rounded border">
-                    <div className="text-2xl font-bold text-emerald-600">
+                  <div className="text-center p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                       {Math.round((report.thesisPackage.qualityMetrics?.totalCharacters || 0) / 1000)}k
                     </div>
-                    <div className="text-xs text-slate-600 mt-1">Characters</div>
+                    <div className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1">Characters</div>
                   </div>
                 </div>
               </div>
 
               {/* Chapter Breakdown */}
               {report.thesisPackage.chapterBreakdown && report.thesisPackage.chapterBreakdown.length > 0 && (
-                <div className="border rounded-lg p-4 overflow-x-auto">
-                  <h4 className="font-semibold text-slate-800 mb-3">Chapter Breakdown</h4>
+                <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 overflow-x-auto bg-white dark:bg-slate-800/90 transition-colors">
+                  <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-3">Chapter Breakdown</h4>
                   <table className="w-full text-sm">
-                    <thead className="bg-slate-100 border-b">
+                    <thead className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
                       <tr>
-                        <th className="text-left p-3 font-semibold text-slate-700">Chapter</th>
-                        <th className="text-left p-3 font-semibold text-slate-700">Title</th>
-                        <th className="text-center p-3 font-semibold text-slate-700">Word Count</th>
-                        <th className="text-center p-3 font-semibold text-slate-700">Progress</th>
-                        <th className="text-center p-3 font-semibold text-slate-700">Status</th>
+                        <th className="text-left p-3 font-semibold text-slate-700 dark:text-slate-300">Chapter</th>
+                        <th className="text-left p-3 font-semibold text-slate-700 dark:text-slate-300">Title</th>
+                        <th className="text-center p-3 font-semibold text-slate-700 dark:text-slate-300">Word Count</th>
+                        <th className="text-center p-3 font-semibold text-slate-700 dark:text-slate-300">Progress</th>
+                        <th className="text-center p-3 font-semibold text-slate-700 dark:text-slate-300">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y">
+                    <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                       {report.thesisPackage.chapterBreakdown.map((ch, i) => {
                         const progress = Math.min(100, ch.progress || 0);
                         return (
-                          <tr key={i} className="hover:bg-slate-50 transition">
-                            <td className="p-3 font-medium text-slate-800">Chapter {ch.chapter}</td>
-                            <td className="p-3 text-slate-700">{ch.title}</td>
-                            <td className="p-3 text-center text-slate-700">{ch.wordCount}</td>
+                          <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
+                            <td className="p-3 font-medium text-slate-800 dark:text-slate-200">Chapter {ch.chapter}</td>
+                            <td className="p-3 text-slate-700 dark:text-slate-300">{ch.title}</td>
+                            <td className="p-3 text-center text-slate-700 dark:text-slate-300">{ch.wordCount}</td>
                             <td className="p-3">
                               <div className="flex items-center gap-2">
-                                <div className="flex-1 bg-slate-200 rounded-full h-2">
+                                <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full h-2">
                                   <div
                                     className="h-2 rounded-full bg-emerald-500"
                                     style={{ width: `${progress}%` }}
                                   />
                                 </div>
-                                <span className="text-xs font-semibold text-slate-700 w-8 text-right">{Math.round(progress)}%</span>
+                                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 w-8 text-right">{Math.round(progress)}%</span>
                               </div>
                             </td>
                             <td className="p-3 text-center">
-                              <span style={{
-                                backgroundColor: progress >= 95 ? '#d1fae5' : '#fef3c7',
-                                color: progress >= 95 ? '#065f46' : '#92400e',
-                                padding: '2px 8px',
-                                borderRadius: '4px',
-                                fontSize: '11px',
-                                fontWeight: 'bold'
-                              }}>
+                              <span className={`px-2.5 py-1 rounded-md text-xs font-bold ${
+                                progress >= 95
+                                  ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
+                                  : 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
+                              }`}>
                                 {ch.status}
                               </span>
                             </td>
@@ -1657,13 +1660,13 @@ export default function AutomatedReport() {
 
               {/* References by Type */}
               {report.thesisPackage.references?.byType && Object.keys(report.thesisPackage.references.byType).length > 0 && (
-                <div className="border rounded-lg p-4 bg-slate-50">
-                  <h4 className="font-semibold text-slate-800 mb-3">References by Citation Type</h4>
+                <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 bg-slate-50 dark:bg-slate-900/50 transition-colors">
+                  <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-3">References by Citation Type</h4>
                   <div className="space-y-2">
                     {Object.entries(report.thesisPackage.references.byType).map(([type, count]) => (
-                      <div key={type} className="flex items-center justify-between p-2 rounded bg-white">
-                        <span className="text-slate-700">{type}</span>
-                        <span className="font-semibold text-emerald-600">{count}</span>
+                      <div key={type} className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 transition-colors">
+                        <span className="text-slate-800 dark:text-slate-200 font-medium text-sm">{type}</span>
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400">{count}</span>
                       </div>
                     ))}
                   </div>
@@ -1672,32 +1675,32 @@ export default function AutomatedReport() {
 
               {/* Important Deadlines */}
               {report.thesisPackage.deadlines && report.thesisPackage.deadlines.length > 0 && (
-                <div className="border rounded-lg p-4 overflow-x-auto">
-                  <h4 className="font-semibold text-slate-800 mb-3">Important Deadlines</h4>
+                <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-5 overflow-x-auto bg-white dark:bg-slate-800/90 transition-colors">
+                  <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-3">Important Deadlines</h4>
                   <table className="w-full text-sm">
-                    <thead className="bg-slate-100 border-b">
+                    <thead className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
                       <tr>
-                        <th className="text-left p-3 font-semibold text-slate-700">Deadline</th>
-                        <th className="text-center p-3 font-semibold text-slate-700">Date</th>
-                        <th className="text-center p-3 font-semibold text-slate-700">Type</th>
-                        <th className="text-center p-3 font-semibold text-slate-700">Time Remaining</th>
+                        <th className="text-left p-3 font-semibold text-slate-700 dark:text-slate-300">Deadline</th>
+                        <th className="text-center p-3 font-semibold text-slate-700 dark:text-slate-300">Date</th>
+                        <th className="text-center p-3 font-semibold text-slate-700 dark:text-slate-300">Type</th>
+                        <th className="text-center p-3 font-semibold text-slate-700 dark:text-slate-300">Time Remaining</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y">
+                    <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                       {report.thesisPackage.deadlines.map((d, i) => {
                         const daysRemaining = d.daysRemaining;
                         const daysColor = daysRemaining < 7 ? '#ef4444' : daysRemaining < 14 ? '#f59e0b' : '#10b981';
                         return (
-                          <tr key={i} className="hover:bg-slate-50 transition">
-                            <td className="p-3 font-medium text-slate-800">{d.title}</td>
-                            <td className="p-3 text-center text-slate-700">{new Date(d.date).toLocaleDateString()}</td>
-                            <td className="p-3 text-center text-slate-700 capitalize">{d.type}</td>
+                          <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
+                            <td className="p-3 font-medium text-slate-800 dark:text-slate-200">{d.title}</td>
+                            <td className="p-3 text-center text-slate-700 dark:text-slate-300">{new Date(d.date).toLocaleDateString()}</td>
+                            <td className="p-3 text-center text-slate-700 dark:text-slate-300 capitalize">{d.type}</td>
                             <td className="p-3 text-center">
                               <span style={{
                                 backgroundColor: `${daysColor}20`,
                                 color: daysColor,
                                 padding: '4px 8px',
-                                borderRadius: '4px',
+                                borderRadius: '6px',
                                 fontSize: '12px',
                                 fontWeight: 'bold'
                               }}>
@@ -1713,7 +1716,7 @@ export default function AutomatedReport() {
               )}
             </div>
           ) : (
-            <p className="text-slate-600 text-center py-6">No thesis package data available. Please ensure you are assigned to a thesis group.</p>
+            <p className="text-slate-500 dark:text-slate-400 text-center py-6">No thesis package data available. Please ensure you are assigned to a thesis group.</p>
           )}
         </div>
         )}

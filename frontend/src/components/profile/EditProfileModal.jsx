@@ -26,8 +26,6 @@ const EditProfileModal = ({
     cgpa: "",
     publications: 0,
 
-    thesisTitle: "",
-
     researchInterests: [],
     skills: [],
   });
@@ -51,8 +49,6 @@ const EditProfileModal = ({
       semester: profile.semester || "",
       cgpa: profile.cgpa ?? "",
       publications: profile.publications ?? 0,
-
-      thesisTitle: profile.thesisTitle || "",
 
       researchInterests: profile.researchInterests || [],
       skills: profile.skills || [],
@@ -131,8 +127,6 @@ const EditProfileModal = ({
             ? 0
             : Number(formData.publications),
 
-        thesisTitle: formData.thesisTitle,
-
         researchInterests:
           formData.researchInterests,
 
@@ -183,21 +177,21 @@ const EditProfileModal = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70 p-4">
 
-      <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-xl">
+      <div className="bg-white dark:bg-slate-900 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-xl dark:shadow-black/40">
 
         {/* ================= HEADER ================= */}
 
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
 
           <div>
 
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
               Edit Student Profile
             </h2>
 
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 dark:text-slate-400 mt-1">
               Update your profile information
             </p>
 
@@ -206,7 +200,7 @@ const EditProfileModal = ({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-500 hover:text-slate-900 transition"
+            className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition"
           >
             <X size={24} />
           </button>
@@ -225,7 +219,7 @@ const EditProfileModal = ({
 
           <div>
 
-            <h3 className="text-lg font-bold text-slate-900 mb-4">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
               Basic Information
             </h3>
 
@@ -235,7 +229,7 @@ const EditProfileModal = ({
 
               <div>
 
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
                   Full Name
                 </label>
 
@@ -244,7 +238,7 @@ const EditProfileModal = ({
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-white bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
               </div>
@@ -254,7 +248,7 @@ const EditProfileModal = ({
 
               <div>
 
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
                   Department
                 </label>
 
@@ -263,7 +257,7 @@ const EditProfileModal = ({
                   name="department"
                   value={formData.department}
                   disabled
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-500 bg-slate-100 cursor-not-allowed"
+                  className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-500 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/60 cursor-not-allowed"
                 />
 
               </div>
@@ -273,7 +267,7 @@ const EditProfileModal = ({
 
               <div>
 
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
                   University
                 </label>
 
@@ -282,7 +276,7 @@ const EditProfileModal = ({
                   name="university"
                   value={formData.university}
                   disabled
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-500 bg-slate-100 cursor-not-allowed"
+                  className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-500 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/60 cursor-not-allowed"
                 />
 
               </div>
@@ -296,7 +290,7 @@ const EditProfileModal = ({
 
           <div>
 
-            <h3 className="text-lg font-bold text-slate-900 mb-4">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
               Academic Information
             </h3>
 
@@ -306,7 +300,7 @@ const EditProfileModal = ({
 
               <div>
 
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
                   Program
                 </label>
 
@@ -314,10 +308,13 @@ const EditProfileModal = ({
                   name="program"
                   value={formData.program}
                   onChange={handleChange}
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
 
-                  <option value="">
+                  <option
+                    value=""
+                    className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                  >
                     Select Program
                   </option>
 
@@ -325,6 +322,7 @@ const EditProfileModal = ({
                     <option
                       key={program}
                       value={program}
+                      className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                     >
                       {program}
                     </option>
@@ -339,7 +337,7 @@ const EditProfileModal = ({
 
               <div>
 
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
                   Semester
                 </label>
 
@@ -348,10 +346,10 @@ const EditProfileModal = ({
                   name="semester"
                   value={formData.semester}
                   disabled
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-500 bg-slate-100 cursor-not-allowed"
+                  className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-500 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/60 cursor-not-allowed"
                 />
 
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Semester cannot be edited here.
                 </p>
 
@@ -362,7 +360,7 @@ const EditProfileModal = ({
 
               <div>
 
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
                   CGPA
                 </label>
 
@@ -374,7 +372,7 @@ const EditProfileModal = ({
                   min="0"
                   max="4"
                   step="0.01"
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
               </div>
@@ -384,7 +382,7 @@ const EditProfileModal = ({
 
               <div>
 
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
                   Number of Publications
                 </label>
 
@@ -394,27 +392,7 @@ const EditProfileModal = ({
                   value={formData.publications}
                   onChange={handleChange}
                   min="0"
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-
-              </div>
-
-
-              {/* Thesis Title */}
-
-              <div className="md:col-span-2">
-
-                <label className="block text-sm font-bold text-slate-800 mb-2">
-                  Thesis Title
-                </label>
-
-                <input
-                  type="text"
-                  name="thesisTitle"
-                  value={formData.thesisTitle}
-                  onChange={handleChange}
-                  placeholder="Enter your thesis title"
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
               </div>
@@ -428,11 +406,11 @@ const EditProfileModal = ({
 
           <div>
 
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               Research Interests
             </h3>
 
-            <p className="text-sm text-slate-600 mb-4">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
               Select your research interests.
             </p>
 
@@ -458,7 +436,7 @@ const EditProfileModal = ({
                     className={`px-3 py-3 rounded-lg border text-sm font-semibold transition ${
                       selected
                         ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white text-slate-800 border-slate-300 hover:bg-slate-100"
+                        : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
                     }`}
                   >
                     {interest}
@@ -477,11 +455,11 @@ const EditProfileModal = ({
 
           <div>
 
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               Technical Skills
             </h3>
 
-            <p className="text-sm text-slate-600 mb-4">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
               Select your technical skills.
             </p>
 
@@ -503,7 +481,7 @@ const EditProfileModal = ({
                     className={`px-3 py-3 rounded-lg border text-sm font-semibold transition ${
                       selected
                         ? "bg-green-600 text-white border-green-600"
-                        : "bg-white text-slate-800 border-slate-300 hover:bg-slate-100"
+                        : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
                     }`}
                   >
                     {skill}
@@ -520,13 +498,13 @@ const EditProfileModal = ({
 
           {/* ================= BUTTONS ================= */}
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
 
             <button
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 transition disabled:opacity-50"
+              className="px-5 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition disabled:opacity-50"
             >
               Cancel
             </button>

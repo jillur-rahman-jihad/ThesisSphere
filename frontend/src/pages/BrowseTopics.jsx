@@ -3,11 +3,13 @@ import { useOutletContext } from 'react-router-dom';
 import { RefreshCw, AlertCircle, Bookmark, Search, Filter, X, Send } from 'lucide-react';
 import { getThesisTopics } from '../services/thesisTopicService';
 import { applyForTopic, getMyApplications } from '../services/thesisApplicationService';
+import { getProfile } from '../services/profileService';
 
 const BrowseTopics = () => {
   const { currentUser } = useOutletContext();
   const [topics, setTopics] = useState([]);
   const [myApplications, setMyApplications] = useState([]);
+  const [studentProfile, setStudentProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
@@ -27,8 +29,12 @@ const BrowseTopics = () => {
       setTopics(topicsRes.data || []);
       
       if (currentUser?.role === 'student') {
-        const appsRes = await getMyApplications(currentUser);
+        const [appsRes, profileRes] = await Promise.all([
+          getMyApplications(currentUser),
+          getProfile(),
+        ]);
         setMyApplications(appsRes.data || []);
+        setStudentProfile(profileRes.data?.profile || null);
       }
     } catch (err) {
       setError(err.message);
@@ -48,8 +54,12 @@ const BrowseTopics = () => {
     );
   };
 
+  const studentGroup = studentProfile?.thesisGroupId;
+  const isGroupLeader = studentGroup && String(studentGroup.leaderId) === String(currentUser?._id);
+  const canApply = currentUser?.role === 'student' && (!studentGroup || isGroupLeader);
+
   const handleOpenModal = (topic) => {
-    if (hasApplied(topic._id) || currentUser?.role !== 'student') return;
+    if (hasApplied(topic._id) || !canApply) return;
     setApplyingTopic(topic);
     setMessage('');
     setApplyError(null);
@@ -168,17 +178,17 @@ const BrowseTopics = () => {
                 
                 <button 
                   onClick={() => handleOpenModal(topic)}
-                  disabled={hasApplied(topic._id) || currentUser?.role !== 'student'}
+                  disabled={hasApplied(topic._id) || !canApply}
                   className={`w-full text-sm font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 ${
-                    currentUser?.role !== 'student' 
+                    !canApply
                       ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed' 
                       : hasApplied(topic._id) 
                         ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 cursor-not-allowed' 
                         : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                   }`}
                 >
-                  {currentUser?.role !== 'student' 
-                    ? 'Students Only' 
+                    {!canApply
+                      ? studentGroup ? 'Group leader applies' : 'Students Only' 
                     : hasApplied(topic._id) 
                       ? 'Application Submitted' 
                       : 'Apply for Topic'}

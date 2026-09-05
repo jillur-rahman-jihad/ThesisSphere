@@ -407,9 +407,9 @@ const Messages = () => {
   });
 
   return (
-    <div className="flex h-[calc(100vh-140px)] gap-6 antialiased">
+    <div className="flex h-[calc(100vh-140px)] min-w-0 gap-6 overflow-x-auto antialiased">
       {/* Left Sidebar: Inbox & Directory */}
-      <div className="w-80 md:w-96 flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700/80 overflow-hidden">
+      <div className="w-[clamp(14rem,28vw,24rem)] flex-[0_1_24rem] min-w-56 flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700/80 overflow-hidden">
         {/* Inbox Header */}
         <div className="p-4 border-b border-slate-100 dark:border-slate-700/80">
           <div className="flex items-center justify-between mb-3">
@@ -566,7 +566,7 @@ const Messages = () => {
       </div>
 
       {/* Right Area: Conversation Pane */}
-      <div className="flex-1 flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700/80 overflow-hidden">
+      <div className="flex-[1_1_0%] min-w-[22rem] flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700/80 overflow-hidden">
         {!selected ? (
           /* Empty State when no conversation is selected */
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50/50 dark:bg-slate-900/30">
