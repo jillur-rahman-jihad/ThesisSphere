@@ -1,4 +1,6 @@
 import ThesisGroup from "../models/ThesisGroup.js";
+import StudentProfile from "../models/StudentProfileModel.js";
+import Notification from "../models/Notification.js";
 import User from "../models/userModel.js";
 
 // ============================================================
@@ -387,6 +389,30 @@ export const removeMemberFromGroup = async (
       group.recentActivity.slice(0, 10);
 
     await group.save();
+
+    await StudentProfile.updateOne(
+      {
+        userId: memberId,
+        thesisGroupId: group._id,
+      },
+      {
+        $set: { thesisGroupId: null },
+      }
+    );
+
+    const notification = await Notification.create({
+      userId: memberId,
+      title: "Removed from thesis group",
+      message: `You have been removed from the thesis group "${group.groupName}" by your supervisor.`,
+      type: "thesis_group_member_removed",
+      actionId: group._id,
+      actionType: "thesis_group",
+    });
+
+    const io = req.app.get("io");
+    if (io) {
+      io.to(memberId).emit("new-notification", notification);
+    }
 
     res.status(200).json({
       success: true,
