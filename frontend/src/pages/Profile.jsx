@@ -75,6 +75,9 @@ const Profile = () => {
 
   const user = profileData?.user || {};
   const profile = profileData?.profile || {};
+  
+  const thesisTitle = profile.thesisTitle || profile.thesisGroupId?.topicId?.title || "Not Added";
+  const supervisorName = profile.supervisorId?.fullName || profile.thesisGroupId?.supervisorId?.fullName || "Not Assigned";
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
