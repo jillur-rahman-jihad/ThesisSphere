@@ -46,7 +46,7 @@ const seedFacultyDashboard = async () => {
   // Clear existing mock data for this faculty
   await ThesisGroup.deleteMany({ supervisorId: faculty._id });
   await Meeting.deleteMany({ supervisorId: faculty._id });
-  await PaperReview.deleteMany({ reviewer: faculty._id });
+  await PaperReview.deleteMany({ reviewedBy: faculty._id });
   await SupervisionRequest.deleteMany({ supervisorId: faculty._id });
 
   // Create Mock Students
@@ -121,10 +121,10 @@ const seedFacultyDashboard = async () => {
 
   // Create Paper Reviews
   await PaperReview.create([
-    { thesisGroupId: group1._id, paperTitle: 'Literature Review Draft', reviewer: faculty._id, status: 'submitted' },
-    { thesisGroupId: group2._id, paperTitle: 'Methodology Outline', reviewer: faculty._id, status: 'submitted' },
-    { thesisGroupId: group3._id, paperTitle: 'Introduction Chapter', reviewer: faculty._id, status: 'submitted' },
-    { thesisGroupId: group1._id, paperTitle: 'Abstract Draft', reviewer: faculty._id, status: 'submitted' }
+    { thesisGroupId: group1._id, paperTitle: 'Literature Review Draft', reviewedBy: faculty._id, status: 'submitted' },
+    { thesisGroupId: group2._id, paperTitle: 'Methodology Outline', reviewedBy: faculty._id, status: 'submitted' },
+    { thesisGroupId: group3._id, paperTitle: 'Introduction Chapter', reviewedBy: faculty._id, status: 'submitted' },
+    { thesisGroupId: group1._id, paperTitle: 'Abstract Draft', reviewedBy: faculty._id, status: 'submitted' }
   ]);
 
   // Create Pending Supervision Requests

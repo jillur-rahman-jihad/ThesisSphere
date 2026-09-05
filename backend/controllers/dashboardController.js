@@ -126,7 +126,7 @@ export const getStudentDashboard = async (req, res, next) => {
         ? PaperReview.find({ thesisGroupId })
             .sort({ createdAt: -1 })
             .limit(5)
-            .populate('reviewer', 'fullName email role')
+            .populate('reviewedBy', 'fullName email role')
             .lean()
         : Promise.resolve([]),
       ForumPost.find({})

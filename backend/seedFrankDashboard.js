@@ -308,7 +308,7 @@ const seedFrankDashboard = async () => {
     thesisGroupId: group._id,
     paperTitle: 'Related Work Review Draft',
     paperFile: '',
-    reviewer: supervisor._id,
+    reviewedBy: supervisor._id,
     comments: 'Strong start; add more recent papers and clarify the comparison table.',
     score: 8,
     status: 'reviewed',

@@ -4,6 +4,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
+
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -19,6 +20,7 @@ import thesisBrowseRoutes from './routes/thesisBrowseRoutes.js';
 import thesisApplicationRoutes from './routes/thesisApplicationRoutes.js';
 import thesisGroupRoutes from "./routes/thesisGroupRoutes.js";
 import supervisorGroupManagerRoutes from './routes/supervisorGroupManagerRoutes.js';
+import paperReviewRoutes from "./routes/paperReviewRoutes.js";
 
 import calendarRoutes from './routes/calendarRoutes.js';
 import citationRoutes from './routes/citationRoutes.js';
@@ -47,6 +49,8 @@ const io = new SocketIOServer(server, {
 });
 app.set('io', io); // Attach io to app for access in controllers
 initializeSocket(io);
+app.set('io', io);
+
 
 // Middlewares
 app.use(cors());
@@ -90,6 +94,9 @@ app.use('/api/contribution-tracker', contributionTrackerRoutes);
 app.use('/api/video-meetings', videoMeetingRoutes);
 app.use('/api/supervisor-group-manager', supervisorGroupManagerRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/paper-reviews', paperReviewRoutes);
+
+
 
 // Error Middlewares
 app.use(notFound);

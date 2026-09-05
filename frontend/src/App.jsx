@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import AuthPage from './AuthPage.jsx';
 import DashboardLayout from './components/DashboardLayout.jsx';
 import { NotificationProvider } from './context/NotificationContext.js';
+import { SocketProvider } from './context/SocketContext';
+
 
 // Pages
 import DashboardHome from './pages/DashboardHome';
@@ -56,15 +58,16 @@ export default function App() {
   }
 
   return (
-    <Router>
-      <Routes>
-        {/* If no user, show auth page on all routes */}
-        {!currentUser ? (
-          <Route path="*" element={<AuthPage onLoginSuccess={handleLoginSuccess} />} />
-        ) : (
-          <>
-            {/* Video meeting - full screen, no sidebar */}
-            <Route path="/video-meeting/:meetingId" element={<VideoMeetingRoom />} />
+    <SocketProvider currentUser={currentUser}>
+      <Router>
+        <Routes>
+          {/* If no user, show auth page on all routes */}
+          {!currentUser ? (
+            <Route path="*" element={<AuthPage onLoginSuccess={handleLoginSuccess} />} />
+          ) : (
+            <>
+              {/* Video meeting - full screen, no sidebar */}
+              <Route path="/video-meeting/:meetingId" element={<VideoMeetingRoom />} />
 
             {/* Protected Routes wrapped in DashboardLayout */}
             <Route 
@@ -101,5 +104,6 @@ export default function App() {
         )}
       </Routes>
     </Router>
+    </SocketProvider>
   );
 }

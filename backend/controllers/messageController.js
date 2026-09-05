@@ -32,11 +32,19 @@ export const sendMessage = async (req, res, next) => {
       .populate('sender', '-password')
       .populate('receiver', '-password');
 
+    // Emit real-time socket event
+    const io = req.app.get('io');
+    if (io) {
+      io.to(receiver.toString()).to(`user:${receiver}`).emit('new_message', populated);
+      io.to(sender.toString()).to(`user:${sender}`).emit('new_message', populated);
+    }
+
     res.status(201).json({ success: true, data: populated });
   } catch (error) {
     next(error);
   }
 };
+
 
 // @desc   Get conversation between authenticated user and another user
 // @route  GET /api/messages/conversation/:participantId
@@ -158,8 +166,46 @@ export const markAsRead = async (req, res, next) => {
     message.isRead = true;
     await message.save();
 
+    // Emit real-time read receipt
+    const io = req.app.get('io');
+    if (io) {
+      io.to(message.sender.toString()).to(`user:${message.sender}`).emit('message_read', {
+        messageId: message._id,
+        readerId: userId,
+      });
+    }
+
     res.status(200).json({ success: true, data: message });
   } catch (error) {
     next(error);
   }
 };
+
+// @desc   Mark all unread messages from a participant as read
+// @route  PATCH /api/messages/conversation/:participantId/read
+// @access Private
+export const markConversationAsRead = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const { participantId } = req.params;
+
+    const result = await Message.updateMany(
+      { sender: participantId, receiver: userId, isRead: false },
+      { $set: { isRead: true } }
+    );
+
+    const io = req.app.get('io');
+    if (io) {
+      io.to(participantId.toString()).to(`user:${participantId}`).emit('conversation_read', {
+        readerId: userId.toString(),
+        participantId: participantId.toString(),
+        count: result.modifiedCount,
+      });
+    }
+
+    res.status(200).json({ success: true, updatedCount: result.modifiedCount });
+  } catch (error) {
+    next(error);
+  }
+};
+

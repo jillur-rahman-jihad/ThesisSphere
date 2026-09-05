@@ -211,7 +211,7 @@ export const getGroupContributions = async (req, res) => {
     // Fetch System Activities automatically
     const [progressReports, paperReviews, meetings] = await Promise.all([
       ProgressReport.find({ thesisGroupId: group._id }).populate('submittedBy', 'fullName email profilePicture department'),
-      PaperReview.find({ thesisGroupId: group._id }).populate('reviewer', 'fullName email profilePicture department'),
+      PaperReview.find({ thesisGroupId: group._id }).populate('reviewedBy', 'fullName email profilePicture department'),
       Meeting.find({ thesisGroupId: group._id }).populate('supervisorId', 'fullName email profilePicture department'),
     ]);
 
@@ -237,12 +237,12 @@ export const getGroupContributions = async (req, res) => {
     });
 
     paperReviews.forEach((rev) => {
-      if (rev.reviewer) {
+      if (rev.reviewedBy) {
         autoSystemContributions.push({
           _id: `auto_review_${rev._id}`,
           isAutomated: true,
           thesisGroupId: group._id,
-          studentId: rev.reviewer,
+          studentId: rev.reviewedBy,
           task: `[Auto-Tracked] Paper Review: ${rev.paperTitle}`,
           hoursSpent: 8,
           category: 'Research',
